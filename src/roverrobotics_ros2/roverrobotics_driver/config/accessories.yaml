@@ -1,14 +1,7 @@
-# RPLidar S2 Settings
-rplidar:
+# RoboSense Airy 3D Lidar Settings
+rslidar:
   ros__parameters:
-    active: false
-    serial_port: "/dev/rplidar"
-    serial_baudrate: 1000000
-    frame_id: "lidar_link"
-    inverted: false
-    angle_compensate: true
-    scan_mode: "Standard"
-    scan_frequency: 10.0
+    active: true
 
 # BNO055 IMU Settings
 bno055:
@@ -216,4 +209,8 @@ realsense:
     usb_port_id: ''
     use_sim_time: false
     wait_for_device_timeout: -1.0
+
+zed2i:
+  ros__parameters:
+    active: true
 

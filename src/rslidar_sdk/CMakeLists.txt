@@ -91,6 +91,7 @@ message(=============================================================)
 #========================
 # Dependencies Setup
 #========================
+set(roscpp_FOUND OFF)
 
 #ROS#
 find_package(roscpp 1.12 QUIET)
@@ -201,6 +202,7 @@ if(rclcpp_FOUND)
   install(DIRECTORY
     launch
     rviz
+    config
     DESTINATION share/${PROJECT_NAME})
 
   ament_package()
