@@ -66,23 +66,25 @@
   <joint name="imu_joint" type="fixed">
     <parent link="base_link"/>
     <child link="bno055"/>
-    <origin xyz="0.05 0.0 0.05" rpy="0 0 0"/>
+    <!-- This configuration is based on my estimate for where the center of the chip is
+    the IMU is mounted in a right-handed X right Y forward configuration. -->
+    <origin xyz="-0.03928461 -0.050864 0.14345" rpy="0 0 ${pi/2}"/>
   </joint>
 
 
-  <link name="laser_frame">
+  <link name="lidar_frame">
     <visual>
       <geometry>
-        <cylinder radius="0.05" length="0.04"/>
+        <cylinder radius="0.061331" length="0.038040"/>
       </geometry>
-      <material name="black"/>
+      <material name="blue"/>
     </visual>
   </link>
 
-  <joint name="laser_joint" type="fixed">
+  <joint name="lidar_joint" type="fixed">
     <parent link="base_link"/>
     <child link="laser_frame"/>
-    <origin xyz="0.0 0.0 ${chassis_height/2 + 0.02}" rpy="0 0 0"/>
+    <origin xyz="0.0 0.043684 .19576183" rpy="0 ${22 * pi / 180} 0"/>
   </joint>
 
 
@@ -91,14 +93,14 @@
       <geometry>
         <box size="0.02 0.06 0.02"/>
       </geometry>
-      <material name="red"/>
+      <material name="blue"/>
     </visual>
   </link>
 
   <joint name="camera_joint" type="fixed">
     <parent link="base_link"/>
     <child link="camera_link"/>
-    <origin xyz="${chassis_length/2 + 0.01} 0.0 0.08" rpy="0 0 0"/>
+    <origin xyz=".196296 .060 .135925" rpy="0 0 0"/>
   </joint>
 
   <link name="camera_link_optical"/>
