@@ -1,230 +1,144 @@
-<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="rover_4wd">
-
-    <!-- Robot Parameters -->
-    <xacro:property name="wheel_z_offset" value="0.020" />
-    <xacro:property name="wheel_x_offset" value="0.145" />
-    <xacro:property name="front_flipper_x_offset" value="-0.0035" />
-    <xacro:property name="wheel_y_offset" value="0.18" />
-    <xacro:property name="track_y_offset" value="0.11" />
-    <xacro:property name="wheel_mass" value="1.25" />
-    <xacro:property name="chassis_mass" value="4.53592" />
-
-    <!-- Part Includes - Payload, Sensors, Etc.. -->
-    <!-- Comment or Uncomment any of these to add them to the dev payload -->
-    <!-- You can always link them elsewhere if you wish by editing accessories/<sensor>.urdf -->
-    <xacro:property name="payload_z_offset" value="0.0513" />
-    <xacro:include filename="$(find roverrobotics_description)/urdf/accessories/rover_dev_payload.urdf" />
-    <xacro:include filename="$(find roverrobotics_description)/urdf/accessories/rplidar_s2.urdf" />
-    <xacro:include filename="$(find roverrobotics_description)/urdf/accessories/imu.urdf" />
-
-    <!-- Robot Definition -->
-    <link name="base_link" />
-    <link name="chassis_link">
-        <visual>
-            <origin xyz="0 0 0" rpy="1.57 -0 1.57" />
-            <geometry>
-                <mesh filename="file://$(find roverrobotics_description)/meshes/flipper_chassis.dae"/>
-            </geometry>
-        </visual>
-        <visual>
-            <origin xyz="0 ${track_y_offset} 0" rpy="1.57 3.1415 0" />
-            <geometry>
-                <mesh filename="file://$(find roverrobotics_description)/meshes/flipper_track.dae"/>
-            </geometry>
-        </visual>
-
-        <collision>
-            <origin xyz="0 ${track_y_offset} 0" rpy="1.57 3.1415 0" />
-            <geometry>
-                <mesh filename="file://$(find roverrobotics_description)/meshes/flipper_track.dae"/>
-            </geometry>
-        </collision>
-
-         <visual>
-            <origin xyz="0 ${-track_y_offset} 0" rpy="1.57 3.1415 0" />
-            <geometry>
-                <mesh filename="file://$(find roverrobotics_description)/meshes/flipper_track.dae"/>
-            </geometry>
-        </visual>
-
-        <collision>
-            <origin xyz="0 ${-track_y_offset} 0" rpy="1.57 3.1415 0" />
-            <geometry>
-                <mesh filename="file://$(find roverrobotics_description)/meshes/flipper_track.dae"/>
-            </geometry>
-        </collision>
-
-        <collision>
-            <origin xyz="0 0 0" rpy="1.57 -0 1.57" />
-            <geometry>
-                <mesh filename="file://$(find roverrobotics_description)/meshes/flipper_chassis.dae"/>
-            </geometry>
-        </collision>
-
-        <inertial>
-            <origin xyz="0 0 0" rpy="0 0 0"/>
-            <mass value="${chassis_mass}" />
-            <inertia ixx="0.028064" ixy="0.0"  ixz="0.0" iyy="0.08226" iyz="0.0" izz="0.10258" />
-        </inertial>
-    </link>
-
-    <joint name="base_to_chassis" type="fixed">
-        <parent link="base_link"/>
-        <child link="chassis_link"/>
-        <origin xyz="0 0 0.125"/>
-    </joint>
-
-
-    <link name="fr_wheel_link">
-        <visual>
-            <origin xyz="0 0 0" rpy="-1.57 0 0" />
-            <geometry>
-                <mesh filename="file://$(find roverrobotics_description)/meshes/pro_tire.dae"/>
-            </geometry>
-        </visual>
-
-        <collision>
-            <origin xyz="0 0 0" rpy="-1.57 0 0" />
-            <geometry>
-                <mesh filename="file://$(find roverrobotics_description)/meshes/pro_tire.dae"/>
-            </geometry>
-        </collision>
-
-        <inertial>
-            <origin xyz="0 0 0" rpy="0 0 0" />
-            <mass value="${wheel_mass}" />
-            <inertia ixx="0.005645" ixy="0.0"  ixz="0.0" iyy= "0.01008" iyz="0.0" izz="0.005645"/>
-        </inertial>
-        <mu>5.0</mu>
-    </link>
-    <joint name="fr_wheel_to_chassis" type="continuous">
-        <parent link="chassis_link"/> 
-        <child link="fr_wheel_link"/>
-        <axis xyz="0 1 0"/>
-        <origin xyz="${wheel_x_offset + front_flipper_x_offset} ${-wheel_y_offset} 0" rpy="0 0 0"/>
-    </joint>
-
-    <link name="fl_wheel_link">
-        <visual>
-            <origin xyz="0 0 0" rpy="1.57 0 0" />
-            <geometry>
-                <mesh filename="file://$(find roverrobotics_description)/meshes/pro_tire.dae"/>
-            </geometry>
-        </visual>
-
-        <collision>
-            <origin xyz="0 0 0" rpy="1.57 0 0" />
-            <geometry>
-                <mesh filename="file://$(find roverrobotics_description)/meshes/pro_tire.dae"/>
-            </geometry>
-        </collision>
-
-        <inertial>
-            <origin xyz="0 0 0" rpy="0 0 0" />
-            <mass value="${wheel_mass}" />
-            <inertia ixx="0.005645" ixy="0.0"  ixz="0.0" iyy= "0.01008" iyz="0.0" izz="0.005645"/>
-        </inertial>
-        <mu>5.0</mu>
-    </link>
-    <joint name="fl_wheel_to_chassis" type="continuous">
-        <parent link="chassis_link"/>
-        <child link="fl_wheel_link"/>
-        <axis xyz="0 1 0"/>
-        <origin xyz="${wheel_x_offset + front_flipper_x_offset} ${wheel_y_offset} 0" rpy="0 0 0"/>
-    </joint>
-
-    <link name="rr_wheel_link">
-        <visual>
-            <origin xyz="0 0 0" rpy="1.57 0 3.1415" />
-            <geometry>
-                <mesh filename="file://$(find roverrobotics_description)/meshes/pro_tire.dae"/>
-            </geometry>
-        </visual>
-
-        <collision>
-            <origin xyz="0 0 0" rpy="1.57 0 3.1415" />
-            <geometry>
-                <mesh filename="file://$(find roverrobotics_description)/meshes/pro_tire.dae"/>
-            </geometry>
-        </collision>
-
-        <inertial>
-            <origin xyz="0 0 0" rpy="0 0 0" />
-            <mass value="${wheel_mass}" />
-            <inertia ixx="0.005645" ixy="0.0"  ixz="0.0" iyy= "0.01008" iyz="0.0" izz="0.005645"/>
-        </inertial>
-        <mu>5.0</mu>
-    </link>
-    <joint name="rr_wheel_to_chassis" type="continuous">
-        <parent link="chassis_link"/>
-        <child link="rr_wheel_link"/>
-        <axis xyz="0 1 0"/>
-        <origin xyz="${-wheel_x_offset} ${-wheel_y_offset} 0"/>
-    </joint>
-
-    <link name="rl_wheel_link">
-        <visual>
-            <origin xyz="0 0 0" rpy="-1.57 0 3.1415" />
-            <geometry>
-                <mesh filename="file://$(find roverrobotics_description)/meshes/pro_tire.dae"/>
-            </geometry>
-        </visual>
-
-        <collision>
-            <origin xyz="0 0 0" rpy="-1.57 0 3.1415" />
-            <geometry>
-                <mesh filename="file://$(find roverrobotics_description)/meshes/pro_tire.dae"/>
-            </geometry>
-        </collision>
-
-        <inertial>
-            <origin xyz="0 0 0" rpy="0 0 0" />
-            <mass value="${wheel_mass}" />
-            <inertia ixx="0.005645" ixy="0.0"  ixz="0.0" iyy= "0.01008" iyz="0.0" izz="0.005645"/>
-        </inertial>
-        <mu>5.0</mu>
-    </link>
-    <joint name="rl_wheel_to_chassis" type="continuous">
-        <parent link="chassis_link"/>
-        <child link="rl_wheel_link"/>
-        <axis xyz="0 1 0"/>
-        <origin xyz="${-wheel_x_offset} ${wheel_y_offset} 0"/>
-    </joint>
-    
-
-    <!-- Gazebo Plugins -->
-    <gazebo>
-        <plugin name="ignition::gazebo::systems::DiffDrive" filename="ignition-gazebo-diff-drive-system"> 
-            <num_wheel_pairs>2</num_wheel_pairs>
-            <!-- Wheel Information -->
-            <left_joint>rl_wheel_to_chassis</left_joint>
-            <left_joint>fl_wheel_to_chassis</left_joint>
-            <right_joint>rr_wheel_to_chassis</right_joint>
-            <right_joint>fr_wheel_to_chassis</right_joint>
-            <wheel_separation>0.24</wheel_separation>
-            <wheel_radius>0.122</wheel_radius>
-
-            <!-- Limits -->
-            <max_linear_acceleration>5</max_linear_acceleration>
-            <min_linear_acceleration>-5</min_linear_acceleration>
-            <max_angular_acceleration>4</max_angular_acceleration>
-            <min_angular_acceleration>-4</min_angular_acceleration>
-
-            
-            <!-- Output -->
-            <frame_id>odom</frame_id>
-            <child_frame_id>base_link</child_frame_id>
-
-            <!-- Topics -->
-            <topic>/cmd_vel</topic>
-            <odom_topic>/odometry/wheels</odom_topic>
-            <tf_topic>/tf_gazebo</tf_topic>
-
-        </plugin>
-
-        <plugin filename="ignition-gazebo-joint-state-publisher-system" name="ignition::gazebo::systems::JointStatePublisher">
-            <topic>/joint_states</topic>
-        </plugin>
-    </gazebo>
-
+<?xml version="1.0" ?>
+<!-- =================================================================================== -->
+<!-- |    This document was autogenerated by xacro from /home/rover/rover_workspace/src/rover_description/urdf/rover.urdf.xacro | -->
+<!-- |    EDITING THIS FILE BY HAND IS NOT RECOMMENDED                                 | -->
+<!-- =================================================================================== -->
+<robot name="rover">
+  <material name="dark_grey">
+    <color rgba="0.2 0.2 0.2 1.0"/>
+  </material>
+  <material name="black">
+    <color rgba="0.0 0.0 0.0 1.0"/>
+  </material>
+  <material name="blue">
+    <color rgba="0.0 0.0 0.8 1.0"/>
+  </material>
+  <material name="red">
+    <color rgba="0.8 0.0 0.0 1.0"/>
+  </material>
+  <link name="base_footprint"/>
+  <link name="base_link">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <box size="0.5 0.4 0.25"/>
+      </geometry>
+      <material name="dark_grey"/>
+    </visual>
+  </link>
+  <joint name="base_joint" type="fixed">
+    <parent link="base_footprint"/>
+    <child link="base_link"/>
+    <origin rpy="0 0 0" xyz="0 0 0.15000000000000002"/>
+  </joint>
+  <link name="front_left_wheel">
+    <visual>
+      <origin rpy="1.5707963267948966 0 0" xyz="0 0 0"/>
+      <geometry>
+        <cylinder length="0.05" radius="0.1"/>
+      </geometry>
+      <material name="black"/>
+    </visual>
+  </link>
+  <joint name="front_left_wheel_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="front_left_wheel"/>
+    <origin rpy="0 0 0" xyz="0.18 0.225 -0.05"/>
+    <axis xyz="0 1 0"/>
+  </joint>
+  <link name="front_right_wheel">
+    <visual>
+      <origin rpy="1.5707963267948966 0 0" xyz="0 0 0"/>
+      <geometry>
+        <cylinder length="0.05" radius="0.1"/>
+      </geometry>
+      <material name="black"/>
+    </visual>
+  </link>
+  <joint name="front_right_wheel_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="front_right_wheel"/>
+    <origin rpy="0 0 0" xyz="0.18 -0.225 -0.05"/>
+    <axis xyz="0 1 0"/>
+  </joint>
+  <link name="rear_left_wheel">
+    <visual>
+      <origin rpy="1.5707963267948966 0 0" xyz="0 0 0"/>
+      <geometry>
+        <cylinder length="0.05" radius="0.1"/>
+      </geometry>
+      <material name="black"/>
+    </visual>
+  </link>
+  <joint name="rear_left_wheel_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="rear_left_wheel"/>
+    <origin rpy="0 0 0" xyz="-0.18 0.225 -0.05"/>
+    <axis xyz="0 1 0"/>
+  </joint>
+  <link name="rear_right_wheel">
+    <visual>
+      <origin rpy="1.5707963267948966 0 0" xyz="0 0 0"/>
+      <geometry>
+        <cylinder length="0.05" radius="0.1"/>
+      </geometry>
+      <material name="black"/>
+    </visual>
+  </link>
+  <joint name="rear_right_wheel_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="rear_right_wheel"/>
+    <origin rpy="0 0 0" xyz="-0.18 -0.225 -0.05"/>
+    <axis xyz="0 1 0"/>
+  </joint>
+  <link name="bno055">
+    <visual>
+      <geometry>
+        <box size="0.03 0.02 0.01"/>
+      </geometry>
+      <material name="blue"/>
+    </visual>
+  </link>
+  <joint name="imu_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="bno055"/>
+    <!-- This configuration is based on my estimate for where the center of the chip is
+    the IMU is mounted in a right-handed X right Y forward configuration. -->
+    <!-- <origin rpy="0 0 -1.5707963267948966" xyz="-0.03928461 -0.050864 0.14345"/> -->
+    <origin rpy="0 0 0" xyz="-0.03928461 -0.050864 0.14345"/>
+  </joint>
+  <link name="rslidar">
+    <visual>
+      <geometry>
+        <cylinder length="0.038040" radius="0.061331"/>
+      </geometry>
+      <material name="blue"/>
+    </visual>
+  </link>
+  <joint name="lidar_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="rslidar"/>
+    <!-- <origin xyz="0.0 0.043684 .19576183" rpy="0 ${-22 * pi / 180} 0"/> -->
+    <!-- <origin xyz="0.0 0.043684 .19576183" rpy="${pi} 0 0"/> -->
+    <origin rpy="0 0.3839724354387525 0" xyz="0.0 0.043684 .19576183"/>
+  </joint>
+  <link name="camera_link">
+    <visual>
+      <geometry>
+        <box size="0.02 0.06 0.02"/>
+      </geometry>
+      <material name="blue"/>
+    </visual>
+  </link>
+  <joint name="camera_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="camera_link"/>
+    <origin rpy="0 0 0" xyz=".196296 .060 .135925"/>
+  </joint>
+  <link name="camera_link_optical"/>
+  <joint name="camera_optical_joint" type="fixed">
+    <parent link="camera_link"/>
+    <child link="camera_link_optical"/>
+    <origin rpy="-1.5707963267948966 0 -1.5707963267948966" xyz="0 0 0"/>
+  </joint>
 </robot>
