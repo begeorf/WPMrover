@@ -31,7 +31,8 @@ def generate_launch_description():
         
         # Minimum range must clear your chassis outer box boundaries (approx 0.25m from center)
         "range_min": 0.3,  
-        "range_max": 30.0,  # Reliable structural range for indoor/outdoor mapping
+        # change max range to be accurate (max range according to website is 60m)
+        "range_max": 60.0,  # Reliable structural range for indoor/outdoor mapping
         
         "use_inf": True,
         "inf_epsilon": 1.0,
