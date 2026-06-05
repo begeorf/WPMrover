@@ -15,7 +15,7 @@ def generate_launch_description():
     driver_share = get_package_share_directory('roverrobotics_driver')
     # zed_wrapper_pkg = get_package_share_directory('zed_wrapper')
     rslidar_pkg = get_package_share_directory('rslidar_sdk')
-    zero_description_pkg = get_package_share_directory('rover_description')
+    zero_description_pkg = get_package_share_directory('roverrobotics_description')
     
     # Configuration Files
     slam_config_file = os.path.join(slam_toolbox_pkg, "config", "slamtoolbox_params.yaml")
