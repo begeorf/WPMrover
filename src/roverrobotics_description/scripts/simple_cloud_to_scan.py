@@ -56,7 +56,7 @@ class SimpleCloudToScan(Node):
         self._skipped_height_filter = 0
 
         sensor_qos = QoSProfile(
-            reliability=ReliabilityPolicy.RELIABLE,    
+            reliability=ReliabilityPolicy.BEST_EFFORT,    
             history=HistoryPolicy.KEEP_LAST,           
             depth=5,
             durability=DurabilityPolicy.VOLATILE       

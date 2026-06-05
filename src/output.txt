@@ -1,548 +1,540 @@
-rover@rover-desktop:~/rover_workspace$ ros2 launch slamtoolbox slamtoolbox.launch.py
-[INFO] [launch]: All log files can be found below /home/rover/.ros/log/2026-06-04-14-20-34-400666-rover-desktop-24187
+rover@rover-desktop:~/rover_workspace$ ros2 launch roverrobotics_driver zero.launch.py
+[INFO] [launch]: All log files can be found below /home/rover/.ros/log/2026-06-05-17-08-50-540243-rover-desktop-30994
 [INFO] [launch]: Default logging verbosity is set to INFO
-[INFO] [roverrobotics_driver-1]: process started with pid [24203]
-[INFO] [joint_state_publisher-2]: process started with pid [24205]
-[INFO] [robot_state_publisher-3]: process started with pid [24207]
-[INFO] [rslidar_sdk_node-4]: process started with pid [24209]
-[INFO] [pointcloud_to_laserscan_node-5]: process started with pid [24211]
-[INFO] [bno055-6]: process started with pid [24213]
-[INFO] [component_container_isolated-7]: process started with pid [24215]
-[INFO] [static_transform_publisher-8]: process started with pid [24217]
-[INFO] [static_transform_publisher-9]: process started with pid [24219]
-[INFO] [static_transform_publisher-10]: process started with pid [24221]
-[INFO] [static_transform_publisher-11]: process started with pid [24223]
-[INFO] [async_slam_toolbox_node-12]: process started with pid [24244]
-[INFO] [rviz2-13]: process started with pid [24259]
-[rslidar_sdk_node-4] ********************************************************
-[rslidar_sdk_node-4] **********                                    **********
-[rslidar_sdk_node-4] **********    RSLidar_SDK Version: v1.5.19     **********
-[rslidar_sdk_node-4] **********                                    **********
-[rslidar_sdk_node-4] ********************************************************
-[static_transform_publisher-8] [INFO] [1780600834.805534624] [footprint_to_link]: Spinning until stopped - publishing transform
-[static_transform_publisher-8] translation: ('0.000000', '0.000000', '0.100000')
-[static_transform_publisher-8] rotation: ('0.000000', '0.000000', '0.000000', '1.000000')
-[static_transform_publisher-8] from 'base_footprint' to 'base_link'
-[roverrobotics_driver-1] [INFO] [1780600835.117102720] [roverrobotics_driver]: Starting Rover Driver node
-[roverrobotics_driver-1] [INFO] [1780600835.117641472] [roverrobotics_driver]: Robot type is Rover zero2 over serial
-[roverrobotics_driver-1] [INFO] [1780600835.117666720] [roverrobotics_driver]: Receiving velocity command from /cmd_vel
-[roverrobotics_driver-1] [INFO] [1780600835.126120736] [roverrobotics_driver]: Estop state is currently inactive
-[roverrobotics_driver-1] [INFO] [1780600835.126140000] [roverrobotics_driver]: Receiving Estop activation at /soft_estop/trigger
-[roverrobotics_driver-1] [INFO] [1780600835.126151136] [roverrobotics_driver]: Receiving Estop deactivation at /soft_estop/reset
-[rslidar_sdk_node-4] --------------------------------------------------------
-[rslidar_sdk_node-4] Config loaded from PATH:
-[rslidar_sdk_node-4] /home/rover/rover_workspace/src/rslidar_sdk/config/config.yaml
-[rslidar_sdk_node-4] --------------------------------------------------------
-[rslidar_sdk_node-4] ------------------------------------------------------
-[rslidar_sdk_node-4] Receive Packets From : Online LiDAR
-[rslidar_sdk_node-4] Msop Port: 6699
-[rslidar_sdk_node-4] Difop Port: 7788
-[rslidar_sdk_node-4] ------------------------------------------------------
-[rslidar_sdk_node-4] ------------------------------------------------------
-[rslidar_sdk_node-4]              RoboSense Driver Parameters 
-[rslidar_sdk_node-4] input type: ONLINE_LIDAR
-[rslidar_sdk_node-4] lidar_type: RSAIRY
-[rslidar_sdk_node-4] frame_id: rslidar
-[rslidar_sdk_node-4] ------------------------------------------------------
-[rslidar_sdk_node-4] ------------------------------------------------------
-[rslidar_sdk_node-4]              RoboSense Input Parameters 
-[rslidar_sdk_node-4] msop_port: 6699
-[rslidar_sdk_node-4] difop_port: 7788
-[rslidar_sdk_node-4] imu_port: 0
-[rslidar_sdk_node-4] user_layer_bytes: 0
-[rslidar_sdk_node-4] tail_layer_bytes: 0
-[rslidar_sdk_node-4] host_address: 192.168.1.102
-[rslidar_sdk_node-4] group_address: 0.0.0.0
-[rslidar_sdk_node-4] socket_recv_buf: 106496
-[rslidar_sdk_node-4] pcap_path: /home/robosense/lidar.pcap
-[rslidar_sdk_node-4] pcap_rate: 1
-[rslidar_sdk_node-4] pcap_repeat: 1
-[rslidar_sdk_node-4] use_vlan: 0
-[rslidar_sdk_node-4] ------------------------------------------------------
-[rslidar_sdk_node-4] ------------------------------------------------------
-[rslidar_sdk_node-4]              RoboSense Decoder Parameters 
-[rslidar_sdk_node-4] min_distance: 0.2
-[rslidar_sdk_node-4] max_distance: 200
-[rslidar_sdk_node-4] use_lidar_clock: 0
-[rslidar_sdk_node-4] dense_points: 0
-[rslidar_sdk_node-4] ts_first_point: 1
-[rslidar_sdk_node-4] wait_for_difop: 1
-[rslidar_sdk_node-4] config_from_file: 0
-[rslidar_sdk_node-4] angle_path: 
-[rslidar_sdk_node-4] start_angle: 0
-[rslidar_sdk_node-4] end_angle: 360
-[rslidar_sdk_node-4] split_frame_mode: 1
-[rslidar_sdk_node-4] split_angle: 0
-[rslidar_sdk_node-4] num_blks_split: 0
-[rslidar_sdk_node-4] ------------------------------------------------------
-[rslidar_sdk_node-4] ------------------------------------------------------
-[rslidar_sdk_node-4]              RoboSense Transform Parameters 
-[rslidar_sdk_node-4] x: 0
-[rslidar_sdk_node-4] y: 0
-[rslidar_sdk_node-4] z: 0
-[rslidar_sdk_node-4] roll: 0
-[rslidar_sdk_node-4] pitch: 0
-[rslidar_sdk_node-4] yaw: 0
-[rslidar_sdk_node-4] ------------------------------------------------------
-[roverrobotics_driver-1] [INFO] [1780600835.244802016] [roverrobotics_driver]: Publishing Robot status on /robot_status at 60.00hz
-[roverrobotics_driver-1] [INFO] [1780600835.244949568] [roverrobotics_driver]: Robot is in closed loop mode.
-[roverrobotics_driver-1] [INFO] [1780600835.244967840] [roverrobotics_driver]: PID is at P:0.0011 I:0.0000 D:0.0001
-[roverrobotics_driver-1] [INFO] [1780600835.244995680] [roverrobotics_driver]: Connecting to robot at /dev/rover-control
+[INFO] [launch.user]: Using common configuration file: /home/rover/rover_workspace/install/zed_wrapper/share/zed_wrapper/config/common_stereo.yaml
+[INFO] [launch.user]: Using camera configuration file: /home/rover/rover_workspace/install/zed_wrapper/share/zed_wrapper/config/zed2i.yaml
+[INFO] [launch.user]: Using Object Detection configuration file: /home/rover/rover_workspace/install/zed_wrapper/share/zed_wrapper/config/object_detection.yaml
+[INFO] [launch.user]: Using Custom Object Detection configuration file: /home/rover/rover_workspace/install/zed_wrapper/share/zed_wrapper/config/custom_object_detection.yaml
+[INFO] [launch.user]: NITROS not installed, skipping IPC/NITROS conflict check.
+[INFO] [launch.user]: Loading ZED node `zed_node` in container `/camera/zed_container`
+[INFO] [roverrobotics_driver-1]: process started with pid [31021]
+[INFO] [rslidar_sdk_node-2]: process started with pid [31023]
+[INFO] [rviz2-3]: process started with pid [31025]
+[INFO] [bno055-4]: process started with pid [31027]
+[INFO] [robot_state_publisher-5]: process started with pid [31029]
+[INFO] [component_container_isolated-6]: process started with pid [31031]
+[INFO] [joint_state_publisher-7]: process started with pid [31033]
+[INFO] [robot_state_publisher-8]: process started with pid [31035]
+[rslidar_sdk_node-2] ********************************************************
+[rslidar_sdk_node-2] **********                                    **********
+[rslidar_sdk_node-2] **********    RSLidar_SDK Version: v1.5.19     **********
+[rslidar_sdk_node-2] **********                                    **********
+[rslidar_sdk_node-2] ********************************************************
+[roverrobotics_driver-1] [INFO] [1780697331.812501888] [roverrobotics_driver]: Starting Rover Driver node
+[roverrobotics_driver-1] [INFO] [1780697331.813164736] [roverrobotics_driver]: Robot type is Rover zero2 over serial
+[roverrobotics_driver-1] [INFO] [1780697331.813214752] [roverrobotics_driver]: Receiving velocity command from /cmd_vel
+[roverrobotics_driver-1] [INFO] [1780697331.813226272] [roverrobotics_driver]: Estop state is currently inactive
+[roverrobotics_driver-1] [INFO] [1780697331.813235232] [roverrobotics_driver]: Receiving Estop activation at /soft_estop/trigger
+[roverrobotics_driver-1] [INFO] [1780697331.813244128] [roverrobotics_driver]: Receiving Estop deactivation at /soft_estop/reset
+[roverrobotics_driver-1] [INFO] [1780697331.867178976] [roverrobotics_driver]: Publishing Robot status on /robot_status at 60.00hz
+[roverrobotics_driver-1] [INFO] [1780697331.867372128] [roverrobotics_driver]: Robot is in closed loop mode.
+[roverrobotics_driver-1] [INFO] [1780697331.867396640] [roverrobotics_driver]: PID is at P:0.0011 I:0.0000 D:0.0001
+[roverrobotics_driver-1] [INFO] [1780697331.867413248] [roverrobotics_driver]: Connecting to robot at /dev/rover-control
 [roverrobotics_driver-1] Warning: ~/robot.config file not found, persistent trim disabled
 [roverrobotics_driver-1] protocol is running...
-[roverrobotics_driver-1] [INFO] [1780600835.263307168] [roverrobotics_driver]: Connected to robot at /dev/rover-control
-[roverrobotics_driver-1] [FATAL] [1780600835.264251200] [roverrobotics_driver]: Did not receive any data from the robot or the data is stale. Check that the robot is connected to the computer and that permissions are set correctly.
-[static_transform_publisher-9] [INFO] [1780600835.272319456] [base_link_to_laser]: Spinning until stopped - publishing transform
-[static_transform_publisher-9] translation: ('0.150000', '0.000000', '0.400000')
-[static_transform_publisher-9] rotation: ('0.000000', '0.000000', '0.000000', '1.000000')
-[static_transform_publisher-9] from 'base_link' to 'rslidar'
-[rslidar_sdk_node-4] Original receive buffer size: 1048576 bytes
-[rslidar_sdk_node-4] After setting: receive buffer size: 2097152 bytes
-[rslidar_sdk_node-4] Original receive buffer size: 1048576 bytes
-[rslidar_sdk_node-4] After setting: receive buffer size: 2097152 bytes
-[rslidar_sdk_node-4] ------------------------------------------------------
-[rslidar_sdk_node-4] Send PointCloud To : ROS
-[rslidar_sdk_node-4] PointCloud Topic: /rslidar_points
-[rslidar_sdk_node-4] ------------------------------------------------------
-[rslidar_sdk_node-4] [WARN] [1780600835.365523456] [rcl.logging_rosout]: Publisher already registered for provided node name. If this is due to multiple nodes with the same name then all logs for that logger name will go out over the existing publisher. As soon as any node with that name is destructed it will unregister the publisher, preventing any further logs for that name from being published on the rosout topic.
-[static_transform_publisher-10] [INFO] [1780600835.369369184] [base_link_to_imu]: Spinning until stopped - publishing transform
-[static_transform_publisher-10] translation: ('0.000000', '0.000000', '0.050000')
-[static_transform_publisher-10] rotation: ('0.000000', '0.000000', '0.000000', '1.000000')
-[static_transform_publisher-10] from 'base_link' to 'bno055'
-[component_container_isolated-7] [INFO] [1780600835.456621440] [camera.zed_container]: Load Library: /home/rover/rover_workspace/install/zed_components/lib/libzed_camera_component.so
-[static_transform_publisher-11] [INFO] [1780600835.449533280] [base_link_to_camera_pivot]: Spinning until stopped - publishing transform
-[static_transform_publisher-11] translation: ('0.200000', '0.000000', '0.300000')
-[static_transform_publisher-11] rotation: ('0.000000', '0.000000', '0.000000', '1.000000')
-[static_transform_publisher-11] from 'base_link' to 'camera_camera_link'
-[rslidar_sdk_node-4] RoboSense-LiDAR-Driver is running.....
-[robot_state_publisher-3] [INFO] [1780600835.643892640] [robot_state_publisher]: got segment base_footprint
-[robot_state_publisher-3] [INFO] [1780600835.646348448] [robot_state_publisher]: got segment base_link
-[robot_state_publisher-3] [INFO] [1780600835.648042720] [robot_state_publisher]: got segment bno055
-[robot_state_publisher-3] [INFO] [1780600835.649503936] [robot_state_publisher]: got segment camera_link
-[robot_state_publisher-3] [INFO] [1780600835.651950880] [robot_state_publisher]: got segment camera_link_optical
-[robot_state_publisher-3] [INFO] [1780600835.654072192] [robot_state_publisher]: got segment front_left_wheel
-[robot_state_publisher-3] [INFO] [1780600835.656916544] [robot_state_publisher]: got segment front_right_wheel
-[INFO] [roverrobotics_driver-1]: process has finished cleanly [pid 24203]
-[robot_state_publisher-3] [INFO] [1780600835.662285504] [robot_state_publisher]: got segment rear_left_wheel
-[robot_state_publisher-3] [INFO] [1780600835.662317344] [robot_state_publisher]: got segment rear_right_wheel
-[robot_state_publisher-3] [INFO] [1780600835.662326560] [robot_state_publisher]: got segment rslidar
-[async_slam_toolbox_node-12] [INFO] [1780600835.667976352] [slam_toolbox]: Using solver plugin solver_plugins::CeresSolver
-[async_slam_toolbox_node-12] [INFO] [1780600835.669098112] [slam_toolbox]: CeresSolver: Using SCHUR_JACOBI preconditioner.
-[component_container_isolated-7] [INFO] [1780600835.709150496] [camera.zed_container]: Found class: rclcpp_components::NodeFactoryTemplate<stereolabs::ZedCamera>
-[component_container_isolated-7] [INFO] [1780600835.711281632] [camera.zed_container]: Instantiate class: rclcpp_components::NodeFactoryTemplate<stereolabs::ZedCamera>
-[ERROR] [rslidar_sdk_node-4]: process has died [pid 24209, exit code -11, cmd '/home/rover/rover_workspace/install/rslidar_sdk/lib/rslidar_sdk/rslidar_sdk_node --ros-args -r __node:=rslidar_sdk_node --params-file /tmp/launch_params_h_mepd2i'].
-[pointcloud_to_laserscan_node-5] [INFO] [1780600836.639349280] [pointcloud_to_laserscan]: Got a subscriber to laserscan, starting pointcloud subscriber
-[INFO] [roverrobotics_driver-1]: process started with pid [24462]
-[roverrobotics_driver-1] 2026-06-04 14:20:36.697 [RTPS_TRANSPORT_SHM Error] Failed init_port fastrtps_port7425: open_and_lock_file failed -> Function open_port_internal
-[roverrobotics_driver-1] [INFO] [1780600836.725220288] [roverrobotics_driver]: Starting Rover Driver node
-[roverrobotics_driver-1] [INFO] [1780600836.726689984] [roverrobotics_driver]: Robot type is Rover zero2 over serial
-[roverrobotics_driver-1] [INFO] [1780600836.726735136] [roverrobotics_driver]: Receiving velocity command from /cmd_vel
-[roverrobotics_driver-1] [INFO] [1780600836.726748288] [roverrobotics_driver]: Estop state is currently inactive
-[roverrobotics_driver-1] [INFO] [1780600836.726757664] [roverrobotics_driver]: Receiving Estop activation at /soft_estop/trigger
-[roverrobotics_driver-1] [INFO] [1780600836.726770368] [roverrobotics_driver]: Receiving Estop deactivation at /soft_estop/reset
-[roverrobotics_driver-1] [INFO] [1780600836.742057600] [roverrobotics_driver]: Publishing Robot status on /robot_status at 60.00hz
-[roverrobotics_driver-1] [INFO] [1780600836.742164480] [roverrobotics_driver]: Robot is in closed loop mode.
-[roverrobotics_driver-1] [INFO] [1780600836.742178208] [roverrobotics_driver]: PID is at P:0.0011 I:0.0000 D:0.0001
-[roverrobotics_driver-1] [INFO] [1780600836.742193312] [roverrobotics_driver]: Connecting to robot at /dev/rover-control
-[roverrobotics_driver-1] Warning: ~/robot.config file not found, persistent trim disabled
-[roverrobotics_driver-1] protocol is running...
-[roverrobotics_driver-1] [INFO] [1780600836.744012032] [roverrobotics_driver]: Connected to robot at /dev/rover-control
-[rviz2-13] [INFO] [1780600836.770053216] [rviz2]: Stereo is NOT SUPPORTED
-[rviz2-13] [INFO] [1780600836.770453440] [rviz2]: OpenGl version: 4.6 (GLSL 4.6)
-[joint_state_publisher-2] [INFO] [1780600836.794117216] [joint_state_publisher]: Waiting for robot_description to be published on the robot_description topic...
-[rviz2-13] [INFO] [1780600836.816160160] [rviz2]: Stereo is NOT SUPPORTED
-[bno055-6] [INFO] [1780600837.460614240] [bno055]: Initializing parameters
-[bno055-6] [INFO] [1780600837.472372992] [bno055]: Parameters set to:
-[bno055-6] [INFO] [1780600837.473147296] [bno055]:      ros_topic_prefix:       "bno055/"
-[bno055-6] [INFO] [1780600837.473908992] [bno055]:      connection_type:        "uart"
-[bno055-6] [INFO] [1780600837.474597056] [bno055]:      uart_port:              "/dev/ttyUSB0"
-[bno055-6] [INFO] [1780600837.475282368] [bno055]:      uart_baudrate:          "115200"
-[bno055-6] [INFO] [1780600837.475986720] [bno055]:      uart_timeout:           "0.1"
-[bno055-6] [INFO] [1780600837.476667872] [bno055]:      frame_id:               "bno055"
-[bno055-6] [INFO] [1780600837.477354560] [bno055]:      data_query_frequency:   "10"
-[bno055-6] [INFO] [1780600837.478076064] [bno055]:      calib_status_frequency: "0.1"
-[bno055-6] [INFO] [1780600837.478712576] [bno055]:      operation_mode:         "12"
-[bno055-6] [INFO] [1780600837.479385408] [bno055]:      placement_axis_remap:   "P1"
-[bno055-6] [INFO] [1780600837.480027904] [bno055]:      acc_factor:             "100.0"
-[bno055-6] [INFO] [1780600837.480675776] [bno055]:      mag_factor:             "16000000.0"
-[bno055-6] [INFO] [1780600837.481327552] [bno055]:      gyr_factor:             "900.0"
-[bno055-6] [INFO] [1780600837.481997440] [bno055]:      grav_factor:            "100.0"
-[bno055-6] [INFO] [1780600837.482623104] [bno055]:      set_offsets:            "False"
-[bno055-6] [INFO] [1780600837.483275232] [bno055]:      offset_acc:             "[65516, 165, 65512]"
-[bno055-6] [INFO] [1780600837.483895392] [bno055]:      radius_acc:             "1000"
-[bno055-6] [INFO] [1780600837.484520672] [bno055]:      offset_mag:             "[65460, 65182, 637]"
-[bno055-6] [INFO] [1780600837.485124608] [bno055]:      radius_mag:             "0"
-[bno055-6] [INFO] [1780600837.485770624] [bno055]:      offset_gyr:             "[2, 65535, 65535]"
-[bno055-6] [INFO] [1780600837.486369824] [bno055]:      variance_acc:           "[0.017, 0.017, 0.017]"
-[bno055-6] [INFO] [1780600837.486950496] [bno055]:      variance_angular_vel:   "[0.04, 0.04, 0.04]"
-[bno055-6] [INFO] [1780600837.487515968] [bno055]:      variance_orientation:   "[0.0159, 0.0159, 0.0159]"
-[bno055-6] [INFO] [1780600837.488079712] [bno055]:      variance_mag:           "[0.0, 0.0, 0.0]"
-[bno055-6] [INFO] [1780600837.488993216] [bno055]: Opening serial port: "/dev/ttyUSB0"...
-[bno055-6] [INFO] [1780600837.519133152] [bno055]: Configuring device...
-[bno055-6] [WARN] [1780600837.601585024] [bno055]: Unable to start IMU.
-[bno055-6] [INFO] [1780600837.633442176] [bno055]: Current sensor offsets:
-[bno055-6] [INFO] [1780600837.713489472] [bno055]:      Accel offsets (x y z): 0 0 0
-[bno055-6] [INFO] [1780600837.714867200] [bno055]:      Accel radius: 1000
-[bno055-6] [INFO] [1780600837.716089376] [bno055]:      Mag offsets (x y z): 0 0 0
-[bno055-6] [INFO] [1780600837.717294720] [bno055]:      Mag radius: 1383
-[bno055-6] [INFO] [1780600837.718503072] [bno055]:      Gyro offsets (x y z): 65535 65535 0
-[bno055-6] [INFO] [1780600837.719669504] [bno055]: Setting device_mode to 12
-[bno055-6] [INFO] [1780600837.729331904] [bno055]: Bosch BNO055 IMU configuration complete.
-[component_container_isolated-7] [INFO] [1780600838.519562976] [zed_node]: ================================
-[component_container_isolated-7] [INFO] [1780600838.519798976] [zed_node]:       ZED Camera Component 
-[component_container_isolated-7] [INFO] [1780600838.519828896] [zed_node]: ================================
-[component_container_isolated-7] [INFO] [1780600838.519841408] [zed_node]:  * IPC: disabled
-[INFO] [launch_ros.actions.load_composable_nodes]: Loaded node '/zed_node' in container '/camera/zed_container'
-[component_container_isolated-7] [INFO] [1780600838.570133984] [zed_node]:  * namespace: /
-[component_container_isolated-7] [INFO] [1780600838.570273280] [zed_node]:  * node name: zed_node
-[component_container_isolated-7] [INFO] [1780600838.570292032] [zed_node]: ================================
-[component_container_isolated-7] [INFO] [1780600838.570302560] [zed_node]: Starting node initialization...
-[component_container_isolated-7] [INFO] [1780600838.570364672] [zed_node]: === DEBUG parameters ===
-[component_container_isolated-7] [INFO] [1780600838.571250272] [zed_node]:  * SDK Verbose: 1
-[component_container_isolated-7] [INFO] [1780600838.571867904] [zed_node]:  * Use Pub Timestamps: FALSE
-[component_container_isolated-7] [INFO] [1780600838.572387072] [zed_node]:  * SDK Verbose File: 
-[component_container_isolated-7] [INFO] [1780600838.572914976] [zed_node]:  * Debug Common: FALSE
-[component_container_isolated-7] [INFO] [1780600838.573657600] [zed_node]:  * Debug Dynamic Parameters: FALSE
-[component_container_isolated-7] [INFO] [1780600838.574407104] [zed_node]:  * Debug Grab (low level): FALSE
-[component_container_isolated-7] [INFO] [1780600838.574943936] [zed_node]:  * Debug Simulation: FALSE
-[component_container_isolated-7] [INFO] [1780600838.575423840] [zed_node]:  * Debug Video/Depth: FALSE
-[component_container_isolated-7] [INFO] [1780600838.576250176] [zed_node]:  * Debug Control settings: FALSE
-[component_container_isolated-7] [INFO] [1780600838.577033856] [zed_node]:  * Debug Point Cloud: FALSE
-[component_container_isolated-7] [INFO] [1780600838.578416160] [zed_node]:  * Debug TF: FALSE
-[component_container_isolated-7] [INFO] [1780600838.579014176] [zed_node]:  * Debug Positional Tracking: FALSE
-[component_container_isolated-7] [INFO] [1780600838.579403968] [zed_node]:  * Debug GNSS: FALSE
-[component_container_isolated-7] [INFO] [1780600838.579780448] [zed_node]:  * Debug sensors: FALSE
-[component_container_isolated-7] [INFO] [1780600838.580156032] [zed_node]:  * Debug Mapping: FALSE
-[component_container_isolated-7] [INFO] [1780600838.580523296] [zed_node]:  * Debug Object Detection: FALSE
-[component_container_isolated-7] [INFO] [1780600838.580903392] [zed_node]:  * Debug Body Tracking: FALSE
-[component_container_isolated-7] [INFO] [1780600838.581265920] [zed_node]:  * Debug Streaming: FALSE
-[component_container_isolated-7] [INFO] [1780600838.581616224] [zed_node]:  * Debug ROI: FALSE
-[component_container_isolated-7] [INFO] [1780600838.582048384] [zed_node]:  * Debug Nitros: FALSE
-[component_container_isolated-7] [INFO] [1780600838.582413248] [zed_node]:  * Debug Advanced: FALSE
-[component_container_isolated-7] [INFO] [1780600838.582488224] [zed_node]: === TOPIC selection parameters ===
-[component_container_isolated-7] [INFO] [1780600838.582815680] [zed_node]:  * Publish Status: TRUE
-[component_container_isolated-7] [INFO] [1780600838.583158464] [zed_node]:  * Image format: BGRA 32-bit
-[component_container_isolated-7] [INFO] [1780600838.583482144] [zed_node]:  * Publish Left/Right images: FALSE
-[component_container_isolated-7] [INFO] [1780600838.583810272] [zed_node]:  * Publish Raw images: FALSE
-[component_container_isolated-7] [INFO] [1780600838.584479808] [zed_node]:  * Publish Gray images: FALSE
-[component_container_isolated-7] [INFO] [1780600838.584835808] [zed_node]:  * Publish RGB image: TRUE
-[component_container_isolated-7] [INFO] [1780600838.585170944] [zed_node]:  * Publish Stereo image: FALSE
-[component_container_isolated-7] [INFO] [1780600838.585501728] [zed_node]:  * Publish ROI Mask image: FALSE
-[component_container_isolated-7] [INFO] [1780600838.585870912] [zed_node]:  * Publish Depth Map: TRUE
-[component_container_isolated-7] [INFO] [1780600838.586194496] [zed_node]:  * Publish Depth Info: FALSE
-[component_container_isolated-7] [INFO] [1780600838.586504768] [zed_node]:  * Publish Point Cloud: TRUE
-[component_container_isolated-7] [INFO] [1780600838.586836672] [zed_node]:  * Publish Depth Confidence: FALSE
-[component_container_isolated-7] [INFO] [1780600838.587188896] [zed_node]:  * Publish Disparity: FALSE
-[component_container_isolated-7] [INFO] [1780600838.587539296] [zed_node]:  * Publish IMU: TRUE
-[component_container_isolated-7] [INFO] [1780600838.587848416] [zed_node]:  * Publish IMU Raw: FALSE
-[component_container_isolated-7] [INFO] [1780600838.588159584] [zed_node]:  * Publish LeftCam/IMU Transf.: FALSE
-[component_container_isolated-7] [INFO] [1780600838.588473088] [zed_node]:  * Publish Magnetometer: FALSE
-[component_container_isolated-7] [INFO] [1780600838.588787552] [zed_node]:  * Publish Barometer: FALSE
-[component_container_isolated-7] [INFO] [1780600838.589124192] [zed_node]:  * Publish Temperature: FALSE
-[component_container_isolated-7] [INFO] [1780600838.589429248] [zed_node]:  * Publish Odometry/Pose: TRUE
-[component_container_isolated-7] [INFO] [1780600838.589794560] [zed_node]:  * Publish Pose with Covariance: FALSE
-[component_container_isolated-7] [INFO] [1780600838.590148064] [zed_node]:  * Publish Camera Path: FALSE
-[component_container_isolated-7] [INFO] [1780600838.590694240] [zed_node]:  * Publish Detection Plane: FALSE
-[component_container_isolated-7] [INFO] [1780600838.591165472] [zed_node]: === SVO INPUT parameters ===
-[component_container_isolated-7] [INFO] [1780600838.591625088] [zed_node]:  * SVO input: DISABLED
-[component_container_isolated-7] [INFO] [1780600838.591671104] [zed_node]: === LOCAL STREAMING parameters ===
-[component_container_isolated-7] [INFO] [1780600838.592109184] [zed_node]:  * Local stream input: DISABLED
-[component_container_isolated-7] [INFO] [1780600838.592143296] [zed_node]: === GENERAL parameters ===
-[component_container_isolated-7] [INFO] [1780600838.592596896] [zed_node]:  * Camera model: zed2i - ZED 2i
-[component_container_isolated-7] [INFO] [1780600838.593055904] [zed_node]:  * Camera name: zed2i
-[component_container_isolated-7] [INFO] [1780600838.594210464] [zed_node]:  * Camera SN: 0
-[component_container_isolated-7] [INFO] [1780600838.595089312] [zed_node]:  * Camera ID: -1
-[component_container_isolated-7] [INFO] [1780600838.595999424] [zed_node]:  * Camera timeout [sec]: 5
-[component_container_isolated-7] [INFO] [1780600838.596774112] [zed_node]:  * Camera reconnection temptatives: 5
-[component_container_isolated-7] [INFO] [1780600838.597500576] [zed_node]:  * Camera framerate: 60
-[component_container_isolated-7] [INFO] [1780600838.598496096] [zed_node]:  * GPU ID: -1
-[component_container_isolated-7] [INFO] [1780600838.599217568] [zed_node]:  * Asynchronous image retrieval: FALSE
-[component_container_isolated-7] [INFO] [1780600838.600032320] [zed_node]:  * Image Validity Check: 1
-[component_container_isolated-7] [INFO] [1780600838.600812992] [zed_node]:  * Camera resolution: HD720
-[component_container_isolated-7] [INFO] [1780600838.601541600] [zed_node]:  * Publishing resolution: NATIVE
-[component_container_isolated-7] [INFO] [1780600838.602302112] [zed_node]:  * OpenCV custom calibration: 
-[component_container_isolated-7] [INFO] [1780600838.603305440] [zed_node]:  * Camera self calibration: TRUE
-[component_container_isolated-7] [INFO] [1780600838.604739264] [zed_node]:  * Camera flip: FALSE
-[component_container_isolated-7] [INFO] [1780600838.605557120] [zed_node]:  * Publish framerate [Hz]:  0 [DYNAMIC]
-[component_container_isolated-7] [INFO] [1780600838.606231168] [zed_node]:  * Grab Compute Capping FPS: 0
-[component_container_isolated-7] [INFO] [1780600838.606310848] [zed_node]: === VIDEO parameters ===
-[component_container_isolated-7] [INFO] [1780600838.607040640] [zed_node]:  * Brightness: 4 [DYNAMIC]
-[component_container_isolated-7] [INFO] [1780600838.608432128] [zed_node]:  * Contrast: 4 [DYNAMIC]
-[component_container_isolated-7] [INFO] [1780600838.609159584] [zed_node]:  * Hue: 0 [DYNAMIC]
-[component_container_isolated-7] [INFO] [1780600838.609755840] [zed_node]:  * Saturation: 4 [DYNAMIC]
-[component_container_isolated-7] [INFO] [1780600838.610444352] [zed_node]:  * Sharpness: 4 [DYNAMIC]
-[component_container_isolated-7] [INFO] [1780600838.611142304] [zed_node]:  * Gamma: 8 [DYNAMIC]
-[component_container_isolated-7] [INFO] [1780600838.611795808] [zed_node]:  * Auto Exposure/Gain: TRUE [DYNAMIC]
-[component_container_isolated-7] [INFO] [1780600838.612438176] [zed_node]:  * Exposure: 80 [DYNAMIC]
-[component_container_isolated-7] [INFO] [1780600838.613081472] [zed_node]:  * Gain: 80 [DYNAMIC]
-[component_container_isolated-7] [INFO] [1780600838.613910496] [zed_node]:  * Auto White Balance: TRUE [DYNAMIC]
-[component_container_isolated-7] [INFO] [1780600838.614585760] [zed_node]:  * White Balance Temperature: 42 [DYNAMIC]
-[component_container_isolated-7] [INFO] [1780600838.614657024] [zed_node]: === DEPTH parameters ===
-[component_container_isolated-7] [INFO] [1780600838.615398208] [zed_node]:  * Depth mode: PERFORMANCE [1]
-[component_container_isolated-7] [INFO] [1780600838.616071040] [zed_node]:  * Min depth [m]: 0.01
-[component_container_isolated-7] [INFO] [1780600838.616732320] [zed_node]:  * Max depth [m]: 15
-[component_container_isolated-7] [INFO] [1780600838.617203744] [zed_node]:  * Depth Stabilization: -1
-[component_container_isolated-7] [INFO] [1780600838.617887584] [zed_node]:  * OpenNI mode (16bit depth): FALSE
-[component_container_isolated-7] [INFO] [1780600838.618553696] [zed_node]:  * Point cloud rate [Hz]: 10
-[component_container_isolated-7] [INFO] [1780600838.619417408] [zed_node]:  * Point cloud resolution: COMPACT
-[component_container_isolated-7] [INFO] [1780600838.620066848] [zed_node]:  * Voxel Point Cloud: FALSE [DYNAMIC]
-[component_container_isolated-7] [INFO] [1780600838.620715904] [zed_node]:  * Voxel Size [mm]: -1 [DYNAMIC]
-[component_container_isolated-7] [INFO] [1780600838.621452640] [zed_node]:  * Voxel Resolution Mode: STEREO_UNCERTAINTY
-[component_container_isolated-7] [INFO] [1780600838.622149632] [zed_node]:  * Voxel Resolution Scale: 0.2 [DYNAMIC]
-[component_container_isolated-7] [INFO] [1780600838.622763552] [zed_node]:  * Depth Confidence: 95 [DYNAMIC]
-[component_container_isolated-7] [INFO] [1780600838.623527360] [zed_node]:  * Depth Texture Confidence: 100 [DYNAMIC]
-[component_container_isolated-7] [INFO] [1780600838.624318304] [zed_node]:  * Remove saturated areas: TRUE [DYNAMIC]
-[component_container_isolated-7] [INFO] [1780600838.624391616] [zed_node]: === POSITIONAL TRACKING parameters ===
-[component_container_isolated-7] [INFO] [1780600838.625079040] [zed_node]:  * Map frame id: map
-[component_container_isolated-7] [INFO] [1780600838.625793984] [zed_node]:  * Odometry frame id: odom
-[component_container_isolated-7] [INFO] [1780600838.626289600] [zed_node]:  * Positional tracking enabled: TRUE
-[component_container_isolated-7] [INFO] [1780600838.626918048] [zed_node]:  * Positional tracking mode [AUTO]: GEN 3
-[component_container_isolated-7] [INFO] [1780600838.627853184] [zed_node]:  * Broadcast Odometry TF: FALSE
-[component_container_isolated-7] [INFO] [1780600838.628467232] [zed_node]:  * Depth minimum range: 0
-[component_container_isolated-7] [INFO] [1780600838.629208576] [zed_node]:  * TF timestamp offset: 0 [DYNAMIC]
-[component_container_isolated-7] [INFO] [1780600838.629717504] [zed_node]:  * Path publishing rate: 2 [DYNAMIC]
-[component_container_isolated-7] [INFO] [1780600838.630180992] [zed_node]:  * Path history lenght: -1
-[component_container_isolated-7] [INFO] [1780600838.630639776] [zed_node]:  * Initial pose: [0,0,0,0,0,0,]
-[component_container_isolated-7] [INFO] [1780600838.631108224] [zed_node]:  * Area Memory: TRUE
-[component_container_isolated-7] [INFO] [1780600838.631731744] [zed_node]:  * Area Memory File: 
-[component_container_isolated-7] [INFO] [1780600838.632464064] [zed_node]:  * Enable Localization Only: FALSE
-[component_container_isolated-7] [INFO] [1780600838.633357088] [zed_node]:  * Save Area Memory on closing: FALSE
-[component_container_isolated-7] [INFO] [1780600838.634116512] [zed_node]:  * Camera is static: FALSE
-[component_container_isolated-7] [INFO] [1780600838.634927680] [zed_node]:  * Gravity as origin: TRUE
-[component_container_isolated-7] [INFO] [1780600838.635553312] [zed_node]:  * IMU Fusion: TRUE
-[component_container_isolated-7] [INFO] [1780600838.636264032] [zed_node]:  * Floor Alignment: FALSE
-[component_container_isolated-7] [INFO] [1780600838.636912608] [zed_node]:  * Reset Odometry with Loop Closure: TRUE
-[component_container_isolated-7] [INFO] [1780600838.637536448] [zed_node]:  * Publish 3D Landmarks: FALSE
-[component_container_isolated-7] [INFO] [1780600838.638225216] [zed_node]:  * Publish Landmark Skip Frame: 
-[component_container_isolated-7] [INFO] [1780600838.638900800] [zed_node]:  * 2D mode: FALSE
-[component_container_isolated-7] [INFO] [1780600838.641481920] [zed_node]:  * Reset pose with SVO loop: TRUE
-[component_container_isolated-7] [INFO] [1780600838.641600800] [zed_node]: === GNSS FUSION parameters ===
-[component_container_isolated-7] [INFO] [1780600838.642581952] [zed_node]:  * GNSS fusion enabled: FALSE
-[component_container_isolated-7] [INFO] [1780600838.642665120] [zed_node]: === REGION OF INTEREST parameters ===
-[component_container_isolated-7] [INFO] [1780600838.643782144] [zed_node]:  * Automatic ROI generation: FALSE
-[component_container_isolated-7] [INFO] [1780600838.644908864] [zed_node]:  * Manual ROI polygon: []
-[component_container_isolated-7] [INFO] [1780600838.644983808] [zed_node]: === SENSORS STACK parameters ===
-[component_container_isolated-7] [INFO] [1780600838.645945600] [zed_node]:  * Broadcast IMU TF [not for ZED]: FALSE
-[component_container_isolated-7] [INFO] [1780600838.646739872] [zed_node]:  * Sensors Camera Sync: FALSE
-[component_container_isolated-7] [INFO] [1780600838.647637568] [zed_node]:  * Sensors publishing rate [Hz]: 100 [DYNAMIC]
-[component_container_isolated-7] [INFO] [1780600838.647711136] [zed_node]: === Spatial Mapping parameters ===
-[component_container_isolated-7] [INFO] [1780600838.648436864] [zed_node]:  * Spatial Mapping Enabled: FALSE
-[component_container_isolated-7] [INFO] [1780600838.649292608] [zed_node]:  * Spatial Mapping resolution [m]: 0.05
-[component_container_isolated-7] [INFO] [1780600838.650226976] [zed_node]:  * 3D Max Mapping range [m]: 5
-[component_container_isolated-7] [INFO] [1780600838.651276160] [zed_node]:  * Map publishing rate [Hz]: 1 [DYNAMIC]
-[component_container_isolated-7] [INFO] [1780600838.652304608] [zed_node]:  * Clicked point topic: /clicked_point
-[component_container_isolated-7] [INFO] [1780600838.653315104] [zed_node]:  * Plane Det. Max Dist. Thresh.: 0.15
-[component_container_isolated-7] [INFO] [1780600838.654608256] [zed_node]:  * Plane Det. Normals Sim. Thresh.: 15
-[component_container_isolated-7] [INFO] [1780600838.654735104] [zed_node]: === OBJECT DETECTION parameters ===
-[component_container_isolated-7] [INFO] [1780600838.655848768] [zed_node]:  * Object Det. enabled: FALSE
-[component_container_isolated-7] [INFO] [1780600838.656981888] [zed_node]:  * Object Det. allow reduced precision: FALSE
-[component_container_isolated-7] [INFO] [1780600838.658077056] [zed_node]:  * Object Det. maximum range [m]: 40
-[component_container_isolated-7] [INFO] [1780600838.659228576] [zed_node]:  * Object Det. prediction timeout [sec]: 2
-[component_container_isolated-7] [INFO] [1780600838.660162528] [zed_node]:  * Object Det. tracking: TRUE
-[component_container_isolated-7] [INFO] [1780600838.661127072] [zed_node]:  * Object Filtering mode: NMS3D
-[component_container_isolated-7] [INFO] [1780600838.662182304] [zed_node]:  * Object Det. model: MULTI CLASS BOX FAST
-[component_container_isolated-7] [INFO] [1780600838.663204832] [zed_node]:  * MultiClassBox people: TRUE [DYNAMIC]
-[component_container_isolated-7] [INFO] [1780600838.664353152] [zed_node]:  * MultiClassBox vehicles: TRUE [DYNAMIC]
-[component_container_isolated-7] [INFO] [1780600838.665347424] [zed_node]:  * MultiClassBox bags: TRUE [DYNAMIC]
-[component_container_isolated-7] [INFO] [1780600838.666847168] [zed_node]:  * MultiClassBox animals: TRUE [DYNAMIC]
-[component_container_isolated-7] [INFO] [1780600838.668105408] [zed_node]:  * MultiClassBox electronics: TRUE [DYNAMIC]
-[component_container_isolated-7] [INFO] [1780600838.669246304] [zed_node]:  * MultiClassBox fruits and vegetables: TRUE [DYNAMIC]
-[component_container_isolated-7] [INFO] [1780600838.670295168] [zed_node]:  * MultiClassBox sport-related objects: TRUE [DYNAMIC]
-[component_container_isolated-7] [INFO] [1780600838.671288800] [zed_node]:  * MultiClassBox people confidence: 50 [DYNAMIC]
-[component_container_isolated-7] [INFO] [1780600838.672259328] [zed_node]:  * MultiClassBox vehicles confidence: 50 [DYNAMIC]
-[component_container_isolated-7] [INFO] [1780600838.673213984] [zed_node]:  * MultiClassBox bags confidence: 50 [DYNAMIC]
-[component_container_isolated-7] [INFO] [1780600838.674075744] [zed_node]:  * MultiClassBox animals confidence: 50 [DYNAMIC]
-[component_container_isolated-7] [INFO] [1780600838.674948768] [zed_node]:  * MultiClassBox electronics confidence: 50 [DYNAMIC]
-[component_container_isolated-7] [INFO] [1780600838.675854144] [zed_node]:  * MultiClassBox fruits and vegetables confidence: 50 [DYNAMIC]
-[component_container_isolated-7] [INFO] [1780600838.676758176] [zed_node]:  * MultiClassBox sport-related objects confidence: 50 [DYNAMIC]
-[component_container_isolated-7] [INFO] [1780600838.676827584] [zed_node]: === Body Track. parameters ===
-[component_container_isolated-7] [INFO] [1780600838.677702112] [zed_node]:  * Body Track. enabled: FALSE
-[component_container_isolated-7] [INFO] [1780600838.678680480] [zed_node]:  * Body Track. model: HUMAN BODY MEDIUM
-[component_container_isolated-7] [INFO] [1780600838.679615072] [zed_node]:  * Body Track. format: BODY 38
-[component_container_isolated-7] [INFO] [1780600838.680548896] [zed_node]:  * Body Track. allow reduced precision: FALSE
-[component_container_isolated-7] [INFO] [1780600838.681465440] [zed_node]:  * Body Track. maximum range [m]: 15
-[component_container_isolated-7] [INFO] [1780600838.682372320] [zed_node]:  * Body Track. KP selection: FULL
-[component_container_isolated-7] [INFO] [1780600838.683149376] [zed_node]:  * Body fitting: FALSE
-[component_container_isolated-7] [INFO] [1780600838.683913376] [zed_node]:  * Body joints tracking: TRUE
-[component_container_isolated-7] [INFO] [1780600838.684840352] [zed_node]:  * Body Track. prediction timeout [sec]: 0.5
-[component_container_isolated-7] [INFO] [1780600838.685611392] [zed_node]:  * Body Track. confidence thresh.: 50 [DYNAMIC]
-[component_container_isolated-7] [INFO] [1780600838.686552896] [zed_node]:  * Body Track. min. KP thresh.: 5 [DYNAMIC]
-[component_container_isolated-7] [INFO] [1780600838.686624544] [zed_node]: === STREAMING SERVER parameters ===
-[component_container_isolated-7] [INFO] [1780600838.687309056] [zed_node]:  * Streaming Server enabled: FALSE
-[component_container_isolated-7] [INFO] [1780600838.688017216] [zed_node]:  * Stream codec: H265
-[component_container_isolated-7] [INFO] [1780600838.688727296] [zed_node]:  * Stream port: 30000
-[component_container_isolated-7] [INFO] [1780600838.689360320] [zed_node]:  * Stream bitrate: 12500
-[component_container_isolated-7] [INFO] [1780600838.690023744] [zed_node]:  * Stream GOP size: -1
-[component_container_isolated-7] [INFO] [1780600838.690819136] [zed_node]:  * Stream Chunk size: 16084
-[component_container_isolated-7] [INFO] [1780600838.691529728] [zed_node]:  * Adaptive bitrate: FALSE
-[component_container_isolated-7] [INFO] [1780600838.692259488] [zed_node]:  * Target frame rate:0
-[component_container_isolated-7] [INFO] [1780600838.692323360] [zed_node]: === ADVANCED parameters ===
-[component_container_isolated-7] [INFO] [1780600838.692991200] [zed_node]:  * Change thread priority: FALSE
-[component_container_isolated-7] [INFO] [1780600838.693191744] [zed_node]: === SERVICES ===
-[component_container_isolated-7] [INFO] [1780600838.696811584] [zed_node]:  * Advertised on service: '/zed_node/reset_odometry'
-[component_container_isolated-7] [INFO] [1780600838.699473312] [zed_node]:  * Advertised on service: '/zed_node/reset_pos_tracking'
-[component_container_isolated-7] [INFO] [1780600838.703469664] [zed_node]:  * Advertised on service: '/zed_node/set_pose'
-[component_container_isolated-7] [INFO] [1780600838.707023680] [zed_node]:  * Advertised on service: '/zed_node/save_area_memory'
-[component_container_isolated-7] [INFO] [1780600838.712708832] [zed_node]:  * Advertised on service: '/zed_node/enable_obj_det'
-[component_container_isolated-7] [INFO] [1780600838.715877472] [zed_node]:  * Advertised on service: '/zed_node/enable_body_trk'
-[component_container_isolated-7] [INFO] [1780600838.719823296] [zed_node]:  * Advertised on service: '/zed_node/enable_mapping'
-[component_container_isolated-7] [INFO] [1780600838.724037216] [zed_node]:  * Advertised on service: '/zed_node/enable_streaming'
-[component_container_isolated-7] [INFO] [1780600838.728268960] [zed_node]:  * Advertised on service: '/zed_node/start_svo_rec'
-[component_container_isolated-7] [INFO] [1780600838.731908736] [zed_node]:  * Advertised on service: '/zed_node/stop_svo_rec'
-[component_container_isolated-7] [INFO] [1780600838.736105088] [zed_node]:  * Advertised on service: '/zed_node/set_roi'
-[component_container_isolated-7] [INFO] [1780600838.742431008] [zed_node]:  * Advertised on service: '/zed_node/reset_roi'
-[component_container_isolated-7] [INFO] [1780600838.742541408] [zed_node]: === STARTING CAMERA ===
-[component_container_isolated-7] [INFO] [1780600838.742595072] [zed_node]: ZED SDK Version: 5.3.0 - Build 114247_4d466e77_3096841
-[component_container_isolated-7] [INFO] [1780600838.781904640] [zed_node]: === CAMERA OPENING ===
-[component_container_isolated-7] [2026-06-04 14:20:39 UTC][ZED][INFO] Logging level INFO
-[component_container_isolated-7] [2026-06-04 14:20:40 UTC][ZED][INFO] [Init]  Camera successfully opened.
-[component_container_isolated-7] [2026-06-04 14:20:40 UTC][ZED][INFO] [Init]  Camera FW version: 1523
-[component_container_isolated-7] [2026-06-04 14:20:40 UTC][ZED][INFO] [Init]  Video mode: HD720@60
-[component_container_isolated-7] [2026-06-04 14:20:40 UTC][ZED][INFO] [Init]  Serial Number: S/N 30093797
-[component_container_isolated-7] [2026-06-04 14:20:40 UTC][ZED][WARNING] [Init]  PERFORMANCE is deprecated. Please update your configuration to use NEURAL instead.
-[component_container_isolated-7] [2026-06-04 14:20:40 UTC][ZED][WARNING] [Init]  The requested depth_minimum_distance (0.01METER) is below the supported minimum. The value has been clamped to 0.2METER. Adjust the minimum distance to stay within valid depth range limits.
-[component_container_isolated-7] [INFO] [1780600841.273983360] [zed_node]:  * ZED SDK running on GPU #0
-[component_container_isolated-7] [INFO] [1780600841.274176384] [zed_node]:  * Camera Model  -> ZED 2i
-[component_container_isolated-7] [INFO] [1780600841.274219872] [zed_node]:  * Serial Number -> 30093797
-[component_container_isolated-7] [INFO] [1780600841.274508960] [zed_node]:  * Focal Length      -> 2.13902 mm
-[component_container_isolated-7] [INFO] [1780600841.274598144] [zed_node]:  * Input     -> USB
-[component_container_isolated-7] [INFO] [1780600841.274658336] [zed_node]:  * Camera FW Version  -> 1523
-[component_container_isolated-7] [INFO] [1780600841.274716832] [zed_node]:  * Sensors FW Version -> 778
-[component_container_isolated-7] [INFO] [1780600841.274757792] [zed_node]:  * Camera grab size -> 1280x720
-[component_container_isolated-7] [INFO] [1780600841.274786432] [zed_node]:  * Color/Depth publishing size -> 1280x720
-[component_container_isolated-7] [INFO] [1780600841.274811040] [zed_node]:  * Point Cloud publishing size -> 448x256
-[component_container_isolated-7] [INFO] [1780600841.274842400] [zed_node]: === TF FRAMES ===
-[component_container_isolated-7] [INFO] [1780600841.274860192] [zed_node]:  * Map                       -> map
-[component_container_isolated-7] [INFO] [1780600841.274873856] [zed_node]:  * Odometry          -> odom
-[component_container_isolated-7] [INFO] [1780600841.274886432] [zed_node]:  * Base                      -> zed2i_camera_link
-[component_container_isolated-7] [INFO] [1780600841.274898464] [zed_node]:  * Camera            -> zed2i_camera_center
-[component_container_isolated-7] [INFO] [1780600841.274910016] [zed_node]:  * Left                      -> zed2i_left_camera_frame
-[component_container_isolated-7] [INFO] [1780600841.274921088] [zed_node]:  * Left Optical              -> zed2i_left_camera_frame_optical
-[component_container_isolated-7] [INFO] [1780600841.274932096] [zed_node]:  * Right                     -> zed2i_right_camera_frame
-[component_container_isolated-7] [INFO] [1780600841.274942400] [zed_node]:  * Right Optical             -> zed2i_right_camera_frame_optical
-[component_container_isolated-7] [INFO] [1780600841.274963840] [zed_node]:  * Depth                     -> zed2i_left_camera_frame
-[component_container_isolated-7] [INFO] [1780600841.274975680] [zed_node]:  * Depth Optical             -> zed2i_left_camera_frame_optical
-[component_container_isolated-7] [INFO] [1780600841.274986176] [zed_node]:  * Point Cloud               -> zed2i_left_camera_frame
-[component_container_isolated-7] [INFO] [1780600841.274996288] [zed_node]:  * IMU                       -> zed2i_imu_link
-[component_container_isolated-7] [INFO] [1780600841.275033568] [zed_node]:  * Barometer         -> zed2i_camera_center
-[component_container_isolated-7] [INFO] [1780600841.275046464] [zed_node]:  * Magnetometer              -> zed2i_imu_link
-[component_container_isolated-7] [INFO] [1780600841.275057440] [zed_node]:  * Left Temperature  -> zed2i_left_camera_frame
-[component_container_isolated-7] [INFO] [1780600841.275067136] [zed_node]:  * Right Temperature -> zed2i_right_camera_frame
-[component_container_isolated-7] [INFO] [1780600841.275122720] [zed_node]: === PUBLISHED TOPICS ===
-[component_container_isolated-7] [INFO] [1780600841.283021888] [zed_node]:  * Advertised on topic: /zed_node/status/health
-[component_container_isolated-7] [INFO] [1780600841.289305440] [zed_node]:  * Advertised on topic: /zed_node/status/heartbeat
-[component_container_isolated-7] [INFO] [1780600841.293879008] [zed_node]:  * Advertised on topic: /zed_node/rgb/color/rect/image [IPC type-adapted zero-copy]
-[component_container_isolated-7] [INFO] [1780600841.436977440] [zed_node]:  * Advertised on topic: /zed_node/rgb/color/rect/image
-[component_container_isolated-7] [INFO] [1780600841.437130304] [zed_node]:  * Advertised on topic: /zed_node/rgb/color/rect/image/compressed [image_transport]
-[component_container_isolated-7] [INFO] [1780600841.437158688] [zed_node]:  * Advertised on topic: /zed_node/rgb/color/rect/image/theora [image_transport]
-[component_container_isolated-7] [INFO] [1780600841.441009440] [zed_node]:  * Advertised on topic: /zed_node/depth/depth_registered [IPC type-adapted zero-copy]
-[component_container_isolated-7] [INFO] [1780600841.451912992] [zed_node]:  * Advertised on topic: /zed_node/depth/depth_registered
-[component_container_isolated-7] [INFO] [1780600841.452031456] [zed_node]:  * Advertised on topic: /zed_node/depth/depth_registered/compressedDepth [image_transport]
-[component_container_isolated-7] [INFO] [1780600841.472399072] [zed_node]:  * Advertised on topic: /zed_node/rgb/color/rect/camera_info
-[component_container_isolated-7] [INFO] [1780600841.480052960] [zed_node]:  * Advertised on topic: /zed_node/rgb/color/rect/image/camera_info
-[component_container_isolated-7] [INFO] [1780600841.489296576] [zed_node]:  * Advertised on topic: /zed_node/depth/camera_info
-[component_container_isolated-7] [INFO] [1780600841.495666528] [zed_node]:  * Advertised on topic: /zed_node/depth/depth_registered/camera_info
-[component_container_isolated-7] [INFO] [1780600841.502652448] [zed_node]:  * Advertised on topic: /zed_node/point_cloud/cloud_registered
-[component_container_isolated-7] [INFO] [1780600841.511716096] [zed_node]:  * Advertised on topic: /zed_node/pose
-[component_container_isolated-7] [INFO] [1780600841.518440640] [zed_node]:  * Advertised on topic: /zed_node/pose/status
-[component_container_isolated-7] [INFO] [1780600841.526697440] [zed_node]:  * Advertised on topic: /zed_node/odom
-[component_container_isolated-7] [INFO] [1780600841.533124800] [zed_node]:  * Advertised on topic: /zed_node/imu/data
-[component_container_isolated-7] [INFO] [1780600841.533265088] [zed_node]: Camera-IMU Translation: 
-[component_container_isolated-7]  -0.002 -0.023061 0.000217
-[component_container_isolated-7] [INFO] [1780600841.533425504] [zed_node]: Camera-IMU Rotation:
-[component_container_isolated-7] FFFF565CBEB8
-[component_container_isolated-7] 0.999951 -0.007513 0.006443
-[component_container_isolated-7] 0.007495 0.999968 0.002896
-[component_container_isolated-7] -0.006464 -0.002847 0.999975
-[component_container_isolated-7] 
-[component_container_isolated-7] [INFO] [1780600841.533454848] [zed_node]: === Subscribers ===
-[component_container_isolated-7] [INFO] [1780600841.542818016] [zed_node]:  * Plane detection: '/clicked_point'
-[component_container_isolated-7] [INFO] [1780600841.630044352] [zed_node]: === zed2i started ===
-[component_container_isolated-7] [INFO] [1780600841.642856224] [zed_node]: === Starting Positional Tracking ===
-[component_container_isolated-7] [INFO] [1780600841.642981696] [zed_node]:  * Waiting for valid static transformations...
-[bno055-6] [WARN] [1780600843.733447008] [bno055]: Receiving sensor data failed with TransmissionException:"Wrong READ-request response header 0x3"
-[bno055-6] [WARN] [1780600846.707256384] [bno055]: Receiving sensor data failed with TransmissionException:"Wrong READ-request response header 0x3"
-[bno055-6] [WARN] [1780600853.092680640] [bno055]: Receiving sensor data failed with TransmissionException:"Transmission error: device reports readiness to read but returned no data (device disconnected or multiple access on port?)"
-[bno055-6] [WARN] [1780600855.813164896] [bno055]: Receiving sensor data failed with TransmissionException:"Wrong READ-request response header 0x3"
-[bno055-6] [WARN] [1780600858.933131616] [bno055]: Receiving sensor data failed with TransmissionException:"Wrong READ-request response header 0x1"
-[bno055-6] [WARN] [1780600859.396873280] [bno055]: Receiving sensor data failed with TransmissionException:"Wrong READ-request response header 0x3"
-[bno055-6] [WARN] [1780600859.509302528] [bno055]: Receiving sensor data failed with TransmissionException:"Wrong READ-request response header 0x3"
-[bno055-6] [WARN] [1780600859.605206464] [bno055]: Receiving sensor data failed with TransmissionException:"Transmission error: device reports readiness to read but returned no data (device disconnected or multiple access on port?)"
-[bno055-6] [WARN] [1780600862.032893856] [bno055]: Receiving sensor data failed with TransmissionException:"Wrong READ-request response header 0x3"
-[bno055-6] [WARN] [1780600865.398890016] [bno055]: Receiving sensor data failed with TransmissionException:"Transmission error: device reports readiness to read but returned no data (device disconnected or multiple access on port?)"
-[bno055-6] [WARN] [1780600868.006498912] [bno055]: Receiving sensor data failed with TransmissionException:"Wrong READ-request response header 0x3"
-[bno055-6] [WARN] [1780600868.040535296] [bno055]: Receiving sensor data failed with TransmissionException:"Transmission error: device reports readiness to read but returned no data (device disconnected or multiple access on port?)"
-[bno055-6] [WARN] [1780600868.151704960] [bno055]: Receiving sensor data failed with TransmissionException:"Wrong READ-request response header 0x3"
-[bno055-6] [WARN] [1780600868.247503360] [bno055]: Receiving sensor data failed with TransmissionException:"Wrong READ-request response header 0x3"
-[bno055-6] [WARN] [1780600868.407453408] [bno055]: Receiving sensor data failed with TransmissionException:"Wrong READ-request response header 0x3"
-[bno055-6] [WARN] [1780600868.503472640] [bno055]: Receiving sensor data failed with TransmissionException:"Transmission error: device reports readiness to read but returned no data (device disconnected or multiple access on port?)"
-[bno055-6] [WARN] [1780600868.598807008] [bno055]: Receiving sensor data failed with TransmissionException:"Transmission error: device reports readiness to read but returned no data (device disconnected or multiple access on port?)"
-[bno055-6] [WARN] [1780600871.495726624] [bno055]: Receiving sensor data failed with TransmissionException:"Transmission error: device reports readiness to read but returned no data (device disconnected or multiple access on port?)"
+[roverrobotics_driver-1] [INFO] [1780697331.872337216] [roverrobotics_driver]: Connected to robot at /dev/rover-control
+[rslidar_sdk_node-2] --------------------------------------------------------
+[rslidar_sdk_node-2] Config loaded from PATH:
+[rslidar_sdk_node-2] /home/rover/rover_workspace/src/rslidar_sdk/config/config.yaml
+[rslidar_sdk_node-2] --------------------------------------------------------
+[rslidar_sdk_node-2] ------------------------------------------------------
+[rslidar_sdk_node-2] Receive Packets From : Online LiDAR
+[rslidar_sdk_node-2] Msop Port: 6699
+[rslidar_sdk_node-2] Difop Port: 7788
+[rslidar_sdk_node-2] ------------------------------------------------------
+[rslidar_sdk_node-2] ------------------------------------------------------
+[rslidar_sdk_node-2]              RoboSense Driver Parameters 
+[rslidar_sdk_node-2] input type: ONLINE_LIDAR
+[rslidar_sdk_node-2] lidar_type: RSAIRY
+[rslidar_sdk_node-2] frame_id: rslidar
+[rslidar_sdk_node-2] ------------------------------------------------------
+[rslidar_sdk_node-2] ------------------------------------------------------
+[rslidar_sdk_node-2]              RoboSense Input Parameters 
+[rslidar_sdk_node-2] msop_port: 6699
+[rslidar_sdk_node-2] difop_port: 7788
+[rslidar_sdk_node-2] imu_port: 0
+[rslidar_sdk_node-2] user_layer_bytes: 0
+[rslidar_sdk_node-2] tail_layer_bytes: 0
+[rslidar_sdk_node-2] host_address: 192.168.1.102
+[rslidar_sdk_node-2] group_address: 0.0.0.0
+[rslidar_sdk_node-2] socket_recv_buf: 106496
+[rslidar_sdk_node-2] pcap_path: /home/robosense/lidar.pcap
+[rslidar_sdk_node-2] pcap_rate: 1
+[rslidar_sdk_node-2] pcap_repeat: 1
+[rslidar_sdk_node-2] use_vlan: 0
+[rslidar_sdk_node-2] ------------------------------------------------------
+[rslidar_sdk_node-2] ------------------------------------------------------
+[rslidar_sdk_node-2]              RoboSense Decoder Parameters 
+[rslidar_sdk_node-2] min_distance: 0.2
+[rslidar_sdk_node-2] max_distance: 200
+[rslidar_sdk_node-2] use_lidar_clock: 0
+[rslidar_sdk_node-2] dense_points: 0
+[rslidar_sdk_node-2] ts_first_point: 1
+[rslidar_sdk_node-2] wait_for_difop: 1
+[rslidar_sdk_node-2] config_from_file: 0
+[rslidar_sdk_node-2] angle_path: 
+[rslidar_sdk_node-2] start_angle: 0
+[rslidar_sdk_node-2] end_angle: 360
+[rslidar_sdk_node-2] split_frame_mode: 1
+[rslidar_sdk_node-2] split_angle: 0
+[rslidar_sdk_node-2] num_blks_split: 0
+[rslidar_sdk_node-2] ------------------------------------------------------
+[rslidar_sdk_node-2] ------------------------------------------------------
+[rslidar_sdk_node-2]              RoboSense Transform Parameters 
+[rslidar_sdk_node-2] x: 0
+[rslidar_sdk_node-2] y: 0
+[rslidar_sdk_node-2] z: 0
+[rslidar_sdk_node-2] roll: 0
+[rslidar_sdk_node-2] pitch: 0
+[rslidar_sdk_node-2] yaw: 0
+[rslidar_sdk_node-2] ------------------------------------------------------
+[rslidar_sdk_node-2] Original receive buffer size: 1048576 bytes
+[rslidar_sdk_node-2] After setting: receive buffer size: 2097152 bytes
+[rslidar_sdk_node-2] Original receive buffer size: 1048576 bytes
+[rslidar_sdk_node-2] After setting: receive buffer size: 2097152 bytes
+[rslidar_sdk_node-2] ------------------------------------------------------
+[rslidar_sdk_node-2] Send PointCloud To : ROS
+[rslidar_sdk_node-2] PointCloud Topic: /rslidar_points
+[rslidar_sdk_node-2] ------------------------------------------------------
+[robot_state_publisher-8] [INFO] [1780697331.922886816] [robot_state_publisher]: got segment base_footprint
+[robot_state_publisher-8] [INFO] [1780697331.923126816] [robot_state_publisher]: got segment base_link
+[robot_state_publisher-8] [INFO] [1780697331.923146368] [robot_state_publisher]: got segment bno055
+[robot_state_publisher-8] [INFO] [1780697331.923154624] [robot_state_publisher]: got segment camera_link
+[robot_state_publisher-8] [INFO] [1780697331.923161280] [robot_state_publisher]: got segment camera_link_optical
+[robot_state_publisher-8] [INFO] [1780697331.923168064] [robot_state_publisher]: got segment front_left_wheel
+[robot_state_publisher-8] [INFO] [1780697331.923174816] [robot_state_publisher]: got segment front_right_wheel
+[robot_state_publisher-8] [INFO] [1780697331.923181088] [robot_state_publisher]: got segment rear_left_wheel
+[robot_state_publisher-8] [INFO] [1780697331.923187232] [robot_state_publisher]: got segment rear_right_wheel
+[robot_state_publisher-8] [INFO] [1780697331.923193024] [robot_state_publisher]: got segment rslidar
+[robot_state_publisher-5] [INFO] [1780697331.937910496] [camera.camera_state_publisher]: got segment camera_camera_center
+[robot_state_publisher-5] [INFO] [1780697331.939615104] [camera.camera_state_publisher]: got segment camera_camera_link
+[robot_state_publisher-5] [INFO] [1780697331.939664704] [camera.camera_state_publisher]: got segment camera_left_camera_frame
+[robot_state_publisher-5] [INFO] [1780697331.939678048] [camera.camera_state_publisher]: got segment camera_left_camera_frame_optical
+[robot_state_publisher-5] [INFO] [1780697331.939687616] [camera.camera_state_publisher]: got segment camera_right_camera_frame
+[robot_state_publisher-5] [INFO] [1780697331.939715296] [camera.camera_state_publisher]: got segment camera_right_camera_frame_optical
+[rslidar_sdk_node-2] RoboSense-LiDAR-Driver is running.....
+[component_container_isolated-6] [INFO] [1780697332.026113248] [camera.zed_container]: Load Library: /home/rover/rover_workspace/install/zed_components/lib/libzed_camera_component.so
+[component_container_isolated-6] [INFO] [1780697332.098415744] [camera.zed_container]: Found class: rclcpp_components::NodeFactoryTemplate<stereolabs::ZedCamera>
+[component_container_isolated-6] [INFO] [1780697332.099898752] [camera.zed_container]: Instantiate class: rclcpp_components::NodeFactoryTemplate<stereolabs::ZedCamera>
+[component_container_isolated-6] [INFO] [1780697332.262105344] [camera.zed_node]: ================================
+[component_container_isolated-6] [INFO] [1780697332.263663584] [camera.zed_node]:       ZED Camera Component 
+[component_container_isolated-6] [INFO] [1780697332.263689056] [camera.zed_node]: ================================
+[component_container_isolated-6] [INFO] [1780697332.263698592] [camera.zed_node]:  * IPC: enabled
+[INFO] [launch_ros.actions.load_composable_nodes]: Loaded node '/camera/zed_node' in container '/camera/zed_container'
+[component_container_isolated-6] [INFO] [1780697332.314038720] [camera.zed_node]:  * namespace: /camera
+[component_container_isolated-6] [INFO] [1780697332.314163104] [camera.zed_node]:  * node name: zed_node
+[component_container_isolated-6] [INFO] [1780697332.314176832] [camera.zed_node]: ================================
+[component_container_isolated-6] [INFO] [1780697332.314186784] [camera.zed_node]: Starting node initialization...
+[component_container_isolated-6] [INFO] [1780697332.314246976] [camera.zed_node]: === DEBUG parameters ===
+[component_container_isolated-6] [INFO] [1780697332.314634944] [camera.zed_node]:  * SDK Verbose: 1
+[component_container_isolated-6] [INFO] [1780697332.314802208] [camera.zed_node]:  * Use Pub Timestamps: FALSE
+[component_container_isolated-6] [INFO] [1780697332.314887200] [camera.zed_node]:  * SDK Verbose File: 
+[component_container_isolated-6] [INFO] [1780697332.314962112] [camera.zed_node]:  * Debug Common: FALSE
+[component_container_isolated-6] [INFO] [1780697332.315026656] [camera.zed_node]:  * Debug Dynamic Parameters: FALSE
+[component_container_isolated-6] [INFO] [1780697332.315087328] [camera.zed_node]:  * Debug Grab (low level): FALSE
+[component_container_isolated-6] [INFO] [1780697332.315144864] [camera.zed_node]:  * Debug Simulation: FALSE
+[component_container_isolated-6] [INFO] [1780697332.315208352] [camera.zed_node]:  * Debug Video/Depth: FALSE
+[component_container_isolated-6] [INFO] [1780697332.315284672] [camera.zed_node]:  * Debug Control settings: FALSE
+[component_container_isolated-6] [INFO] [1780697332.315357024] [camera.zed_node]:  * Debug Point Cloud: FALSE
+[component_container_isolated-6] [INFO] [1780697332.315408448] [camera.zed_node]:  * Debug TF: FALSE
+[component_container_isolated-6] [INFO] [1780697332.315459840] [camera.zed_node]:  * Debug Positional Tracking: FALSE
+[component_container_isolated-6] [INFO] [1780697332.315525984] [camera.zed_node]:  * Debug GNSS: FALSE
+[component_container_isolated-6] [INFO] [1780697332.315593440] [camera.zed_node]:  * Debug sensors: FALSE
+[component_container_isolated-6] [INFO] [1780697332.315654656] [camera.zed_node]:  * Debug Mapping: FALSE
+[component_container_isolated-6] [INFO] [1780697332.315710112] [camera.zed_node]:  * Debug Object Detection: FALSE
+[component_container_isolated-6] [INFO] [1780697332.315772896] [camera.zed_node]:  * Debug Body Tracking: FALSE
+[component_container_isolated-6] [INFO] [1780697332.315826272] [camera.zed_node]:  * Debug Streaming: FALSE
+[component_container_isolated-6] [INFO] [1780697332.315877696] [camera.zed_node]:  * Debug ROI: FALSE
+[component_container_isolated-6] [INFO] [1780697332.315942176] [camera.zed_node]:  * Debug Nitros: FALSE
+[component_container_isolated-6] [INFO] [1780697332.316019808] [camera.zed_node]:  * Debug Advanced: FALSE
+[component_container_isolated-6] [INFO] [1780697332.316067904] [camera.zed_node]: === TOPIC selection parameters ===
+[component_container_isolated-6] [INFO] [1780697332.316133632] [camera.zed_node]:  * Publish Status: TRUE
+[component_container_isolated-6] [INFO] [1780697332.316192832] [camera.zed_node]:  * Image format: BGRA 32-bit
+[component_container_isolated-6] [INFO] [1780697332.316256736] [camera.zed_node]:  * Publish Left/Right images: FALSE
+[component_container_isolated-6] [INFO] [1780697332.316320384] [camera.zed_node]:  * Publish Raw images: FALSE
+[component_container_isolated-6] [INFO] [1780697332.316377312] [camera.zed_node]:  * Publish Gray images: FALSE
+[component_container_isolated-6] [INFO] [1780697332.317739712] [camera.zed_node]:  * Publish RGB image: TRUE
+[component_container_isolated-6] [INFO] [1780697332.317881760] [camera.zed_node]:  * Publish Stereo image: FALSE
+[component_container_isolated-6] [INFO] [1780697332.318004288] [camera.zed_node]:  * Publish ROI Mask image: FALSE
+[component_container_isolated-6] [INFO] [1780697332.318092928] [camera.zed_node]:  * Publish Depth Map: TRUE
+[component_container_isolated-6] [INFO] [1780697332.318185152] [camera.zed_node]:  * Publish Depth Info: FALSE
+[component_container_isolated-6] [INFO] [1780697332.318255744] [camera.zed_node]:  * Publish Point Cloud: TRUE
+[component_container_isolated-6] [INFO] [1780697332.318316096] [camera.zed_node]:  * Publish Depth Confidence: FALSE
+[component_container_isolated-6] [INFO] [1780697332.318373600] [camera.zed_node]:  * Publish Disparity: FALSE
+[component_container_isolated-6] [INFO] [1780697332.318434688] [camera.zed_node]:  * Publish IMU: TRUE
+[component_container_isolated-6] [INFO] [1780697332.318496448] [camera.zed_node]:  * Publish IMU Raw: FALSE
+[component_container_isolated-6] [INFO] [1780697332.318555616] [camera.zed_node]:  * Publish LeftCam/IMU Transf.: FALSE
+[component_container_isolated-6] [INFO] [1780697332.319304288] [camera.zed_node]:  * Publish Magnetometer: FALSE
+[component_container_isolated-6] [INFO] [1780697332.319523520] [camera.zed_node]:  * Publish Barometer: FALSE
+[component_container_isolated-6] [INFO] [1780697332.319623328] [camera.zed_node]:  * Publish Temperature: FALSE
+[component_container_isolated-6] [INFO] [1780697332.319717440] [camera.zed_node]:  * Publish Odometry/Pose: TRUE
+[component_container_isolated-6] [INFO] [1780697332.319790272] [camera.zed_node]:  * Publish Pose with Covariance: FALSE
+[component_container_isolated-6] [INFO] [1780697332.319861696] [camera.zed_node]:  * Publish Camera Path: FALSE
+[component_container_isolated-6] [INFO] [1780697332.319956704] [camera.zed_node]:  * Publish Detection Plane: FALSE
+[component_container_isolated-6] [INFO] [1780697332.320046432] [camera.zed_node]: === SVO INPUT parameters ===
+[component_container_isolated-6] [INFO] [1780697332.320118688] [camera.zed_node]:  * SVO input: DISABLED
+[component_container_isolated-6] [INFO] [1780697332.320146368] [camera.zed_node]: === LOCAL STREAMING parameters ===
+[component_container_isolated-6] [INFO] [1780697332.320206816] [camera.zed_node]:  * Local stream input: DISABLED
+[component_container_isolated-6] [INFO] [1780697332.320223168] [camera.zed_node]: === GENERAL parameters ===
+[component_container_isolated-6] [INFO] [1780697332.320314656] [camera.zed_node]:  * Camera model: zed2i - ZED 2i
+[component_container_isolated-6] [INFO] [1780697332.320391328] [camera.zed_node]:  * Camera name: camera
+[component_container_isolated-6] [INFO] [1780697332.320469728] [camera.zed_node]:  * Camera SN: 0
+[component_container_isolated-6] [INFO] [1780697332.320539008] [camera.zed_node]:  * Camera ID: -1
+[component_container_isolated-6] [INFO] [1780697332.320599904] [camera.zed_node]:  * Camera timeout [sec]: 5
+[component_container_isolated-6] [INFO] [1780697332.320655776] [camera.zed_node]:  * Camera reconnection temptatives: 5
+[component_container_isolated-6] [INFO] [1780697332.320718688] [camera.zed_node]:  * Camera framerate: 60
+[component_container_isolated-6] [INFO] [1780697332.320776032] [camera.zed_node]:  * GPU ID: -1
+[component_container_isolated-6] [INFO] [1780697332.320841120] [camera.zed_node]:  * Asynchronous image retrieval: FALSE
+[component_container_isolated-6] [INFO] [1780697332.320908064] [camera.zed_node]:  * Image Validity Check: 1
+[component_container_isolated-6] [INFO] [1780697332.321006112] [camera.zed_node]:  * Camera resolution: HD720
+[component_container_isolated-6] [INFO] [1780697332.321080384] [camera.zed_node]:  * Publishing resolution: NATIVE
+[component_container_isolated-6] [INFO] [1780697332.321149152] [camera.zed_node]:  * OpenCV custom calibration: 
+[component_container_isolated-6] [INFO] [1780697332.321213664] [camera.zed_node]:  * Camera self calibration: TRUE
+[component_container_isolated-6] [INFO] [1780697332.321270496] [camera.zed_node]:  * Camera flip: FALSE
+[component_container_isolated-6] [INFO] [1780697332.321383776] [camera.zed_node]:  * Publish framerate [Hz]:  0 [DYNAMIC]
+[component_container_isolated-6] [INFO] [1780697332.321463520] [camera.zed_node]:  * Grab Compute Capping FPS: 0
+[component_container_isolated-6] [INFO] [1780697332.321500480] [camera.zed_node]: === VIDEO parameters ===
+[component_container_isolated-6] [INFO] [1780697332.321571616] [camera.zed_node]:  * Brightness: 4 [DYNAMIC]
+[component_container_isolated-6] [INFO] [1780697332.323321856] [camera.zed_node]:  * Contrast: 4 [DYNAMIC]
+[component_container_isolated-6] [INFO] [1780697332.323817152] [camera.zed_node]:  * Hue: 0 [DYNAMIC]
+[component_container_isolated-6] [INFO] [1780697332.324271232] [camera.zed_node]:  * Saturation: 4 [DYNAMIC]
+[component_container_isolated-6] [INFO] [1780697332.324812128] [camera.zed_node]:  * Sharpness: 4 [DYNAMIC]
+[component_container_isolated-6] [INFO] [1780697332.325231008] [camera.zed_node]:  * Gamma: 8 [DYNAMIC]
+[component_container_isolated-6] [INFO] [1780697332.325660480] [camera.zed_node]:  * Auto Exposure/Gain: TRUE [DYNAMIC]
+[component_container_isolated-6] [INFO] [1780697332.326113344] [camera.zed_node]:  * Exposure: 80 [DYNAMIC]
+[component_container_isolated-6] [INFO] [1780697332.326538432] [camera.zed_node]:  * Gain: 80 [DYNAMIC]
+[component_container_isolated-6] [INFO] [1780697332.326963584] [camera.zed_node]:  * Auto White Balance: TRUE [DYNAMIC]
+[component_container_isolated-6] [INFO] [1780697332.327381504] [camera.zed_node]:  * White Balance Temperature: 42 [DYNAMIC]
+[component_container_isolated-6] [INFO] [1780697332.327444704] [camera.zed_node]: === DEPTH parameters ===
+[component_container_isolated-6] [INFO] [1780697332.327959104] [camera.zed_node]:  * Depth mode: NEURAL LIGHT [4]
+[component_container_isolated-6] [INFO] [1780697332.328401632] [camera.zed_node]:  * Min depth [m]: 0.01
+[component_container_isolated-6] [INFO] [1780697332.328859392] [camera.zed_node]:  * Max depth [m]: 15
+[component_container_isolated-6] [INFO] [1780697332.329296192] [camera.zed_node]:  * Depth Stabilization: -1
+[component_container_isolated-6] [INFO] [1780697332.329719488] [camera.zed_node]:  * OpenNI mode (16bit depth): FALSE
+[component_container_isolated-6] [INFO] [1780697332.330185056] [camera.zed_node]:  * Point cloud rate [Hz]: 10
+[component_container_isolated-6] [INFO] [1780697332.330638560] [camera.zed_node]:  * Point cloud resolution: COMPACT
+[component_container_isolated-6] [INFO] [1780697332.331069408] [camera.zed_node]:  * Voxel Point Cloud: FALSE [DYNAMIC]
+[component_container_isolated-6] [INFO] [1780697332.331506240] [camera.zed_node]:  * Voxel Size [mm]: -1 [DYNAMIC]
+[component_container_isolated-6] [INFO] [1780697332.332038048] [camera.zed_node]:  * Voxel Resolution Mode: STEREO_UNCERTAINTY
+[component_container_isolated-6] [INFO] [1780697332.332510048] [camera.zed_node]:  * Voxel Resolution Scale: 0.2 [DYNAMIC]
+[component_container_isolated-6] [INFO] [1780697332.332945696] [camera.zed_node]:  * Depth Confidence: 95 [DYNAMIC]
+[component_container_isolated-6] [INFO] [1780697332.333456032] [camera.zed_node]:  * Depth Texture Confidence: 100 [DYNAMIC]
+[component_container_isolated-6] [INFO] [1780697332.333920224] [camera.zed_node]:  * Remove saturated areas: TRUE [DYNAMIC]
+[component_container_isolated-6] [INFO] [1780697332.333976480] [camera.zed_node]: === POSITIONAL TRACKING parameters ===
+[component_container_isolated-6] [INFO] [1780697332.334407232] [camera.zed_node]:  * Map frame id: map
+[component_container_isolated-6] [INFO] [1780697332.334870240] [camera.zed_node]:  * Odometry frame id: odom
+[component_container_isolated-6] [INFO] [1780697332.335470720] [camera.zed_node]:  * Positional tracking enabled: TRUE
+[component_container_isolated-6] [INFO] [1780697332.335966368] [camera.zed_node]:  * Positional tracking mode [AUTO]: GEN 3
+[component_container_isolated-6] [INFO] [1780697332.336412032] [camera.zed_node]:  * Broadcast Odometry TF: TRUE
+[component_container_isolated-6] [INFO] [1780697332.336863264] [camera.zed_node]:  * Broadcast Pose TF: TRUE
+[component_container_isolated-6] [INFO] [1780697332.337331552] [camera.zed_node]:  * Depth minimum range: 0
+[component_container_isolated-6] [INFO] [1780697332.337760224] [camera.zed_node]:  * TF timestamp offset: 0 [DYNAMIC]
+[component_container_isolated-6] [INFO] [1780697332.338257024] [camera.zed_node]:  * Path publishing rate: 2 [DYNAMIC]
+[component_container_isolated-6] [INFO] [1780697332.338817152] [camera.zed_node]:  * Path history lenght: -1
+[component_container_isolated-6] [INFO] [1780697332.339348576] [camera.zed_node]:  * Initial pose: [0,0,0,0,0,0,]
+[component_container_isolated-6] [INFO] [1780697332.339857216] [camera.zed_node]:  * Area Memory: TRUE
+[component_container_isolated-6] [INFO] [1780697332.340327776] [camera.zed_node]:  * Area Memory File: 
+[component_container_isolated-6] [INFO] [1780697332.340761856] [camera.zed_node]:  * Enable Localization Only: FALSE
+[component_container_isolated-6] [INFO] [1780697332.341200288] [camera.zed_node]:  * Save Area Memory on closing: FALSE
+[component_container_isolated-6] [INFO] [1780697332.341661920] [camera.zed_node]:  * Camera is static: FALSE
+[component_container_isolated-6] [INFO] [1780697332.342256928] [camera.zed_node]:  * Gravity as origin: TRUE
+[component_container_isolated-6] [INFO] [1780697332.342737152] [camera.zed_node]:  * IMU Fusion: TRUE
+[component_container_isolated-6] [INFO] [1780697332.343214720] [camera.zed_node]:  * Floor Alignment: FALSE
+[component_container_isolated-6] [INFO] [1780697332.343693600] [camera.zed_node]:  * Reset Odometry with Loop Closure: TRUE
+[component_container_isolated-6] [INFO] [1780697332.344165376] [camera.zed_node]:  * Publish 3D Landmarks: FALSE
+[component_container_isolated-6] [INFO] [1780697332.344653600] [camera.zed_node]:  * Publish Landmark Skip Frame: 
+[component_container_isolated-6] [INFO] [1780697332.345124544] [camera.zed_node]:  * 2D mode: FALSE
+[component_container_isolated-6] [INFO] [1780697332.345563968] [camera.zed_node]:  * Reset pose with SVO loop: TRUE
+[component_container_isolated-6] [INFO] [1780697332.345620960] [camera.zed_node]: === GNSS FUSION parameters ===
+[component_container_isolated-6] [INFO] [1780697332.346075616] [camera.zed_node]:  * GNSS fusion enabled: FALSE
+[component_container_isolated-6] [INFO] [1780697332.346134080] [camera.zed_node]: === REGION OF INTEREST parameters ===
+[component_container_isolated-6] [INFO] [1780697332.346558688] [camera.zed_node]:  * Automatic ROI generation: FALSE
+[component_container_isolated-6] [INFO] [1780697332.347078144] [camera.zed_node]:  * Manual ROI polygon: []
+[component_container_isolated-6] [INFO] [1780697332.347130816] [camera.zed_node]: === SENSORS STACK parameters ===
+[component_container_isolated-6] [INFO] [1780697332.347568160] [camera.zed_node]:  * Broadcast IMU TF [not for ZED]: FALSE
+[component_container_isolated-6] [INFO] [1780697332.348040896] [camera.zed_node]:  * Sensors Camera Sync: FALSE
+[component_container_isolated-6] [INFO] [1780697332.348558912] [camera.zed_node]:  * Sensors publishing rate [Hz]: 100 [DYNAMIC]
+[component_container_isolated-6] [INFO] [1780697332.348609472] [camera.zed_node]: === Spatial Mapping parameters ===
+[component_container_isolated-6] [INFO] [1780697332.349072672] [camera.zed_node]:  * Spatial Mapping Enabled: FALSE
+[component_container_isolated-6] [INFO] [1780697332.349567584] [camera.zed_node]:  * Spatial Mapping resolution [m]: 0.05
+[component_container_isolated-6] [INFO] [1780697332.350037856] [camera.zed_node]:  * 3D Max Mapping range [m]: 5
+[component_container_isolated-6] [INFO] [1780697332.350526240] [camera.zed_node]:  * Map publishing rate [Hz]: 1 [DYNAMIC]
+[component_container_isolated-6] [INFO] [1780697332.351004448] [camera.zed_node]:  * Clicked point topic: /clicked_point
+[component_container_isolated-6] [INFO] [1780697332.351489056] [camera.zed_node]:  * Plane Det. Max Dist. Thresh.: 0.15
+[component_container_isolated-6] [INFO] [1780697332.351969504] [camera.zed_node]:  * Plane Det. Normals Sim. Thresh.: 15
+[component_container_isolated-6] [INFO] [1780697332.352059552] [camera.zed_node]: === OBJECT DETECTION parameters ===
+[component_container_isolated-6] [INFO] [1780697332.352660032] [camera.zed_node]:  * Object Det. enabled: FALSE
+[component_container_isolated-6] [INFO] [1780697332.353122752] [camera.zed_node]:  * Object Det. allow reduced precision: FALSE
+[component_container_isolated-6] [INFO] [1780697332.353630688] [camera.zed_node]:  * Object Det. maximum range [m]: 40
+[component_container_isolated-6] [INFO] [1780697332.354119680] [camera.zed_node]:  * Object Det. prediction timeout [sec]: 2
+[component_container_isolated-6] [INFO] [1780697332.354753920] [camera.zed_node]:  * Object Det. tracking: TRUE
+[component_container_isolated-6] [INFO] [1780697332.355285952] [camera.zed_node]:  * Object Filtering mode: NMS3D
+[component_container_isolated-6] [INFO] [1780697332.355843168] [camera.zed_node]:  * Object Det. model: MULTI CLASS BOX FAST
+[component_container_isolated-6] [INFO] [1780697332.356289920] [camera.zed_node]:  * MultiClassBox people: TRUE [DYNAMIC]
+[component_container_isolated-6] [INFO] [1780697332.356751008] [camera.zed_node]:  * MultiClassBox vehicles: TRUE [DYNAMIC]
+[component_container_isolated-6] [INFO] [1780697332.357253088] [camera.zed_node]:  * MultiClassBox bags: TRUE [DYNAMIC]
+[component_container_isolated-6] [INFO] [1780697332.357715040] [camera.zed_node]:  * MultiClassBox animals: TRUE [DYNAMIC]
+[component_container_isolated-6] [INFO] [1780697332.358179808] [camera.zed_node]:  * MultiClassBox electronics: TRUE [DYNAMIC]
+[component_container_isolated-6] [INFO] [1780697332.358628896] [camera.zed_node]:  * MultiClassBox fruits and vegetables: TRUE [DYNAMIC]
+[component_container_isolated-6] [INFO] [1780697332.359059104] [camera.zed_node]:  * MultiClassBox sport-related objects: TRUE [DYNAMIC]
+[component_container_isolated-6] [INFO] [1780697332.359534912] [camera.zed_node]:  * MultiClassBox people confidence: 65 [DYNAMIC]
+[component_container_isolated-6] [INFO] [1780697332.359997856] [camera.zed_node]:  * MultiClassBox vehicles confidence: 60 [DYNAMIC]
+[component_container_isolated-6] [INFO] [1780697332.360468832] [camera.zed_node]:  * MultiClassBox bags confidence: 40 [DYNAMIC]
+[component_container_isolated-6] [INFO] [1780697332.360939552] [camera.zed_node]:  * MultiClassBox animals confidence: 40 [DYNAMIC]
+[component_container_isolated-6] [INFO] [1780697332.361389088] [camera.zed_node]:  * MultiClassBox electronics confidence: 45 [DYNAMIC]
+[component_container_isolated-6] [INFO] [1780697332.361832512] [camera.zed_node]:  * MultiClassBox fruits and vegetables confidence: 50 [DYNAMIC]
+[component_container_isolated-6] [INFO] [1780697332.362408416] [camera.zed_node]:  * MultiClassBox sport-related objects confidence: 30 [DYNAMIC]
+[component_container_isolated-6] [INFO] [1780697332.362475328] [camera.zed_node]: === Body Track. parameters ===
+[component_container_isolated-6] [INFO] [1780697332.362965504] [camera.zed_node]:  * Body Track. enabled: FALSE
+[component_container_isolated-6] [INFO] [1780697332.363492672] [camera.zed_node]:  * Body Track. model: HUMAN BODY MEDIUM
+[component_container_isolated-6] [INFO] [1780697332.364014944] [camera.zed_node]:  * Body Track. format: BODY 38
+[component_container_isolated-6] [INFO] [1780697332.364487648] [camera.zed_node]:  * Body Track. allow reduced precision: FALSE
+[component_container_isolated-6] [INFO] [1780697332.364960672] [camera.zed_node]:  * Body Track. maximum range [m]: 15
+[component_container_isolated-6] [INFO] [1780697332.365460448] [camera.zed_node]:  * Body Track. KP selection: FULL
+[component_container_isolated-6] [INFO] [1780697332.365936608] [camera.zed_node]:  * Body fitting: FALSE
+[component_container_isolated-6] [INFO] [1780697332.366486240] [camera.zed_node]:  * Body joints tracking: TRUE
+[component_container_isolated-6] [INFO] [1780697332.367043392] [camera.zed_node]:  * Body Track. prediction timeout [sec]: 0.5
+[component_container_isolated-6] [INFO] [1780697332.367568896] [camera.zed_node]:  * Body Track. confidence thresh.: 50 [DYNAMIC]
+[component_container_isolated-6] [INFO] [1780697332.368066624] [camera.zed_node]:  * Body Track. min. KP thresh.: 5 [DYNAMIC]
+[component_container_isolated-6] [INFO] [1780697332.368130304] [camera.zed_node]: === STREAMING SERVER parameters ===
+[component_container_isolated-6] [INFO] [1780697332.368599680] [camera.zed_node]:  * Streaming Server enabled: FALSE
+[component_container_isolated-6] [INFO] [1780697332.369089952] [camera.zed_node]:  * Stream codec: H265
+[component_container_isolated-6] [INFO] [1780697332.369564608] [camera.zed_node]:  * Stream port: 30000
+[component_container_isolated-6] [INFO] [1780697332.370082112] [camera.zed_node]:  * Stream bitrate: 12500
+[component_container_isolated-6] [INFO] [1780697332.370546016] [camera.zed_node]:  * Stream GOP size: -1
+[component_container_isolated-6] [INFO] [1780697332.370993248] [camera.zed_node]:  * Stream Chunk size: 16084
+[component_container_isolated-6] [INFO] [1780697332.371433184] [camera.zed_node]:  * Adaptive bitrate: FALSE
+[component_container_isolated-6] [INFO] [1780697332.371916000] [camera.zed_node]:  * Target frame rate:0
+[component_container_isolated-6] [INFO] [1780697332.371978432] [camera.zed_node]: === ADVANCED parameters ===
+[component_container_isolated-6] [INFO] [1780697332.372422272] [camera.zed_node]:  * Change thread priority: FALSE
+[component_container_isolated-6] [INFO] [1780697332.372710464] [camera.zed_node]: === SERVICES ===
+[component_container_isolated-6] [INFO] [1780697332.375324576] [camera.zed_node]:  * Advertised on service: '/camera/zed_node/reset_odometry'
+[component_container_isolated-6] [INFO] [1780697332.377121920] [camera.zed_node]:  * Advertised on service: '/camera/zed_node/reset_pos_tracking'
+[component_container_isolated-6] [INFO] [1780697332.380062688] [camera.zed_node]:  * Advertised on service: '/camera/zed_node/set_pose'
+[component_container_isolated-6] [INFO] [1780697332.382098880] [camera.zed_node]:  * Advertised on service: '/camera/zed_node/save_area_memory'
+[component_container_isolated-6] [INFO] [1780697332.386045088] [camera.zed_node]:  * Advertised on service: '/camera/zed_node/enable_obj_det'
+[component_container_isolated-6] [INFO] [1780697332.388047328] [camera.zed_node]:  * Advertised on service: '/camera/zed_node/enable_body_trk'
+[component_container_isolated-6] [INFO] [1780697332.389659776] [camera.zed_node]:  * Advertised on service: '/camera/zed_node/enable_mapping'
+[component_container_isolated-6] [INFO] [1780697332.391269056] [camera.zed_node]:  * Advertised on service: '/camera/zed_node/enable_streaming'
+[component_container_isolated-6] [INFO] [1780697332.393211776] [camera.zed_node]:  * Advertised on service: '/camera/zed_node/start_svo_rec'
+[component_container_isolated-6] [INFO] [1780697332.394841344] [camera.zed_node]:  * Advertised on service: '/camera/zed_node/stop_svo_rec'
+[component_container_isolated-6] [INFO] [1780697332.396650432] [camera.zed_node]:  * Advertised on service: '/camera/zed_node/set_roi'
+[component_container_isolated-6] [INFO] [1780697332.398341824] [camera.zed_node]:  * Advertised on service: '/camera/zed_node/reset_roi'
+[component_container_isolated-6] [INFO] [1780697332.398443712] [camera.zed_node]: === STARTING CAMERA ===
+[component_container_isolated-6] [INFO] [1780697332.398498016] [camera.zed_node]: ZED SDK Version: 5.3.0 - Build 114247_4d466e77_3096841
+[component_container_isolated-6] [INFO] [1780697332.411012768] [camera.zed_node]: === CAMERA OPENING ===
+[rviz2-3] [INFO] [1780697332.677262240] [rviz2]: Stereo is NOT SUPPORTED
+[rviz2-3] [INFO] [1780697332.677466624] [rviz2]: OpenGl version: 4.6 (GLSL 4.6)
+[rviz2-3] [INFO] [1780697332.701980032] [rviz2]: Stereo is NOT SUPPORTED
+[component_container_isolated-6] [2026-06-05 17:08:52 UTC][ZED][INFO] Logging level INFO
+[bno055-4] [INFO] [1780697333.236190048] [bno055]: Initializing parameters
+[joint_state_publisher-7] [INFO] [1780697333.237313440] [joint_state_publisher]: Waiting for robot_description to be published on the robot_description topic...
+[bno055-4] [INFO] [1780697333.266773472] [bno055]: Parameters set to:
+[bno055-4] [INFO] [1780697333.267995328] [bno055]:      ros_topic_prefix:       ""
+[bno055-4] [INFO] [1780697333.268710176] [bno055]:      connection_type:        "uart"
+[bno055-4] [INFO] [1780697333.269335264] [bno055]:      uart_port:              "/dev/bno055"
+[bno055-4] [INFO] [1780697333.269935488] [bno055]:      uart_baudrate:          "115200"
+[bno055-4] [INFO] [1780697333.270483168] [bno055]:      uart_timeout:           "0.1"
+[bno055-4] [INFO] [1780697333.270999392] [bno055]:      frame_id:               "imu_link"
+[bno055-4] [INFO] [1780697333.271485664] [bno055]:      data_query_frequency:   "100"
+[bno055-4] [INFO] [1780697333.272005088] [bno055]:      calib_status_frequency: "0.1"
+[bno055-4] [INFO] [1780697333.272563264] [bno055]:      operation_mode:         "12"
+[bno055-4] [INFO] [1780697333.273100160] [bno055]:      placement_axis_remap:   "P2"
+[bno055-4] [INFO] [1780697333.273605408] [bno055]:      acc_factor:             "100.0"
+[bno055-4] [INFO] [1780697333.274105856] [bno055]:      mag_factor:             "16000000.0"
+[bno055-4] [INFO] [1780697333.274600000] [bno055]:      gyr_factor:             "900.0"
+[bno055-4] [INFO] [1780697333.275098336] [bno055]:      grav_factor:            "100.0"
+[bno055-4] [INFO] [1780697333.275611232] [bno055]:      set_offsets:            "False"
+[bno055-4] [INFO] [1780697333.276148960] [bno055]:      offset_acc:             "[65516, 165, 65512]"
+[bno055-4] [INFO] [1780697333.276674976] [bno055]:      radius_acc:             "1000"
+[bno055-4] [INFO] [1780697333.277175392] [bno055]:      offset_mag:             "[65460, 65182, 637]"
+[bno055-4] [INFO] [1780697333.277686880] [bno055]:      radius_mag:             "0"
+[bno055-4] [INFO] [1780697333.278247360] [bno055]:      offset_gyr:             "[2, 65535, 65535]"
+[bno055-4] [INFO] [1780697333.278761536] [bno055]:      variance_acc:           "[0.017, 0.017, 0.017]"
+[bno055-4] [INFO] [1780697333.279266080] [bno055]:      variance_angular_vel:   "[0.04, 0.04, 0.04]"
+[bno055-4] [INFO] [1780697333.279768704] [bno055]:      variance_orientation:   "[0.0159, 0.0159, 0.0159]"
+[bno055-4] [INFO] [1780697333.280299168] [bno055]:      variance_mag:           "[0.0, 0.0, 0.0]"
+[bno055-4] [INFO] [1780697333.281141632] [bno055]: Opening serial port: "/dev/bno055"...
+[bno055-4] [INFO] [1780697333.311484032] [bno055]: Configuring device...
+[bno055-4] [INFO] [1780697333.409898816] [bno055]: Current sensor offsets:
+[bno055-4] [INFO] [1780697333.490427392] [bno055]:      Accel offsets (x y z): 0 0 0
+[bno055-4] [INFO] [1780697333.491264128] [bno055]:      Accel radius: 1000
+[bno055-4] [INFO] [1780697333.492156032] [bno055]:      Mag offsets (x y z): 0 0 0
+[bno055-4] [INFO] [1780697333.492749504] [bno055]:      Mag radius: 1464
+[bno055-4] [INFO] [1780697333.493317504] [bno055]:      Gyro offsets (x y z): 1 0 0
+[bno055-4] [INFO] [1780697333.494271296] [bno055]: Setting device_mode to 12
+[bno055-4] [INFO] [1780697333.506302368] [bno055]: Bosch BNO055 IMU configuration complete.
+[component_container_isolated-6] [2026-06-05 17:08:54 UTC][ZED][INFO] [Init]  Camera successfully opened.
+[component_container_isolated-6] [2026-06-05 17:08:54 UTC][ZED][INFO] [Init]  Camera FW version: 1523
+[component_container_isolated-6] [2026-06-05 17:08:54 UTC][ZED][INFO] [Init]  Video mode: HD720@60
+[component_container_isolated-6] [2026-06-05 17:08:54 UTC][ZED][INFO] [Init]  Serial Number: S/N 30093797
+[component_container_isolated-6] [2026-06-05 17:08:54 UTC][ZED][INFO] [Init]  Depth mode selected: NEURAL LIGHT. Ensure this mode matches your application's performance and accuracy requirements. See https://www.stereolabs.com/docs/depth-sensing/depth-modes for help.
+[component_container_isolated-6] [INFO] [1780697334.936931424] [camera.zed_node]:  * ZED SDK running on GPU #0
+[component_container_isolated-6] [INFO] [1780697334.937074784] [camera.zed_node]:  * Camera Model  -> ZED 2i
+[component_container_isolated-6] [INFO] [1780697334.937106944] [camera.zed_node]:  * Serial Number -> 30093797
+[component_container_isolated-6] [INFO] [1780697334.937305248] [camera.zed_node]:  * Focal Length       -> 2.13902 mm
+[component_container_isolated-6] [INFO] [1780697334.937364576] [camera.zed_node]:  * Input      -> USB
+[component_container_isolated-6] [INFO] [1780697334.937414368] [camera.zed_node]:  * Camera FW Version  -> 1523
+[component_container_isolated-6] [INFO] [1780697334.937437088] [camera.zed_node]:  * Sensors FW Version -> 778
+[component_container_isolated-6] [INFO] [1780697334.937459840] [camera.zed_node]:  * Camera grab size -> 1280x720
+[component_container_isolated-6] [INFO] [1780697334.937475200] [camera.zed_node]:  * Color/Depth publishing size -> 1280x720
+[component_container_isolated-6] [INFO] [1780697334.937490336] [camera.zed_node]:  * Point Cloud publishing size -> 448x256
+[component_container_isolated-6] [INFO] [1780697334.937522400] [camera.zed_node]: === TF FRAMES ===
+[component_container_isolated-6] [INFO] [1780697334.937539520] [camera.zed_node]:  * Map                        -> map
+[component_container_isolated-6] [INFO] [1780697334.937552416] [camera.zed_node]:  * Odometry           -> odom
+[component_container_isolated-6] [INFO] [1780697334.937565408] [camera.zed_node]:  * Base                       -> camera_camera_link
+[component_container_isolated-6] [INFO] [1780697334.937590848] [camera.zed_node]:  * Camera             -> camera_camera_center
+[component_container_isolated-6] [INFO] [1780697334.937606112] [camera.zed_node]:  * Left                       -> camera_left_camera_frame
+[component_container_isolated-6] [INFO] [1780697334.937618400] [camera.zed_node]:  * Left Optical               -> camera_left_camera_frame_optical
+[component_container_isolated-6] [INFO] [1780697334.937631072] [camera.zed_node]:  * Right                      -> camera_right_camera_frame
+[component_container_isolated-6] [INFO] [1780697334.937642784] [camera.zed_node]:  * Right Optical              -> camera_right_camera_frame_optical
+[component_container_isolated-6] [INFO] [1780697334.937654688] [camera.zed_node]:  * Depth                      -> camera_left_camera_frame
+[component_container_isolated-6] [INFO] [1780697334.937667360] [camera.zed_node]:  * Depth Optical              -> camera_left_camera_frame_optical
+[component_container_isolated-6] [INFO] [1780697334.937679712] [camera.zed_node]:  * Point Cloud                -> camera_left_camera_frame
+[component_container_isolated-6] [INFO] [1780697334.937713088] [camera.zed_node]:  * IMU                        -> camera_imu_link
+[component_container_isolated-6] [INFO] [1780697334.937727680] [camera.zed_node]:  * Barometer          -> camera_camera_center
+[component_container_isolated-6] [INFO] [1780697334.937740096] [camera.zed_node]:  * Magnetometer               -> camera_imu_link
+[component_container_isolated-6] [INFO] [1780697334.937751712] [camera.zed_node]:  * Left Temperature   -> camera_left_camera_frame
+[component_container_isolated-6] [INFO] [1780697334.937777088] [camera.zed_node]:  * Right Temperature  -> camera_right_camera_frame
+[component_container_isolated-6] [INFO] [1780697334.937843296] [camera.zed_node]: === PUBLISHED TOPICS ===
+[component_container_isolated-6] [INFO] [1780697334.942390176] [camera.zed_node]:  * Advertised on topic: /camera/zed_node/status/health
+[component_container_isolated-6] [INFO] [1780697334.946470496] [camera.zed_node]:  * Advertised on topic: /camera/zed_node/status/heartbeat
+[component_container_isolated-6] [INFO] [1780697334.949896864] [camera.zed_node]:  * Advertised on topic: /camera/zed_node/rgb/color/rect/image [IPC type-adapted zero-copy]
+[component_container_isolated-6] [INFO] [1780697335.117769888] [camera.zed_node]:  * Advertised on topic: /camera/zed_node/rgb/color/rect/image
+[component_container_isolated-6] [INFO] [1780697335.119625056] [camera.zed_node]:  * Advertised on topic: /camera/zed_node/rgb/color/rect/image/compressed [image_transport]
+[component_container_isolated-6] [INFO] [1780697335.120578560] [camera.zed_node]:  * Advertised on topic: /camera/zed_node/rgb/color/rect/image/theora [image_transport]
+[component_container_isolated-6] [INFO] [1780697335.123078592] [camera.zed_node]:  * Advertised on topic: /camera/zed_node/depth/depth_registered [IPC type-adapted zero-copy]
+[component_container_isolated-6] [INFO] [1780697335.131891648] [camera.zed_node]:  * Advertised on topic: /camera/zed_node/depth/depth_registered
+[component_container_isolated-6] [INFO] [1780697335.134197568] [camera.zed_node]:  * Advertised on topic: /camera/zed_node/depth/depth_registered/compressedDepth [image_transport]
+[component_container_isolated-6] [INFO] [1780697335.138743936] [camera.zed_node]:  * Advertised on topic: /camera/zed_node/rgb/color/rect/camera_info
+[component_container_isolated-6] [INFO] [1780697335.142443040] [camera.zed_node]:  * Advertised on topic: /camera/zed_node/rgb/color/rect/image/camera_info
+[component_container_isolated-6] [INFO] [1780697335.145952576] [camera.zed_node]:  * Advertised on topic: /camera/zed_node/depth/camera_info
+[component_container_isolated-6] [INFO] [1780697335.149905312] [camera.zed_node]:  * Advertised on topic: /camera/zed_node/depth/depth_registered/camera_info
+[component_container_isolated-6] [INFO] [1780697335.154416608] [camera.zed_node]:  * Advertised on topic: /camera/zed_node/point_cloud/cloud_registered
+[component_container_isolated-6] [INFO] [1780697335.159239936] [camera.zed_node]:  * Advertised on topic: /camera/zed_node/pose
+[component_container_isolated-6] [INFO] [1780697335.162820192] [camera.zed_node]:  * Advertised on topic: /camera/zed_node/pose/status
+[component_container_isolated-6] [INFO] [1780697335.168237568] [camera.zed_node]:  * Advertised on topic: /camera/zed_node/odom
+[component_container_isolated-6] [INFO] [1780697335.179037376] [camera.zed_node]:  * Advertised on topic: /camera/zed_node/imu/data
+[component_container_isolated-6] [INFO] [1780697335.179167712] [camera.zed_node]: Camera-IMU Translation: 
+[component_container_isolated-6]  -0.002 -0.023061 0.000217
+[component_container_isolated-6] [INFO] [1780697335.179238368] [camera.zed_node]: Camera-IMU Rotation:
+[component_container_isolated-6] FFFF6B7EBEA8
+[component_container_isolated-6] 0.999951 -0.007513 0.006443
+[component_container_isolated-6] 0.007495 0.999968 0.002896
+[component_container_isolated-6] -0.006464 -0.002847 0.999975
+[component_container_isolated-6] 
+[component_container_isolated-6] [INFO] [1780697335.179263552] [camera.zed_node]: === Subscribers ===
+[component_container_isolated-6] [INFO] [1780697335.182485984] [camera.zed_node]:  * Plane detection: '/clicked_point'
+[component_container_isolated-6] [INFO] [1780697335.372661600] [camera.zed_node]: === camera started ===
+[component_container_isolated-6] [INFO] [1780697335.385642784] [camera.zed_node]: === Starting Positional Tracking ===
+[component_container_isolated-6] [INFO] [1780697335.385814784] [camera.zed_node]:  * Waiting for valid static transformations...
+[component_container_isolated-6] [INFO] [1780697335.386052160] [camera.zed_node]:  Static transform ref. CMOS Sensor to Base [camera_left_camera_frame -> camera_camera_link]
+[component_container_isolated-6] [INFO] [1780697335.386095680] [camera.zed_node]:   * Translation: {0.010,-0.060,-0.015}
+[component_container_isolated-6] [INFO] [1780697335.386135008] [camera.zed_node]:   * Rotation: {0.000,-0.000,0.000}
+[component_container_isolated-6] [INFO] [1780697335.386176032] [camera.zed_node]:  Static transform ref. CMOS Sensor to Camera Center [camera_left_camera_frame -> camera_camera_center]
+[component_container_isolated-6] [INFO] [1780697335.386191584] [camera.zed_node]:   * Translation: {0.010,-0.060,0.000}
+[component_container_isolated-6] [INFO] [1780697335.386205536] [camera.zed_node]:   * Rotation: {0.000,-0.000,0.000}
+[component_container_isolated-6] [INFO] [1780697335.386231808] [camera.zed_node]:  Static transform Camera Center to Base [camera_camera_center -> camera_camera_link]
+[component_container_isolated-6] [INFO] [1780697335.386244352] [camera.zed_node]:   * Translation: {0.000,0.000,-0.015}
+[component_container_isolated-6] [INFO] [1780697335.386255392] [camera.zed_node]:   * Rotation: {0.000,-0.000,0.000}
+[component_container_isolated-6] [INFO] [1780697335.387365888] [camera.zed_node]: Initial ZED left camera pose (ZED pos. tracking): 
+[component_container_isolated-6] [INFO] [1780697335.387417888] [camera.zed_node]:  * T: [-0.01,0.06,0.015]
+[component_container_isolated-6] [INFO] [1780697335.387446528] [camera.zed_node]:  * Q: [0,0,0,1]
+[component_container_isolated-6] [2026-06-05 17:08:57 UTC][ZED][WARNING] Gravity alignment issues detected. Recomputing alignment...
+[bno055-4] [WARN] [1780697343.626861344] [bno055]: Receiving calibration status failed with BusOverRunException:"Data fusion not ready, resend read request"
 ^C[WARNING] [launch]: user interrupted with ctrl-c (SIGINT)
-[rviz2-13] [INFO] [1780600872.680686016] [rclcpp]: signal_handler(SIGINT/SIGTERM)
-[INFO] [static_transform_publisher-10]: process has finished cleanly [pid 24221]
-[INFO] [async_slam_toolbox_node-12]: process has finished cleanly [pid 24244]
-[INFO] [static_transform_publisher-8]: process has finished cleanly [pid 24217]
-[INFO] [pointcloud_to_laserscan_node-5]: process has finished cleanly [pid 24211]
-[INFO] [robot_state_publisher-3]: process has finished cleanly [pid 24207]
-[INFO] [static_transform_publisher-11]: process has finished cleanly [pid 24223]
-[INFO] [static_transform_publisher-9]: process has finished cleanly [pid 24219]
-[INFO] [rviz2-13]: process has finished cleanly [pid 24259]
-[ERROR] [roverrobotics_driver-1]: process has died [pid 24462, exit code -11, cmd '/home/rover/rover_workspace/install/roverrobotics_driver/lib/roverrobotics_driver/roverrobotics_driver --ros-args -r __node:=roverrobotics_driver --params-file /home/rover/rover_workspace/install/roverrobotics_driver/share/roverrobotics_driver/config/zero_config.yaml --params-file /tmp/launch_params_227p5pyy'].
-[INFO] [joint_state_publisher-2]: process has finished cleanly [pid 24205]
-[ERROR] [bno055-6]: process has died [pid 24213, exit code 1, cmd '/home/rover/rover_workspace/install/bno055/lib/bno055/bno055 --ros-args -r __node:=bno055 --params-file /tmp/launch_params_jyfcg6aw'].
-[static_transform_publisher-10] [INFO] [1780600872.680847872] [rclcpp]: signal_handler(SIGINT/SIGTERM)
-[roverrobotics_driver-1] [INFO] [1780600872.680849696] [rclcpp]: signal_handler(SIGINT/SIGTERM)
-[robot_state_publisher-3] [INFO] [1780600872.680904512] [rclcpp]: signal_handler(SIGINT/SIGTERM)
-[pointcloud_to_laserscan_node-5] [INFO] [1780600872.681031712] [rclcpp]: signal_handler(SIGINT/SIGTERM)
-[component_container_isolated-7] [INFO] [1780600872.681254688] [rclcpp]: signal_handler(SIGINT/SIGTERM)
-[static_transform_publisher-11] [INFO] [1780600872.681765952] [rclcpp]: signal_handler(SIGINT/SIGTERM)
-[static_transform_publisher-9] [INFO] [1780600872.681816096] [rclcpp]: signal_handler(SIGINT/SIGTERM)
-[async_slam_toolbox_node-12] [INFO] [1780600872.682427296] [rclcpp]: signal_handler(SIGINT/SIGTERM)
-[static_transform_publisher-8] [INFO] [1780600872.683057024] [rclcpp]: signal_handler(SIGINT/SIGTERM)
-[bno055-6] [INFO] [1780600872.684744544] [bno055]: Ctrl+C received - exiting...
-[bno055-6] Failed to publish log message to rosout: publisher's context is invalid, at ./src/rcl/publisher.c:389
-[bno055-6] [INFO] [1780600872.685782272] [bno055]: ROS node shutdown
-[bno055-6] Failed to publish log message to rosout: publisher's context is invalid, at ./src/rcl/publisher.c:389
-[bno055-6] Traceback (most recent call last):
-[bno055-6]   File "/home/rover/rover_workspace/build/bno055/bno055/bno055.py", line 155, in main
-[bno055-6]     rclpy.spin(node)
-[bno055-6]   File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/__init__.py", line 229, in spin
-[bno055-6]     executor.spin_once()
-[bno055-6]   File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/executors.py", line 808, in spin_once
-[bno055-6]     self._spin_once_impl(timeout_sec)
-[bno055-6]   File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/executors.py", line 797, in _spin_once_impl
-[bno055-6]     handler, entity, node = self.wait_for_ready_callbacks(timeout_sec=timeout_sec)
-[bno055-6]   File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/executors.py", line 780, in wait_for_ready_callbacks
-[bno055-6]     return next(self._cb_iter)
-[bno055-6]   File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/executors.py", line 677, in _wait_for_ready_callbacks
-[bno055-6]     wait_set.wait(timeout_nsec)
-[bno055-6] KeyboardInterrupt
-[bno055-6] 
-[bno055-6] During handling of the above exception, another exception occurred:
-[bno055-6] 
-[bno055-6] Traceback (most recent call last):
-[bno055-6]   File "/home/rover/rover_workspace/build/bno055/bno055/bno055.py", line 159, in main
-[bno055-6]     sys.exit(0)
-[bno055-6] SystemExit: 0
-[bno055-6] 
-[bno055-6] During handling of the above exception, another exception occurred:
-[bno055-6] 
-[bno055-6] Traceback (most recent call last):
-[bno055-6]   File "/home/rover/rover_workspace/install/bno055/lib/bno055/bno055", line 33, in <module>
-[bno055-6]     sys.exit(load_entry_point('bno055', 'console_scripts', 'bno055')())
-[bno055-6]   File "/home/rover/rover_workspace/build/bno055/bno055/bno055.py", line 168, in main
-[bno055-6]     rclpy.shutdown()
-[bno055-6]   File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/__init__.py", line 130, in shutdown
-[bno055-6]     _shutdown(context=context)
-[bno055-6]   File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/utilities.py", line 58, in shutdown
-[bno055-6]     return context.shutdown()
-[bno055-6]   File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/context.py", line 102, in shutdown
-[bno055-6]     self.__context.shutdown()
-[bno055-6] rclpy._rclpy_pybind11.RCLError: failed to shutdown: rcl_shutdown already called on the given context, at ./src/rcl/init.c:241
-[ERROR] [component_container_isolated-7]: process[component_container_isolated-7] failed to terminate '5' seconds after receiving 'SIGINT', escalating to 'SIGTERM'
-[INFO] [component_container_isolated-7]: sending signal 'SIGTERM' to process[component_container_isolated-7]
-[ERROR] [component_container_isolated-7]: process[component_container_isolated-7] failed to terminate '10.0' seconds after receiving 'SIGTERM', escalating to 'SIGKILL'
-[INFO] [component_container_isolated-7]: sending signal 'SIGKILL' to process[component_container_isolated-7]
-[ERROR] [component_container_isolated-7]: process has died [pid 24215, exit code -9, cmd '/opt/ros/humble/lib/rclcpp_components/component_container_isolated --ros-args -r __node:=zed_container -r __ns:=/camera'].
+[rviz2-3] [INFO] [1780697385.162892032] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[robot_state_publisher-8] [INFO] [1780697385.162905440] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[component_container_isolated-6] [INFO] [1780697385.163050080] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[rslidar_sdk_node-2] RoboSense-LiDAR-Driver is stopping.....
+[robot_state_publisher-5] [INFO] [1780697385.163234976] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[rslidar_sdk_node-2] [INFO] [1780697385.163284576] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[roverrobotics_driver-1] [INFO] [1780697385.163552416] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[bno055-4] [INFO] [1780697385.164240576] [bno055]: Ctrl+C received - exiting...
+[bno055-4] Failed to publish log message to rosout: publisher's context is invalid, at ./src/rcl/publisher.c:389
+[bno055-4] [INFO] [1780697385.165062112] [bno055]: ROS node shutdown
+[bno055-4] Failed to publish log message to rosout: publisher's context is invalid, at ./src/rcl/publisher.c:389
+[INFO] [robot_state_publisher-5]: process has finished cleanly [pid 31029]
+[INFO] [robot_state_publisher-8]: process has finished cleanly [pid 31035]
+[bno055-4] Traceback (most recent call last):
+[bno055-4]   File "/home/rover/rover_workspace/build/bno055/bno055/bno055.py", line 155, in main
+[bno055-4]     rclpy.spin(node)
+[bno055-4]   File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/__init__.py", line 229, in spin
+[bno055-4]     executor.spin_once()
+[bno055-4]   File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/executors.py", line 808, in spin_once
+[bno055-4]     self._spin_once_impl(timeout_sec)
+[bno055-4]   File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/executors.py", line 803, in _spin_once_impl
+[bno055-4]     handler()
+[bno055-4]   File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/task.py", line 256, in __call__
+[bno055-4]     self._execute_coroutine_step(self._handler)
+[bno055-4]   File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/task.py", line 272, in _execute_coroutine_step
+[bno055-4]     result = coro.send(None)
+[bno055-4]   File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/executors.py", line 488, in handler
+[bno055-4]     await call_coroutine(entity, arg)
+[bno055-4]   File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/executors.py", line 396, in _execute_timer
+[bno055-4]     await await_or_execute(tmr.callback)
+[bno055-4]   File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/executors.py", line 110, in await_or_execute
+[bno055-4]     return callback(*args)
+[bno055-4]   File "/home/rover/rover_workspace/build/bno055/bno055/bno055.py", line 111, in read_data
+[bno055-4]     node.sensor.get_sensor_data()
+[bno055-4]   File "/home/rover/rover_workspace/build/bno055/bno055/sensor/SensorService.py", line 187, in get_sensor_data
+[bno055-4]     self.pub_imu_raw.publish(imu_raw_msg)
+[bno055-4]   File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/publisher.py", line 70, in publish
+[bno055-4]     self.__publisher.publish(msg)
+[bno055-4]   File "/opt/ros/humble/local/lib/python3.10/dist-packages/builtin_interfaces/msg/_time.py", line 119, in sec
+[bno055-4]     @builtins.property
+[bno055-4] KeyboardInterrupt
+[bno055-4] 
+[bno055-4] During handling of the above exception, another exception occurred:
+[bno055-4] 
+[bno055-4] Traceback (most recent call last):
+[bno055-4]   File "/home/rover/rover_workspace/build/bno055/bno055/bno055.py", line 159, in main
+[bno055-4]     sys.exit(0)
+[bno055-4] SystemExit: 0
+[bno055-4] 
+[bno055-4] During handling of the above exception, another exception occurred:
+[bno055-4] 
+[bno055-4] Traceback (most recent call last):
+[bno055-4]   File "/home/rover/rover_workspace/install/bno055/lib/bno055/bno055", line 33, in <module>
+[bno055-4]     sys.exit(load_entry_point('bno055', 'console_scripts', 'bno055')())
+[bno055-4]   File "/home/rover/rover_workspace/build/bno055/bno055/bno055.py", line 168, in main
+[bno055-4]     rclpy.shutdown()
+[bno055-4]   File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/__init__.py", line 130, in shutdown
+[bno055-4]     _shutdown(context=context)
+[bno055-4]   File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/utilities.py", line 58, in shutdown
+[bno055-4]     return context.shutdown()
+[bno055-4]   File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/context.py", line 102, in shutdown
+[bno055-4]     self.__context.shutdown()
+[bno055-4] rclpy._rclpy_pybind11.RCLError: failed to shutdown: rcl_shutdown already called on the given context, at ./src/rcl/init.c:241
+[component_container_isolated-6] [INFO] [1780697385.382726112] [camera.zed_node]: === CLOSING CAMERA ===
+[ERROR] [roverrobotics_driver-1]: process has died [pid 31021, exit code -11, cmd '/home/rover/rover_workspace/install/roverrobotics_driver/lib/roverrobotics_driver/roverrobotics_driver --ros-args -r __node:=roverrobotics_driver --params-file /home/rover/rover_workspace/install/roverrobotics_driver/share/roverrobotics_driver/config/zero_config.yaml'].
+[INFO] [rviz2-3]: process has finished cleanly [pid 31025]
+[INFO] [joint_state_publisher-7]: process has finished cleanly [pid 31033]
+[ERROR] [bno055-4]: process has died [pid 31027, exit code 1, cmd '/home/rover/rover_workspace/install/bno055/lib/bno055/bno055 --ros-args -r __node:=bno055 --params-file /home/rover/rover_workspace/install/roverrobotics_driver/share/roverrobotics_driver/config/accessories.yaml -r /imu:=/imu/data'].
+[rslidar_sdk_node-2] terminate called after throwing an instance of 'std::system_error'
+[rslidar_sdk_node-2]   what():  Invalid argument
+[ERROR] [rslidar_sdk_node-2]: process has died [pid 31023, exit code -6, cmd '/home/rover/rover_workspace/install/rslidar_sdk/lib/rslidar_sdk/rslidar_sdk_node --ros-args -r __ns:=/rslidar_sdk --params-file /tmp/launch_params_qtkabruu'].
+[component_container_isolated-6] [INFO] [1780697386.026344640] [camera.zed_node]: === CAMERA CLOSED ===
+[INFO] [component_container_isolated-6]: process has finished cleanly [pid 31031]
 rover@rover-desktop:~/rover_workspace$ 
+
+rover@rover-desktop:~/rover_workspace$ ros2 launch roverrobotics_driver slam_launch.py 
+[INFO] [launch]: All log files can be found below /home/rover/.ros/log/2026-06-05-17-09-09-749752-rover-desktop-31397
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [ekf_node-1]: process started with pid [31399]
+[INFO] [pointcloud_to_laserscan_node-2]: process started with pid [31401]
+[INFO] [async_slam_toolbox_node-3]: process started with pid [31403]
+[pointcloud_to_laserscan_node-2] [INFO] [1780697350.015277856] [pointcloud_to_laserscan]: Got a subscriber to laserscan, starting pointcloud subscriber
+[async_slam_toolbox_node-3] [INFO] [1780697350.034253888] [slam_toolbox]: Node using stack size 40000000
+[async_slam_toolbox_node-3] [INFO] [1780697350.252747168] [slam_toolbox]: Using solver plugin solver_plugins::CeresSolver
+[async_slam_toolbox_node-3] [INFO] [1780697350.253360000] [slam_toolbox]: CeresSolver: Using SCHUR_JACOBI preconditioner.
+[async_slam_toolbox_node-3] [WARN] [1780697350.345700896] [slam_toolbox]: minimum laser range setting (0.0 m) exceeds the capabilities of the used Lidar (0.2 m)
+[async_slam_toolbox_node-3] Registering sensor: [Custom Described Lidar]
+[async_slam_toolbox_node-3] [INFO] [1780697352.450425152] [slam_toolbox]: Message Filter dropping message: frame 'base_link' at time 1780697352.231 for reason 'discarding message because the queue is full'
+^C[WARNING] [launch]: user interrupted with ctrl-c (SIGINT)
+[pointcloud_to_laserscan_node-2] [INFO] [1780697414.025483456] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[async_slam_toolbox_node-3] [INFO] [1780697414.025510400] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[ekf_node-1] [INFO] [1780697414.025507488] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[INFO] [pointcloud_to_laserscan_node-2]: process has finished cleanly [pid 31401]
+[INFO] [ekf_node-1]: process has finished cleanly [pid 31399]
+[INFO] [async_slam_toolbox_node-3]: process has finished cleanly [pid 31403]

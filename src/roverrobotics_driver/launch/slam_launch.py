@@ -32,6 +32,34 @@ def generate_launch_description():
     rl_launch_path = os.path.join(get_package_share_directory("roverrobotics_driver"), 'launch', 'robot_localizer.launch.py')
     robot_localizer_launch = IncludeLaunchDescription(PythonLaunchDescriptionSource(rl_launch_path),
         launch_arguments={'use_sim_time': use_sim_time}.items())
+    
+    # NEW: PointCloud to LaserScan Slicer node
+    pointcloud_to_laserscan_node = Node(
+        package='pointcloud_to_laserscan',
+        executable='pointcloud_to_laserscan_node',
+        name='pointcloud_to_laserscan',
+        output='screen',
+        parameters=[{
+            'target_frame': 'base_link',
+            'transform_tolerance': 0.05,
+            'min_height': 0.10,
+            'max_height': 1.00,
+            'angle_min': -3.14159,
+            'angle_max': 3.14159,
+            'angle_increment': 0.0087,
+            'scan_time': 0.1,
+            'range_min': 0.20,
+            'range_max': 50.0,
+            'use_inf': True,
+            'use_sim_time': use_sim_time,
+            'qos_reliability': 2
+        }],
+        remappings=[
+            ('cloud_in', '/rslidar_points'),
+            ('scan', '/scan')
+        ]
+        
+    )
 
     start_async_slam_toolbox_node = Node(
         parameters=[
@@ -50,6 +78,9 @@ def generate_launch_description():
     
     # Add localization to launch description
     ld.add_action(robot_localizer_launch)
+
+    # Run the data converter stream
+    ld.add_action(pointcloud_to_laserscan_node)
 
     # Add slam setup to launch description
     ld.add_action(declare_slam_params_file_cmd)

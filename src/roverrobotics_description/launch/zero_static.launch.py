@@ -37,7 +37,7 @@ def generate_launch_description():
     )
 
     rviz_config_path = PathJoinSubstitution(
-        [FindPackageShare(description_package), "config", "go2_description.rviz"]
+        [FindPackageShare(description_package), "config", "zero_description.rviz"]
     )
 
     common_params = [{"robot_description": robot_description, "use_sim_time": use_sim_time}]
