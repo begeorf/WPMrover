@@ -1,14 +1,14 @@
 slam_toolbox:
   ros__parameters:
     # Basic frames
-    base_frame: base_link
+    base_frame: base_footprint
     odom_frame: odom
     map_frame: map
     scan_topic: /scan
 
     # SLAM mode
-    # mode: "mapping"
-    # publish_tf: true
+    mode: "mapping"
+    publish_tf: true
 
     # Localization mode
     # mode: "localization"
@@ -21,18 +21,18 @@ slam_toolbox:
     # map_start_at_dock: true
 
     # Laser parameters (match your RPLiDAR specs)
-    minimum_laser_range: 0.35
-    maximum_laser_range: 12.0
+    minimum_laser_range: 0.2
+    maximum_laser_range: 50.0
 
     # Performance tuning to reduce message dropping
     scan_buffer_size: 20
-    scan_buffer_maximum_scan_distance: 12.0
+    scan_buffer_maximum_scan_distance: 50.0
     tf_buffer_duration: 30.0
 
     # Reduce motion thresholds to update more frequently on slopes
-    minimum_travel_distance: 0.2
-    minimum_travel_heading: 0.1
-    minimum_time_interval: 0.5
+    minimum_travel_distance: 0.1
+    minimum_travel_heading: 0.05
+    minimum_time_interval: 0.2
 
     # Improve scan matching for slope transitions
     use_scan_matching: true
@@ -53,7 +53,7 @@ slam_toolbox:
     correlation_search_space_smear_deviation: 0.05
 
     # Add constraint building for better mapping
-    max_laser_range: 12.0
+    max_laser_range: 50.0
     laser_sample_increment: 1
     laser_sample_maximum_range: 12.0
 
