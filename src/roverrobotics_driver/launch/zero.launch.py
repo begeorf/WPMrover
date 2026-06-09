@@ -83,29 +83,29 @@ def generate_launch_description():
         arguments=['0', '0', '0', '0', '0', '0', 'base_footprint', 'base_link']
     )
 
-    # 3. Mount the Lidar to base_link (using your earlier measured translation/rotation offsets)
-    baselink_to_rslidar_bridge = Node(
-        package='tf2_ros',
-        executable='static_transform_publisher',
-        name='baselink_to_rslidar',
-        arguments=['0.000', '0.044', '0.268', '0.000', '0.384', '0.000', 'base_link', 'rslidar']
-    )
+    # # 3. Mount the Lidar to base_link (using your earlier measured translation/rotation offsets)
+    # baselink_to_rslidar_bridge = Node(
+    #     package='tf2_ros',
+    #     executable='static_transform_publisher',
+    #     name='baselink_to_rslidar',
+    #     arguments=['0.000', '0.044', '0.268', '0.000', '0.384', '0.000', 'base_link', 'rslidar']
+    # )
 
-    # 4. Mount the IMU to base_link
-    baselink_to_bno055_bridge = Node(
-        package='tf2_ros',
-        executable='static_transform_publisher',
-        name='baselink_to_bno055',
-        arguments=['0', '0', '0.05', '0', '0', '0', 'base_link', 'bno055']
-    )
+    # # 4. Mount the IMU to base_link
+    # baselink_to_bno055_bridge = Node(
+    #     package='tf2_ros',
+    #     executable='static_transform_publisher',
+    #     name='baselink_to_bno055',
+    #     arguments=['0', '0', '0.05', '0', '0', '0', 'base_link', 'bno055']
+    # )
 
-    # 5. Connect isolated camera_link frame to the main physical tree
-    baselink_to_cameralink_bridge = Node(
-        package='tf2_ros',
-        executable='static_transform_publisher',
-        name='baselink_to_cameralink',
-        arguments=['0.1', '0', '0.2', '0', '0', '0', 'base_link', 'camera_link']
-    )
+    # # 5. Connect isolated camera_link frame to the main physical tree
+    # baselink_to_cameralink_bridge = Node(
+    #     package='tf2_ros',
+    #     executable='static_transform_publisher',
+    #     name='baselink_to_cameralink',
+    #     arguments=['0.1', '0', '0.2', '0', '0', '0', 'base_link', 'camera_link']
+    # )
 
     # RViz Visualizer Node
     rviz_node = Node(
@@ -122,9 +122,9 @@ def generate_launch_description():
     ld.add_action(robot_state_publisher_node)
     ld.add_action(base_footprint_bridge_node)
     ld.add_action(odom_to_footprint_bridge)
-    ld.add_action(baselink_to_rslidar_bridge)
-    ld.add_action(baselink_to_bno055_bridge)
-    ld.add_action(baselink_to_cameralink_bridge)
+    # ld.add_action(baselink_to_rslidar_bridge)
+    # ld.add_action(baselink_to_bno055_bridge)
+    # ld.add_action(baselink_to_cameralink_bridge)
     # ld.add_action(rviz_node)
    
     return ld
