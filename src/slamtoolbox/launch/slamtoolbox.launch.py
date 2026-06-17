@@ -16,6 +16,11 @@ def generate_launch_description():
     rslidar_pkg = get_package_share_directory('rslidar_sdk')
     # zed_wrapper_pkg = get_package_share_directory('zed_wrapper')
     zero_description_pkg = get_package_share_directory('roverrobotics_description')
+
+    # === MODIFICATION 1: Get driver package directory and define controller launch path ===
+    rover_driver_pkg = get_package_share_directory('roverrobotics_driver')
+    controller_launch_path = os.path.join(rover_driver_pkg, 'launch', 'ps4_controller.launch.py') # Match your actual launch filename if different
+    ps4_controller_launch = IncludeLaunchDescription(PythonLaunchDescriptionSource(controller_launch_path))
     
     # Configuration Files
     slam_config_file = os.path.join(slam_toolbox_pkg, "config", "slamtoolbox_params.yaml")
@@ -107,6 +112,9 @@ def generate_launch_description():
     ld.add_action(slam_toolbox_node)
     ld.add_action(robot_state_publisher_node)
     ld.add_action(rover_driver_node)
+
+    # === MODIFICATION 2: Add the controller launch action to the tree ===
+    ld.add_action(ps4_controller_launch)
 
     delayed_lidar_driver = TimerAction(
         period=5.0,

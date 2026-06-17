@@ -5,8 +5,10 @@ from geometry_msgs.msg import Twist
 from std_msgs.msg import String
 from sensor_msgs.msg import Joy
 import yaml
-from roverrobotics_input_manager.scripts.modules.Controller import Controller, Axis, Button
-from roverrobotics_input_manager.scripts.modules.Topics import Topics, TwistTopic
+# from roverrobotics_input_manager.scripts.modules.Controller import Controller, Axis, Button
+# from roverrobotics_input_manager.scripts.modules.Topics import Topics, TwistTopic
+from modules.Controller import Controller, Axis, Button
+from modules.Topics import Topics
 
 class Mapper(Node):
     def __init__(self, joy_topic, name="joy_manager"):
