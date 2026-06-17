@@ -53,7 +53,7 @@ def main():
     # Define test parameters
     # Adjust these numbers depending on your room size!
     SQUARE_SIDE_METERS = 2.0  
-    STRAIGHT_LINE_METERS = 1.0
+    STRAIGHT_LINE_METERS = .605
 
     print("Waiting for Nav2 Lifecycle Servers to become active...")
     # BYPASS: Manually check the action server instead of waiting for AMCL lifecycle node
