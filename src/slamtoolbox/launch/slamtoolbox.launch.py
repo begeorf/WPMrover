@@ -95,7 +95,7 @@ def generate_launch_description():
             ('cloud_in', '/rslidar_points'),
             ('scan', '/scan')
         ],
-        ros_args=['--param', 'qos_reliability:=reliable']
+        # ros_args=['--param', 'qos_reliability:=reliable']
     )
 
     # SLAM toolbox node
