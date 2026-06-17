@@ -2,3 +2,7 @@ build/
 install/
 log/
 .colcon/
+*.pdf
+*.gv
+output.txt
+battery_test_log.txt
