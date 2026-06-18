@@ -62,7 +62,11 @@ def generate_launch_description():
             launch_arguments={
                 'camera_model': 'zed2i',
                 'camera_name': 'camera',
-                'config_path': str(zed_config_path)
+                'config_path': str(zed_config_path),
+                'base_frame': 'base_footprint', 
+                'publish_tf': 'true',        # <-- ADD THIS LINE: Stops ZED from fighting wheel encoders over Odom
+                'publish_map_tf': 'false'  # <-- ADD THIS LINE
+                # 'cam_pos_z': '0.3'                 # <-- ADD THIS LINE (Adjust 0.3 to your actual camera mount height in meters if needed)
             }.items()
         )
         ld.add_action(zed_launch)

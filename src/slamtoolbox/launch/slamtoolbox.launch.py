@@ -63,11 +63,14 @@ def generate_launch_description():
         output='screen',
         parameters=[{
             'use_sim_time': False,
-            'robot_type': 'zero',                # Sets the controller mapping (usually 'pro' or '4wd')
+            'robot_type': 'zero2',                # Sets the controller mapping (usually 'pro' or '4wd')
             'device_port': '/dev/rover',         # Maps to your physical USB-to-Serial port rule
             'comm_type': 'serial',               # Tells the driver to stream over serial protocol
             'odom_frame': 'odom',
-            'base_link_frame': 'base_footprint'
+            'base_link_frame': 'base_footprint',
+            # these are intended to fix the tf fighting issues
+            'publish_tf': True,                  # <-- ADD THIS LINE: Stops driver from fighting ZED over TF
+            'publish_odom': True
         }]
     )
 

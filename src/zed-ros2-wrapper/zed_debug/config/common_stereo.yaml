@@ -106,6 +106,7 @@
             publish_map_tf: true # [overwritten by launch file options] publish `map -> odom` TF
             map_frame: 'map'
             odometry_frame: 'odom'
+            base_frame: 'base_footprint' # add base frame as base link?
             area_memory: true # Enable to detect loop closure
             area_file_path: '' # Path to the area memory file for relocalization and loop closure in a previously explored environment. 
             enable_localization_only: false # If true, the camera will only localize in the loaded area memory without updating the map with new information.
