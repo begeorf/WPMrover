@@ -91,8 +91,8 @@ def generate_launch_description():
             'range_min': 0.20,
             'range_max': 50.0,
             'use_inf': True,
-            'use_sim_time': False,
-            'qos_reliability': 1 # 1 = Reliable QoS profile to match slam_toolbox
+            'use_sim_time': False, #this should be set to true when looking at data in post, false when collecting data
+            'qos_reliability': 2 # 1 = Reliable QoS profile to match slam_toolbox, 2 = best effort
         }],
         remappings=[
             ('cloud_in', '/rslidar_points'),
@@ -113,17 +113,17 @@ def generate_launch_description():
     ld = LaunchDescription()
 
     ld.add_action(slam_toolbox_node)
-    ld.add_action(robot_state_publisher_node)
-    ld.add_action(rover_driver_node)
+    # ld.add_action(robot_state_publisher_node)
+    # ld.add_action(rover_driver_node)
 
     # === MODIFICATION 2: Add the controller launch action to the tree ===
     ld.add_action(ps4_controller_launch)
 
-    delayed_lidar_driver = TimerAction(
-        period=5.0,
-        actions=[rslidar_launch],
-    )
-    ld.add_action(delayed_lidar_driver)
+    # delayed_lidar_driver = TimerAction(
+    #     period=5.0,
+    #     actions=[rslidar_launch],
+    # )
+    # ld.add_action(delayed_lidar_driver)
 
     delayed_pointcloud_to_laserscan = TimerAction(
         period=10.0,
