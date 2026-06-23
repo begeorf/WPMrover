@@ -183,16 +183,27 @@ def generate_launch_description():
     map_file_arg = PathJoinSubstitution([
         get_package_share_directory('roverrobotics_driver'), 'maps', map_file])
 
-    start_async_slam_toolbox_node = Node(
-        parameters=[
-          slam_params_file,
-          {'use_sim_time': use_sim_time},
-          {'map_file_name': map_file_arg}
-        ],
-        package='slam_toolbox',
-        executable='localization_slam_toolbox_node',
-        name='slam_toolbox',
-        output='screen')
+     # start_async_slam_toolbox_node = Node(
+    #     parameters=[
+    #       slam_params_file,
+    #       {'use_sim_time': use_sim_time},
+    #       {'map_file_name': map_file_arg}
+    #     ],
+    #     package='slam_toolbox',
+    #     executable='localization_slam_toolbox_node',
+    #     name='slam_toolbox',
+    #     output='screen')
+
+    # Modification: Reference official slam_toolbox package launcher
+    slam_toolbox_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(get_package_share_directory('slam_toolbox'), 'launch', 'slamtoolbox.launch.py')
+        ),
+        launch_arguments={
+            'slam_params_file': slam_params_file,
+            'use_sim_time': use_sim_time
+        }.items()
+    )
     
     # Create the launch description and populate
     ld = LaunchDescription()
@@ -218,7 +229,8 @@ def generate_launch_description():
     
     # Add the actions to launch all of the navigation nodes
     ld.add_action(robot_localizer_launch)
-    ld.add_action(start_async_slam_toolbox_node)
+    # ld.add_action(start_async_slam_toolbox_node)
+    ld.add_action(slam_toolbox_launch)
     ld.add_action(bringup_cmd_group)
 
     return ld
