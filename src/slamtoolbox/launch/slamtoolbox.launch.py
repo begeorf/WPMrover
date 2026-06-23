@@ -128,8 +128,8 @@ def generate_launch_description():
     ld.add_action(declare_use_sim_time_argument)
 
     ld.add_action(slam_toolbox_node)
-    # ld.add_action(robot_state_publisher_node)
-    # ld.add_action(rover_driver_node)
+    ld.add_action(robot_state_publisher_node)
+    ld.add_action(rover_driver_node)
 
     # === MODIFICATION 2: Add the controller launch action to the tree ===
     ld.add_action(ps4_controller_launch)
@@ -139,7 +139,7 @@ def generate_launch_description():
     #     actions=[rslidar_launch],
     # )
     # ld.add_action(delayed_lidar_driver)
-    ld.add_action(robot_localizer_launch)
+    # ld.add_action(robot_localizer_launch)
 
 
     delayed_pointcloud_to_laserscan = TimerAction(
