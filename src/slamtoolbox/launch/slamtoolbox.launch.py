@@ -6,9 +6,19 @@ from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, Time
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_ros.actions import Node, ComposableNodeContainer
 from launch_ros.descriptions import ComposableNode
+from launch.substitutions import LaunchConfiguration
 
 
 def generate_launch_description():
+
+    # 1. DEFINE THE VARIABLE FIRST
+    use_sim_time = LaunchConfiguration('use_sim_time')
+
+    # 2. DECLARE THE LAUNCH ARGUMENT
+    declare_use_sim_time_argument = DeclareLaunchArgument(
+        'use_sim_time',
+        default_value='false',
+        description='Use simulation/Gazebo clock')
     # ==========================================
     # 1. PACKAGE PATHS & PARAMETER DEFINITIONS
     # ==========================================
@@ -21,6 +31,10 @@ def generate_launch_description():
     rover_driver_pkg = get_package_share_directory('roverrobotics_driver')
     controller_launch_path = os.path.join(rover_driver_pkg, 'launch', 'ps4_controller.launch.py') # Match your actual launch filename if different
     ps4_controller_launch = IncludeLaunchDescription(PythonLaunchDescriptionSource(controller_launch_path))
+
+    rl_launch_path = os.path.join(get_package_share_directory("roverrobotics_driver"), 'launch', 'robot_localizer.launch.py')
+    robot_localizer_launch = IncludeLaunchDescription(PythonLaunchDescriptionSource(rl_launch_path),
+        launch_arguments={'use_sim_time': use_sim_time}.items())
     
     # Configuration Files
     slam_config_file = os.path.join(slam_toolbox_pkg, "config", "slamtoolbox_params.yaml")
@@ -111,6 +125,7 @@ def generate_launch_description():
     )
 
     ld = LaunchDescription()
+    ld.add_action(declare_use_sim_time_argument)
 
     ld.add_action(slam_toolbox_node)
     # ld.add_action(robot_state_publisher_node)
@@ -124,9 +139,11 @@ def generate_launch_description():
     #     actions=[rslidar_launch],
     # )
     # ld.add_action(delayed_lidar_driver)
+    ld.add_action(robot_localizer_launch)
+
 
     delayed_pointcloud_to_laserscan = TimerAction(
-        period=10.0,
+        period=2.0,
         actions=[pointcloud_to_laserscan_node]
     )
     ld.add_action(delayed_pointcloud_to_laserscan)
