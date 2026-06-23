@@ -64,5 +64,5 @@ slam_toolbox:
     ceres_dogleg_type: TRADITIONAL_DOGLEG
 
     # Additional slope-specific parameters
-    transform_timeout: 0.2
+    transform_timeout: 0.02
     map_update_interval: 2.0
