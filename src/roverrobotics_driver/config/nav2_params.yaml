@@ -238,22 +238,22 @@ controller_server:
 local_costmap:
   local_costmap:
     ros__parameters:
-      update_frequency: 10.0
-      publish_frequency: 5.0
+      update_frequency: 10.0 # test 5 (this is Hossein's value)
+      publish_frequency: 5.0 # test 2.5 (this is Hossein's value)
       global_frame: odom
       robot_base_frame: base_link
       use_sim_time: False
       rolling_window: true
-      width: 8
-      height: 8
+      width: 8 #change this to 3m if 8m is too big
+      height: 8 # same
       resolution: 0.05
       footprint: "[[0.27305, 0.1778],[0.27305, -0.1778],[-0.27305, -0.1778],[-0.27305, 0.1778]]"
       footprint_padding: 0.01
       plugins: ["voxel_layer", "inflation_layer"]
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
-        cost_scaling_factor: 3.0
-        inflation_radius: 0.35
+        cost_scaling_factor: 3.0 # change if these are hard to navitage around obstacles this (maybe put this to 5)
+        inflation_radius: 0.35 # this is the bumper distance to make the robot stay away from (maybe decrease this to .2)
       voxel_layer:
         plugin: "nav2_costmap_2d::VoxelLayer"
         enabled: True
