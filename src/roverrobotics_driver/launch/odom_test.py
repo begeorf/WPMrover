@@ -27,12 +27,21 @@ def execute_pattern(navigator, pattern_poses):
         print(f"\n[Odom Test] Sending Waypoint {i+1}/{len(pattern_poses)}...")
         navigator.goToPose(target_pose)
 
-        # Monitor progress until the robot reaches the destination
-        while not navigator.isTaskComplete():
-            feedback = navigator.getFeedback()
-            if feedback and i % 5 == 0:
-                print(f"Distance remaining: {feedback.distance_remaining:.2f} meters.")
-            time.sleep(0.5)
+        for i, target_pose in enumerate(pattern_poses):
+            print(f"\n[Odom Test] Sending Waypoint {i+1}/{len(pattern_poses)}...")
+            navigator.goToPose(target_pose)
+
+            # Monitor progress until the robot reaches the destination
+            loop_count = 0  # <--- Add a simple loop step counter
+            while not navigator.isTaskComplete():
+                feedback = navigator.getFeedback()
+                # Print feedback approximately every 2.5 seconds (5 loops * 0.5s delay)
+                if feedback and loop_count % 5 == 0: 
+                    print(f"Distance remaining: {feedback.distance_remaining:.2f} meters.")
+                
+                loop_count += 1
+                time.sleep(0.5)
+
 
         # Evaluate the arrival state
         result = navigator.getResult()
@@ -53,7 +62,7 @@ def main():
     # Define test parameters
     # Adjust these numbers depending on your room size!
     SQUARE_SIDE_METERS = 2.0  
-    STRAIGHT_LINE_METERS = .605
+    STRAIGHT_LINE_METERS = 1
 
     print("Waiting for Nav2 Lifecycle Servers to become active...")
     # BYPASS: Manually check the action server instead of waiting for AMCL lifecycle node

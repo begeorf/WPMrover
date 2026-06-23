@@ -21,7 +21,7 @@ roverrobotics_driver:
     control_mode: "INDEPENDENT_WHEEL" # Closed loop : INDEPENDENT_WHEEL | Open loop : OPEN_LOOP
 
     # === ADD THESE TWO LINES TO OVERRIDE THE HARDCODED DEFAULTS ===
-    wheel_radius: 0.0250   # Put your custom measured radius here (in meters)
+    wheel_radius: 0.008   # Put your custom measured radius here (in meters)
     wheel_base: 0.3800     # Put your custom track width here if needed
     # linear_top_speed:
     # angular_top_speed:
