@@ -14,7 +14,8 @@ private:
   const std::string ROBOT_PARAM_PATH = strcat(std::getenv("HOME"), "/robot.config");
   Control::robot_geometry robot_geometry_ = {.intra_axle_distance = 0.2794,
                                              .wheel_base = 0.3683,
-                                             .wheel_radius = 0.2667,
+                                            //  .wheel_radius = 0.2667,
+                                             .wheel_radius = 0.2267, // = .2667 * .85
                                              .center_of_mass_x_offset = 0,
                                              .center_of_mass_y_offset = 0};
   const float MOTOR_RPM_TO_WHEEL_RPM_RATIO_ = 96 *2; 
