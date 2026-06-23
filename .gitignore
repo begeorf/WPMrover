@@ -6,3 +6,7 @@ log/
 *.gv
 output.txt
 battery_test_log.txt
+slam_test_run_1/
+slam_test_run_3/
+slam_test_run_1/
+slam_test_run_2/

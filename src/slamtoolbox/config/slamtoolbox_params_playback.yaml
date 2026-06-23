@@ -1,0 +1,81 @@
+slam_toolbox:
+  ros__parameters:
+
+    # ====== PLAYBACK REQUIRED CHANGES ======
+    use_sim_time: true             # Forces node to listen to the rosbag clock instead of system clock
+    tf_buffer_duration: 60.0       # Expanded cache window to handle historical time jumps
+    transform_timeout: 1.0         # Loosened up to prevent message drops on heavy pointcloud-to-scan conversions
+
+    # Basic frames
+    base_frame: base_footprint
+    odom_frame: odom
+    map_frame: map
+    scan_topic: /scan
+
+    # SLAM mode
+    mode: "mapping"
+    publish_tf: true
+
+    qos_overrides:
+      /scan:
+        subscriber:
+          reliability: best_effort
+          history: keep_last
+          depth: 5
+
+    # Localization mode
+    # mode: "localization"
+    # map_file_name: '/path/to/your/map'
+    # # We use AMCL for localization, so we don't need to publish the TF
+    # publish_tf: false
+
+    # Dock parameters
+    map_start_pose: [0.0, 0.0, 0.0]
+    # map_start_at_dock: true
+
+    # Laser parameters (match your RPLiDAR specs)
+    minimum_laser_range: 0.2
+    maximum_laser_range: 50.0
+
+    # Performance tuning to reduce message dropping
+    scan_buffer_size: 40 # Doubled to accommodate processing burst rates during playback
+    scan_buffer_maximum_scan_distance: 50.0
+    tf_buffer_duration: 30.0
+
+    # Reduce motion thresholds to update more frequently on slopes
+    minimum_travel_distance: 0.1
+    minimum_travel_heading: 0.05
+    minimum_time_interval: 0.2
+
+    # Improve scan matching for slope transitions
+    use_scan_matching: true
+    use_scan_barycenter: true
+    minimum_angle_penalty: 0.9
+    minimum_distance_penalty: 0.5
+
+    # Tighten loop closure for slopes
+    loop_search_maximum_distance: 2.0
+    do_loop_closing: true
+    loop_match_minimum_response_coarse: 0.4
+    loop_match_maximum_response_coarse: 0.6
+    loop_match_minimum_response_fine: 0.45
+
+    # Improve correlation search for slope handling
+    correlation_search_space_dimension: 0.3
+    correlation_search_space_resolution: 0.005
+    correlation_search_space_smear_deviation: 0.05
+
+    # Add constraint building for better mapping
+    max_laser_range: 50.0
+    laser_sample_increment: 1
+    laser_sample_maximum_range: 12.0
+
+    # Solver settings (keep your existing ones)
+    ceres_linear_solver: SPARSE_NORMAL_CHOLESKY
+    ceres_preconditioner: SCHUR_JACOBI
+    ceres_trust_strategy: LEVENBERG_MARQUARDT
+    ceres_dogleg_type: TRADITIONAL_DOGLEG
+
+    # Additional slope-specific parameters
+    transform_timeout: 0.2
+    map_update_interval: 2.0
