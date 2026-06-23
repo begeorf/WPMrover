@@ -197,7 +197,8 @@ def generate_launch_description():
     # Modification: Reference official slam_toolbox package launcher
     slam_toolbox_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
-            os.path.join(get_package_share_directory('slam_toolbox'), 'launch', 'slamtoolbox.launch.py')
+            # os.path.join(get_package_share_directory('slam_toolbox'), 'launch', 'slamtoolbox.launch.py')
+            os.path.join(get_package_share_directory('slamtoolbox'), 'launch', 'slamtoolbox.launch.py')
         ),
         launch_arguments={
             'slam_params_file': slam_params_file,
@@ -228,7 +229,7 @@ def generate_launch_description():
     ld.add_action(declare_log_level_cmd)
     
     # Add the actions to launch all of the navigation nodes
-    ld.add_action(robot_localizer_launch)
+    # ld.add_action(robot_localizer_launch)
     # ld.add_action(start_async_slam_toolbox_node)
     ld.add_action(slam_toolbox_launch)
     ld.add_action(bringup_cmd_group)
