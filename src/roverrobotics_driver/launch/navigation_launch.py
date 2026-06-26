@@ -21,7 +21,7 @@ from launch.actions import (DeclareLaunchArgument, GroupAction,
                             IncludeLaunchDescription, SetEnvironmentVariable)
 from launch.conditions import IfCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.substitutions import LaunchConfiguration, PythonExpression, PathJoinSubstitution
+from launch.substitutions import LaunchConfiguration, PythonExpression
 from launch_ros.actions import Node
 from launch_ros.actions import PushRosNamespace
 from nav2_common.launch import RewrittenYaml
@@ -44,8 +44,6 @@ def generate_launch_description():
     use_composition = LaunchConfiguration('use_composition')
     use_respawn = LaunchConfiguration('use_respawn')
     log_level = LaunchConfiguration('log_level')
-    slam_params_file = LaunchConfiguration('slam_params_file')
-    map_file = LaunchConfiguration('map_file_name')
 
     # Map fully qualified names to relative ones so the node's namespace can be prepended.
     # In case of the transforms (tf), currently, there doesn't seem to be a better alternative
@@ -116,10 +114,6 @@ def generate_launch_description():
         'log_level', default_value='info',
         description='log level')
     
-    rl_launch_path = os.path.join(get_package_share_directory("roverrobotics_driver"), 'launch', 'robot_localizer.launch.py')
-    robot_localizer_launch = IncludeLaunchDescription(PythonLaunchDescriptionSource(rl_launch_path),
-        launch_arguments={'use_sim_time': use_sim_time}.items())
-
     # Specify the actions
     bringup_cmd_group = GroupAction([
         PushRosNamespace(
@@ -167,51 +161,9 @@ def generate_launch_description():
                               'use_respawn': use_respawn,
                               'container_name': 'nav2_container'}.items()),
     ])
-    
-    # Slam toolbox stuff
-    declare_slam_params_file_cmd = DeclareLaunchArgument(
-        'slam_params_file',
-        default_value=os.path.join(get_package_share_directory("roverrobotics_driver"),
-                                   'config/slam_configs', 'mapper_params_localization.yaml'),
-        description='Full path to the ROS2 parameters file to use for the slam_toolbox node')
-    
-    declare_slam_map_file_cmd = DeclareLaunchArgument(
-        'map_file_name',
-        default_value='maze_map',
-        description='Full path to the ROS2 parameters file to use for the slam_toolbox node')
-    
-    map_file_arg = PathJoinSubstitution([
-        get_package_share_directory('roverrobotics_driver'), 'maps', map_file])
 
-     # start_async_slam_toolbox_node = Node(
-    #     parameters=[
-    #       slam_params_file,
-    #       {'use_sim_time': use_sim_time},
-    #       {'map_file_name': map_file_arg}
-    #     ],
-    #     package='slam_toolbox',
-    #     executable='localization_slam_toolbox_node',
-    #     name='slam_toolbox',
-    #     output='screen')
-
-    # Modification: Reference official slam_toolbox package launcher
-    slam_toolbox_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
-            # os.path.join(get_package_share_directory('slam_toolbox'), 'launch', 'slamtoolbox.launch.py')
-            os.path.join(get_package_share_directory('slamtoolbox'), 'launch', 'slamtoolbox.launch.py')
-        ),
-        launch_arguments={
-            'slam_params_file': slam_params_file,
-            'use_sim_time': use_sim_time
-        }.items()
-    )
-    
     # Create the launch description and populate
     ld = LaunchDescription()
-    
-    # Add slam setup to launch description
-    ld.add_action(declare_slam_params_file_cmd)
-    ld.add_action(declare_slam_map_file_cmd)
 
     # Set environment variables
     ld.add_action(stdout_linebuf_envvar)
@@ -227,11 +179,8 @@ def generate_launch_description():
     ld.add_action(declare_use_composition_cmd)
     ld.add_action(declare_use_respawn_cmd)
     ld.add_action(declare_log_level_cmd)
-    
-    # Add the actions to launch all of the navigation nodes
-    # ld.add_action(robot_localizer_launch)
-    # ld.add_action(start_async_slam_toolbox_node)
-    ld.add_action(slam_toolbox_launch)
+
+    # Nav2 servers + conditional SLAM (when slam:=True)
     ld.add_action(bringup_cmd_group)
 
     return ld

@@ -8,7 +8,7 @@ def generate_launch_description():
     updated_params = {
         # CRITICAL: Projecting the data onto base_link automatically flattens 
         # out your lidar's physical 22-degree forward tilt!
-        "target_frame": "base_link",
+        "target_frame": "base_footprint",
         
         "transform_tolerance": 0.3,
         
