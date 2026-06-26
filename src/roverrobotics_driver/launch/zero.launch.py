@@ -39,6 +39,9 @@ def generate_launch_description():
     driver_share = get_package_share_directory('roverrobotics_driver')
     hardware_config = os.path.join(driver_share, 'config', 'zero_config.yaml')
 
+    controller_launch_path = os.path.join(driver_share, 'launch', 'ps4_controller.launch.py') # Match your actual launch filename if different
+    ps4_controller_launch = IncludeLaunchDescription(PythonLaunchDescriptionSource(controller_launch_path))
+
     ld = LaunchDescription()
 
     robot_driver = Node(
@@ -122,6 +125,8 @@ def generate_launch_description():
     ld.add_action(robot_state_publisher_node)
     ld.add_action(base_footprint_bridge_node)
     ld.add_action(odom_to_footprint_bridge)
+    # === MODIFICATION 2: Add the controller launch action to the tree ===
+    ld.add_action(ps4_controller_launch)
     # ld.add_action(baselink_to_rslidar_bridge)
     # ld.add_action(baselink_to_bno055_bridge)
     # ld.add_action(baselink_to_cameralink_bridge)

@@ -29,8 +29,10 @@ def generate_launch_description():
 
     # === MODIFICATION 1: Get driver package directory and define controller launch path ===
     rover_driver_pkg = get_package_share_directory('roverrobotics_driver')
-    controller_launch_path = os.path.join(rover_driver_pkg, 'launch', 'ps4_controller.launch.py') # Match your actual launch filename if different
-    ps4_controller_launch = IncludeLaunchDescription(PythonLaunchDescriptionSource(controller_launch_path))
+
+    # THIS HAS BEEN MOVED TO ZERO LAUNCHER
+    # controller_launch_path = os.path.join(rover_driver_pkg, 'launch', 'ps4_controller.launch.py') # Match your actual launch filename if different
+    # ps4_controller_launch = IncludeLaunchDescription(PythonLaunchDescriptionSource(controller_launch_path))
 
     rl_launch_path = os.path.join(get_package_share_directory("roverrobotics_driver"), 'launch', 'robot_localizer.launch.py')
     robot_localizer_launch = IncludeLaunchDescription(PythonLaunchDescriptionSource(rl_launch_path),
@@ -96,14 +98,14 @@ def generate_launch_description():
         parameters=[{
             'target_frame': 'base_footprint',
             'transform_tolerance': 0.05,
-            'min_height': 0.10,
+            'min_height': 0.15, # this is changed so that the pointcloud to laserscan node isn't calculating every point on the floor
             'max_height': 1.00,
             'angle_min': -3.14159,
             'angle_max': 3.14159,
             'angle_increment': 0.0087,
             'scan_time': 0.1,
             'range_min': 0.20,
-            'range_max': 50.0,
+            'range_max': 8.0, # for navigation purposes, there's no point in calculating points beyone the edge of the costmap (is only the lidar points that are being converted to the laserscan, not the global lidar max range)
             'use_inf': True,
             'use_sim_time': False, #this should be set to true when looking at data in post, false when collecting data
             'qos_reliability': 2 # 1 = Reliable QoS profile to match slam_toolbox, 2 = best effort
@@ -129,7 +131,7 @@ def generate_launch_description():
 
     ld.add_action(slam_toolbox_node)
     ld.add_action(robot_state_publisher_node)
-    ld.add_action(rover_driver_node)
+    # ld.add_action(rover_driver_node) commented this out because the zero launcher already launches it and they were both fighting over it
 
     # === MODIFICATION 2: Add the controller launch action to the tree ===
     ld.add_action(ps4_controller_launch)
