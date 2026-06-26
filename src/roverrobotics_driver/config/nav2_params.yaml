@@ -128,7 +128,7 @@ bt_navigator_navigate_to_pose_rclcpp_node:
 controller_server:
   ros__parameters:
     use_sim_time: False
-    controller_frequency: 30.0
+    controller_frequency: 10.0 #changed from 20 to 10 to save cpu load
     min_x_velocity_threshold: 0.001
     min_y_velocity_threshold: 0.5
     min_theta_velocity_threshold: 0.01
@@ -152,24 +152,24 @@ controller_server:
     general_goal_checker:
       stateful: True
       plugin: "nav2_controller::SimpleGoalChecker"
-      xy_goal_tolerance: 0.5
-      yaw_goal_tolerance: 0.5
+      xy_goal_tolerance: 0.05 #this parameter controls how close translationally the robot has to be the the goal to be reached
+      yaw_goal_tolerance: 0.10 #this parameter controls how close translationally the robot has to be the the goal to be reached
     # DWB parameters
     FollowPath:
       plugin: "nav2_mppi_controller::MPPIController"
-      time_steps: 56
-      model_dt: 0.0333
-      batch_size: 2000
+      time_steps: 20       # Drop this (often default is 56). Down-scaling reduces look-ahead compute.
+      model_dt: 0.1 # changed to match controller frequency of 10
+      batch_size: 400      # Drop this drastically (often default is 1000-2000). Fewer paths evaluated = massive CPU savings.
       vx_std: 0.2
       vy_std: 0.2
       wz_std: 0.4
-      vx_max: 0.5
-      vx_min: -0.35
+      vx_max: 0.2 # lowered so mppi calculator has more time to work (optimizations will need to be made later on to get this to a more reasonable speed)
+      vx_min: -0.15 # lowered (see same comments as above)
       vy_max: 0.5
-      wz_max: 1.9
+      wz_max: 0.8 # lowered to prevent agressive spinning (see same comments about optimization as above)
       iteration_count: 1
       prune_distance: 1.7
-      transform_tolerance: 0.1
+      transform_tolerance: 0.5 #changed this from 0.1 to 0.5 to give the cpu more buffer time
       temperature: 0.3
       gamma: 0.015
       motion_model: "DiffDrive"
@@ -238,15 +238,16 @@ controller_server:
 local_costmap:
   local_costmap:
     ros__parameters:
-      update_frequency: 10.0 # test 5 (this is Hossein's value)
-      publish_frequency: 5.0 # test 2.5 (this is Hossein's value)
+      update_frequency: 5.0 # test 5 (this is Hossein's value)
+      publish_frequency: 2.0 # test 2.5 (this is Hossein's value)
       global_frame: odom
       robot_base_frame: base_link
       use_sim_time: False
+      transform_tolerance: 0.5  # <--- ADD THIS HERE
       rolling_window: true
       width: 8 #change this to 3m if 8m is too big
       height: 8 # same
-      resolution: 0.05
+      resolution: 0.10 # changed from 5m to 10cm to reduce compute load
       footprint: "[[0.27305, 0.1778],[0.27305, -0.1778],[-0.27305, -0.1778],[-0.27305, 0.1778]]"
       footprint_padding: 0.01
       plugins: ["voxel_layer", "inflation_layer"]
@@ -258,8 +259,8 @@ local_costmap:
         plugin: "nav2_costmap_2d::VoxelLayer"
         enabled: True
         publish_voxel_map: True
-        origin_z: 0.0
-        z_resolution: 0.05
+        origin_z: -0.4 # apparently one of my sensors is being noted as too low in the ground, this change seems sus to me though
+        z_resolution: 0.05 # maybe also change this to 10cm to save compute?
         z_voxels: 16
         max_obstacle_height: 2.0
         mark_threshold: 0
@@ -282,14 +283,15 @@ local_costmap:
 global_costmap:
   global_costmap:
     ros__parameters:
-      update_frequency: 1.0
+      update_frequency: 1.0 #changed to 1hz: global costmap won't change very frequently
       publish_frequency: 1.0
       global_frame: map
       robot_base_frame: base_link
       use_sim_time: False
       footprint: "[[0.27305, 0.1778],[0.27305, -0.1778],[-0.27305, -0.1778],[-0.27305, 0.1778]]"
       footprint_padding: 0.025
-      resolution: 0.05
+      transform_tolerance: 0.5  # <--- ADD THIS HERE
+      resolution: 0.10 # changed from 5m to 10cm to reduce compute load
       track_unknown_space: true
       plugins: ["static_layer", "obstacle_layer", "inflation_layer"]
       obstacle_layer:
@@ -332,7 +334,7 @@ map_saver:
 
 planner_server:
   ros__parameters:
-    expected_planner_frequency: 20.0
+    expected_planner_frequency: 2.0 #changed from 20 to 2; don't need to be updating the global planning at 20hz
     use_sim_time: False
     planner_plugins: ["GridBased"]
     GridBased:
