@@ -119,3 +119,15 @@ The base driver configuration parameters were updated to scale down the expected
    controller_server:
       ros__parameters:
          controller_frequency: 5.0
+
+fix odometry between odom and base_link
+use only lidar odometry or wheel odometry
+fix controller teleop issues
+camera_camera_center comes off of base_link
+where is camera_camera_link coming tf tree
+create an xacro file to link 
+global costmap isn't working in navigation
+do foxglove now for visualization
+   install foxglove in personal computer
+      https://foxglove.dev/download
+   need foxglove bridge in robot

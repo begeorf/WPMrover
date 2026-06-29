@@ -63,7 +63,7 @@ RobotDriver::RobotDriver() : Node("roverrobotics", rclcpp::NodeOptions().use_int
       declare_parameter("odometry_frequency", ROBOT_ODOM_FREQUENCY_DEFAULT_);
   odom_frame_id_ = declare_parameter("odom_frame_id", "odom");
   odom_child_frame_id_ =
-      declare_parameter("odom_child_frame_id", "base_link");
+      declare_parameter("odom_child_frame_id", "base_footprint");
   // Angular Scaling params
   angular_scaling_params_.a_coef =
       declare_parameter("angular_a_coef", ANGULAR_SCALING_A_DEFAULT_);

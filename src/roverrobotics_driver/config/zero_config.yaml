@@ -27,7 +27,7 @@ roverrobotics_driver:
     # angular_top_speed:
     odom_topic: "/odometry/wheels"
     odom_frame_id: "odom"
-    odom_child_frame_id: "base_link" # Set this to the base frame of the robot
+    odom_child_frame_id: "base_footprint" # Must match EKF base_link_frame
     # angular_a_coef:
     # angular_b_coef:
     # angular_c_coef:

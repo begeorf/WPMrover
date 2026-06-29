@@ -61,7 +61,7 @@ bt_navigator:
   ros__parameters:
     use_sim_time: False
     global_frame: map
-    robot_base_frame: base_link
+    robot_base_frame: base_footprint
     odom_topic: /odometry/filtered
     bt_loop_duration: 10
     default_server_timeout: 20
@@ -241,7 +241,7 @@ local_costmap:
       update_frequency: 5.0 # test 5 (this is Hossein's value)
       publish_frequency: 2.0 # test 2.5 (this is Hossein's value)
       global_frame: odom
-      robot_base_frame: base_link
+      robot_base_frame: base_footprint
       use_sim_time: False
       transform_tolerance: 0.5  # <--- ADD THIS HERE
       rolling_window: true
@@ -286,7 +286,7 @@ global_costmap:
       update_frequency: 1.0 #changed to 1hz: global costmap won't change very frequently
       publish_frequency: 1.0
       global_frame: map
-      robot_base_frame: base_link
+      robot_base_frame: base_footprint
       use_sim_time: False
       footprint: "[[0.27305, 0.1778],[0.27305, -0.1778],[-0.27305, -0.1778],[-0.27305, 0.1778]]"
       footprint_padding: 0.025
@@ -370,7 +370,7 @@ behavior_server:
     assisted_teleop:
       plugin: "nav2_behaviors/AssistedTeleop"
     global_frame: odom
-    robot_base_frame: base_link
+    robot_base_frame: base_footprint
     transform_tolerance: 1.2
     use_sim_time: False
     simulate_ahead_time: 2.0

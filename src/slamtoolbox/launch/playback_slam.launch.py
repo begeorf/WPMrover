@@ -63,7 +63,7 @@ def generate_launch_description():
         parameters=[
             {'use_sim_time': use_sim_time},
             {'odom_frame': 'odom'},
-            {'base_frame': 'base_link'}, 
+            {'base_frame': 'base_footprint'}, 
             {'map_frame': 'map'},
             {'scan_topic': '/scan'},
             {'scan_queue_size': 10},
