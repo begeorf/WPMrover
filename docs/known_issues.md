@@ -131,3 +131,17 @@ do foxglove now for visualization
    install foxglove in personal computer
       https://foxglove.dev/download
    need foxglove bridge in robot
+
+### **ISSUE-010: Joystick Controls Behave as Accumulative Accelerators Instead of Direct Velocity Inputs**
+
+* **Status**: `Resolved`
+* **Symptoms:** Pushing the joystick analogue stick behaves like an accelerator pedal—the robot continuously "winds up" speed and, upon releasing the stick back to the center deadzone, continues to "coast" or drift forward with high latency instead of snapping to an immediate mechanical stop.
+* **Root Cause:** A hidden background system daemon (`/usr/sbin/roverrobotics`) automatically executes a duplicate robot stack (`zero_teleop.launch.py`) on boot. While the operator's active terminal sends real-time joystick coordinates from the manual launcher, this background service concurrently bombards the `/cmd_vel` topic. This duplicate node collision over the exact same topic and serial port interface results in severe message lag, a command queuing bottleneck, and erratic "accelerating/coasting" control loop behavior.
+* **Fix / Resolution:** Permanently stop and disable the conflicting background system service to ensure your manual launch file has exclusive, immediate control over the hardware:
+
+```bash
+# 1. Stop the active background process immediately
+sudo systemctl stop roverrobotics.service
+
+# 2. Permanently disable the service from starting up on boot
+sudo systemctl disable roverrobotics.service
