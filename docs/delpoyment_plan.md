@@ -398,10 +398,6 @@ This document outlines the deployment and development plan for transforming the 
       - try navigate to pose action
 
 
-
-
-
-
 ### Tests & Results
 **Date Completed:** `[YYYY-MM-DD]`
 
@@ -428,6 +424,36 @@ This document outlines the deployment and development plan for transforming the 
 ### Evaluation Metrics & Questions
 1. **Navigation Reliability:** Out of 10 autonomous point-to-point navigation commands with dynamic obstacles, how many were successfully reached without manual intervention?
    - *Result:* `[Enter success rate X/10]`
+
+
+---
+
+
+## Milestone 6: 360 Camera
+**Date Completed:** `[In Progress]`
+
+
+### Tasks
+- [ ] **Mounting** Mount the 360 Camera on the Rover Zero
+- [ ] **Driver** Install the theta driver here: https://github.com/stella-cv/theta_driver?tab=readme-ov-file
+- [ ] **URDF/TF** Update the URDF File for the exact position of the Z1 is available and publish transforms from base link to it
+
+
+
+
+### Tests & Results
+
+**Notes/Issues:**
+- `[2026-06-30]` Installed `theta_driver` on orin
+
+### Evaluation Metrics & Questions
+1. **360 Data Specs:** What is the data size per frame and per second published by the lidar in ROS2?
+   - *Result:* `data speeds`
+2. **Publishing Frequencies:**
+   = *Zi pubishing frequency*
+     
+3. **ROS2 Interfaces:** List topic names and message types for the IMU, lidar, and ZED 2i outputs.
+  - *Nodes running with theta Active:*
 
 
 ---
