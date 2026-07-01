@@ -450,7 +450,7 @@ This document outlines the deployment and development plan for transforming the 
 1. **360 Data Specs:** What is the data size per frame and per second published by the lidar in ROS2?
    - *Result:* `data speeds`
 2. **Publishing Frequencies:**
-   = *Zi pubishing frequency*
+   - **Z1 pubishing frequency*
      
 3. **ROS2 Interfaces:** List topic names and message types for the IMU, lidar, and ZED 2i outputs.
   - *Nodes running with theta Active:*
@@ -485,9 +485,6 @@ This document outlines the deployment and development plan for transforming the 
 ### Evaluation Metrics & Questions
 1. **SLAM Accuracy:** During a closed-loop drive in the lab, what is the estimated odometry drift upon returning to the origin?
    - *Result:* `[Enter drift in cm/degrees]`
-
-
----
 
 
 ---
@@ -536,7 +533,10 @@ This document outlines the deployment and development plan for transforming the 
 
 **Notes/Issues:**
 - `[2026-06-24]` iPad delivered; passcode is 153426
-
+- `[2026-06-29]` Foxglove connection to the robot established
+  - On Orin, run `ros2 launch foxglove_bridge foxglove_bridge_launch.xml port:=8765`
+  - Create the port under the `ports` tab of the VS Code terminal.
+  - Then, while SSH'd in, click `Open connection` in foxglove app. Type in `ws://localhost:8765` into the box and click connect.
 
 ### Evaluation Metrics & Questions
 1. **UI Telemetry:** What is the total network bandwidth consumed when Foxglove is streaming the full UI dashboard (including point clouds and compressed images)?

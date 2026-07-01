@@ -145,3 +145,20 @@ sudo systemctl stop roverrobotics.service
 
 # 2. Permanently disable the service from starting up on boot
 sudo systemctl disable roverrobotics.service
+```
+
+---
+### **ISSUE-011: Robot Odom Only moving In a Straight lines in Foxglove**
+
+* **Status**: `Resolved`
+* **Symptoms:** No matter if the robot was being spun around or not, odom was only tracking the linear movement.
+* **Root Cause:** Inside `localization_ekf.yaml`, the wheel odometry (`odom_0_config`) had the parameter for yaw velocity set to `false`. This means the ekf node was not listening to the rotations that the wheels were publishing.
+* **Fix / Resolution:** Set parameter for yaw velocity in `odom_0_config` to `true`.
+
+```yaml
+odom0_config: [false, false, false,
+               false, false, false,
+               true,  true,  false,
+               false, false, true,  # roll velo, pitch velo, yaw velo
+               false, false, false]
+```
