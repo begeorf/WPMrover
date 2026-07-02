@@ -1,7 +1,7 @@
 roverrobotics_driver:
   ros__parameters:
     diagnostics_frequency: 0.2
-    odometry_frequency: 15.0
+    odometry_frequency: 30.0 #changed from 15 to 30 to make odometry more accurate when making turns
     motor_control_p_gain: 0.0011
     motor_control_i_gain: 0.000
     motor_control_d_gain: 0.00008
@@ -21,8 +21,8 @@ roverrobotics_driver:
     control_mode: "INDEPENDENT_WHEEL" # Closed loop : INDEPENDENT_WHEEL | Open loop : OPEN_LOOP
 
     # === ADD THESE TWO LINES TO OVERRIDE THE HARDCODED DEFAULTS ===
-    wheel_radius: 0.008   # Put your custom measured radius here (in meters)
-    wheel_base: 0.3800     # Put your custom track width here if needed
+    # wheel_radius: 0.008   # Put your custom measured radius here (in meters)
+    # wheel_base: 0.3800     # Put your custom track width here if needed
     # linear_top_speed:
     # angular_top_speed:
     odom_topic: "/odometry/wheels"

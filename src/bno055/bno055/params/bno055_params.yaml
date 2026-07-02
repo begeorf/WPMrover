@@ -37,7 +37,7 @@ bno055:
     data_query_frequency: 100
     calib_status_frequency: 0.1
     frame_id: "bno055"
-    operation_mode: 0x0C
+    operation_mode: 0x08 #change to 0x08 for 'IMU' Mode; just accel and gyro, no mag
     placement_axis_remap: "P2"
     acc_factor: 100.0
     mag_factor: 16000000.0

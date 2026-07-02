@@ -44,7 +44,7 @@ def generate_launch_description():
             'angle_increment': 0.0087,
             'scan_time': 0.1,
             'range_min': 0.20,
-            'range_max': 8.0,
+            'range_max': 30.0,
             'use_inf': True,
             'use_sim_time': use_sim_time,
             'qos_reliability': 2,

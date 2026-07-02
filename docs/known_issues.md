@@ -162,3 +162,61 @@ odom0_config: [false, false, false,
                false, false, true,  # roll velo, pitch velo, yaw velo
                false, false, false]
 ```
+
+---
+### **ISSUE-012: Foxglove is laggy after having it open for some time**
+* **Status**: `workaround_in_place`
+* **Symptoms**: I originally launched the foxglove bridge for a test and the zero launcher. Then I parked the robot, closed the zero launcher but left the foxglove bridge open. The next time I went to launch the zero launcher the positional updates of the robot took several seconds to show up in foxglove. I'm not sure if this is because foxglove was open for too long
+* **Root Cause**: My guesses are that it's either because foxglove bridge was open for too long or because it had multiple records of the same nodes being published.
+* **Fix/Resolution**: When I restarted the foxglove bridge the problems went away, so it could be that foxglove needs to be closed after every instance of the zero launcher is closed or that foxglove develops a lot of lag over time.
+
+---
+### **ISSUE-013: Robot toses track of where it is when running slam**
+
+* **Status**: `Open`
+* **Symptoms:** After launching `zero.launch.py` and `slamtoolbox.launch.py`, the robot loses where it is WRT to the 'map' frame. This causes the map generated to have obstacles in the wrong spots.
+* **Root Cause:** This is caused by inaccurate/dropped transforms between the `map` and `odom` frames. This also has something to do with which velocity/accel each sensor is given priority in the ekf localization node.
+* **Fix / Resolution:** Unknown
+
+---
+### **ISSUE-014: Orin sometimes loses connection with the rover after docking**
+
+* **Status**: `workaround_in_place`
+* **Symptoms:** After finshing a test and parking the rover on its charger, the rover driver sometimes failes with the next launch.
+```bash
+[INFO] [roverrobotics_driver-1]: process started with pid [14941]
+[roverrobotics_driver-1] [INFO] [1782924520.495260517] [roverrobotics_driver]: Starting Rover Driver node
+[roverrobotics_driver-1] [INFO] [1782924520.495787963] [roverrobotics_driver]: Robot type is Rover zero2 over serial
+[roverrobotics_driver-1] [INFO] [1782924520.495834685] [roverrobotics_driver]: Receiving velocity command from /cmd_vel
+[roverrobotics_driver-1] [INFO] [1782924520.495850558] [roverrobotics_driver]: Estop state is currently inactive
+[roverrobotics_driver-1] [INFO] [1782924520.495859742] [roverrobotics_driver]: Receiving Estop activation at /soft_estop/trigger
+[roverrobotics_driver-1] [INFO] [1782924520.495866911] [roverrobotics_driver]: Receiving Estop deactivation at /soft_estop/reset
+[roverrobotics_driver-1] [INFO] [1782924520.503369693] [roverrobotics_driver]: Publishing Robot status on /robot_status at 60.00hz
+[roverrobotics_driver-1] [INFO] [1782924520.503451776] [roverrobotics_driver]: Robot is in closed loop mode.
+[roverrobotics_driver-1] [INFO] [1782924520.503463841] [roverrobotics_driver]: PID is at P:0.0011 I:0.0000 D:0.0001
+[roverrobotics_driver-1] [INFO] [1782924520.503477505] [roverrobotics_driver]: Connecting to robot at /dev/rover-control
+[roverrobotics_driver-1] Warning: ~/robot.config file not found, persistent trim disabled
+[roverrobotics_driver-1] errorerror[FATAL] [1782924520.503729420] [roverrobotics_driver]: Error when connecting to robot.
+[roverrobotics_driver-1] [FATAL] [1782924520.503862802] [roverrobotics_driver]: Robot at /dev/rover-control is not available. Check that port is available and permissions allow access.
+[INFO] [roverrobotics_driver-1]: process has finished cleanly [pid 14941]
+```
+* **Root Cause:** Unsure, it seems to happen less of if I drive the rover more slowly into its charger
+* **Fix / Resolution:** When this happens, here is the troubleshooting steps:
+   - Make sure the rover cable is plugged in; check both the connection of:
+      - the Rover cable to the Splitter
+      - the Splitter to the Orin 
+   - Once it's plugged in, try some terminal commands
+   - `ls -l /dev/rover-control`
+      - this should output something like `lrwxrwxrwx 1 root root 7 Jul  1 13:12 /dev/rover-control -> ttyACM0`
+      - The important thing is `/dev/rover-control -> ttyACM0`: this means the rover is connected
+      - If the Orin sees the Rover, try `ros2 launch roverrobotics_driver zero.launch.py` again
+   - If the rover isn't recognized, try 
+      - `sudo udevadm control --reload-rule && sudo udevadm trigger`   
+      - then try `ls -l /dev/rover-control` again
+   - If this fails, reboot is needed
+      - Turn rover power button off
+      - Unplug Rover cable from Orin, wait `10s`
+      - Turn on Rover power button, wait a bit (ssh in first before moving to next step)
+      - Plug Rover cable into Orin
+      - Try `ls -l /dev/rover-control` again, it should work
+   - If this fails idk
