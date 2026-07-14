@@ -152,8 +152,8 @@ controller_server:
     general_goal_checker:
       stateful: True
       plugin: "nav2_controller::SimpleGoalChecker"
-      xy_goal_tolerance: 0.05 #this parameter controls how close translationally the robot has to be the the goal to be reached
-      yaw_goal_tolerance: 0.10 #this parameter controls how close translationally the robot has to be the the goal to be reached
+      xy_goal_tolerance: 0.1 #this parameter controls how close translationally the robot has to be the the goal to be reached
+      yaw_goal_tolerance: 0.087 #this parameter controls how close translationally the robot has to be the the goal to be reached ~ 5 degrees
     # DWB parameters
     FollowPath:
       plugin: "nav2_mppi_controller::MPPIController"
@@ -245,7 +245,7 @@ local_costmap:
       use_sim_time: False
       transform_tolerance: 0.5  # <--- ADD THIS HERE
       rolling_window: true
-      width: 8 #change this to 3m if 8m is too big
+      width: 8 #change this to 3m if 8m is too big 
       height: 8 # same
       resolution: 0.10 # changed from 5m to 10cm to reduce compute load
       footprint: "[[0.27305, 0.1778],[0.27305, -0.1778],[-0.27305, -0.1778],[-0.27305, 0.1778]]"

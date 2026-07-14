@@ -13,7 +13,8 @@ private:
   std::unique_ptr<Utilities::PersistentParams> persistent_params_;
   const std::string ROBOT_PARAM_PATH = strcat(std::getenv("HOME"), "/robot.config");
   Control::robot_geometry robot_geometry_ = {.intra_axle_distance = 0.2794,
-                                             //.wheel_base = 0.3683, // original wheel base
+                                             // .wheel_base = 0.3683, // original wheel base
+                                             // .wheel_base = .43373, //value estimated to solve localization
                                              .wheel_base = 0.3181, // = .3683 / 1.15
                                             //  .wheel_base = 0.7366, // = .3683 * 2
                                             //  .wheel_radius = 0.2667, //original wheel radius

@@ -92,26 +92,16 @@
   </joint>
 
 
-  <link name="camera_link">
-    <visual>
-      <geometry>
-        <box size="0.02 0.06 0.02"/>
-      </geometry>
-      <material name="blue"/>
-    </visual>
-  </link>
+  <!-- Unified camera frame for ZED 2i (and Theta 360 when integrated).
+       The zed-ros2-wrapper (launched with camera_name:=camera) roots its TF tree at camera_camera_link,
+       so this joint anchors that tree to base_link. -->
+  <link name="camera_camera_link"/>
 
   <joint name="camera_joint" type="fixed">
     <parent link="base_link"/>
-    <child link="camera_link"/>
+    <child link="camera_camera_link"/>
+    <!-- TODO: replace with measured camera mount offset once bracket geometry is finalized -->
     <origin xyz=".180006 .060 .135925" rpy="0 0 0"/>
-  </joint>
-
-  <link name="camera_link_optical"/>
-  <joint name="camera_optical_joint" type="fixed">
-    <parent link="camera_link"/>
-    <child link="camera_link_optical"/>
-    <origin xyz="0 0 0" rpy="-${pi/2} 0 -${pi/2}"/>
   </joint>
 
 </robot>

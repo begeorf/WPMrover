@@ -122,9 +122,15 @@ void ThetaDriver::onInit() {
     get_parameter("serial", serial_);
     declare_parameter<std::string>("camera_frame", camera_frame_);
     get_parameter("camera_frame", camera_frame_);
+    // pipeline_ =
+    //     "appsrc name=ap ! queue ! h264parse ! queue ! "
+    //     "decodebin ! queue ! videoconvert n_threads=8 ! queue ! video/x-raw,format=RGB ! appsink name=appsink emit-signals=true";
     pipeline_ =
-        "appsrc name=ap ! queue ! h264parse ! queue ! "
-        "decodebin ! queue ! videoconvert n_threads=8 ! queue ! video/x-raw,format=RGB ! appsink name=appsink emit-signals=true";
+        "appsrc name=ap ! queue ! h264parse ! "
+        "nvv4l2decoder ! video/x-raw(memory:NVMM) ! "
+        "nvvidconv ! video/x-raw,format=BGRx ! "
+        "videoconvert ! video/x-raw,format=RGB ! "
+        "appsink name=appsink emit-signals=true";
     declare_parameter<std::string>("pipeline", pipeline_);
     get_parameter("pipeline", pipeline_);
 

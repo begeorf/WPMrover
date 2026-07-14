@@ -177,7 +177,7 @@ class SensorService:
         imu_raw_msg.angular_velocity.y = \
             self.unpackBytesToFloat(buf[14], buf[15]) / self.param.gyr_factor.value
         imu_raw_msg.angular_velocity.z = \
-            self.unpackBytesToFloat(buf[16], buf[17]) / self.param.gyr_factor.value
+            (self.unpackBytesToFloat(buf[16], buf[17]) / self.param.gyr_factor.value) * 0.968
         imu_raw_msg.angular_velocity_covariance = [
             self.param.variance_angular_vel.value[0], 0.0, 0.0,
             0.0, self.param.variance_angular_vel.value[1], 0.0,
@@ -219,7 +219,7 @@ class SensorService:
         imu_msg.angular_velocity.y = \
             self.unpackBytesToFloat(buf[14], buf[15]) / self.param.gyr_factor.value
         imu_msg.angular_velocity.z = \
-            self.unpackBytesToFloat(buf[16], buf[17]) / self.param.gyr_factor.value
+            (self.unpackBytesToFloat(buf[16], buf[17]) / self.param.gyr_factor.value) * 0.968
         imu_msg.angular_velocity_covariance = imu_raw_msg.angular_velocity_covariance
         self.pub_imu.publish(imu_msg)
 

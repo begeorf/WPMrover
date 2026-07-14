@@ -10,3 +10,22 @@ slam_test_run_1/
 slam_test_run_3/
 slam_test_run_1/
 slam_test_run_2/
+slam_test_run_2/rosbag*/
+spin_test_results.csv
+
+# Ignore python compilation files
+__pycache__/
+*.pyc
+
+# Ignore temporary YOLO run files and sample media
+runs/
+bus.jpg
+index.html
+
+# Ignore installation files
+*.deb
+
+# Ignore massive ML model files and target engines
+*.pt
+*.onnx
+*.engine

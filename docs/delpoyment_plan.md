@@ -371,6 +371,7 @@ This document outlines the deployment and development plan for transforming the 
   - Solved: Previously both the zero launcher and the slam launcher were requesting the lidar data, changed the slam launcher so it doesn't use lidar data directly
 - `[2026-06-19]` When fixing the above issue, this broke the visualization in post with slam
   - fixed by creating a dedicated slam post processing visualization node
+- `[2026-07-07]` Fixed robot localization issues, slam works well now
 
 
 
@@ -419,11 +420,13 @@ This document outlines the deployment and development plan for transforming the 
 - `[2026-06-09]` Navigation test: set goal pose 1m behind robot and 180 turn
   - Result: Robot turned by ~30 degrees and moved backwards ~30cm
   - Interpretation: Need to run more tests to figure out the behavior when the robot's goal pose has a different orientation than the starting one
+- `[2026-07-07]` Fixed robot localization issues, Nav2 works well now
+  - Robot navigates to goals and avoids obstacles
 
 
 ### Evaluation Metrics & Questions
 1. **Navigation Reliability:** Out of 10 autonomous point-to-point navigation commands with dynamic obstacles, how many were successfully reached without manual intervention?
-   - *Result:* `[Enter success rate X/10]`
+   - *Result:* `[Enter success rate 10/10]`
 
 
 ---
@@ -445,15 +448,32 @@ This document outlines the deployment and development plan for transforming the 
 
 **Notes/Issues:**
 - `[2026-06-30]` Installed `theta_driver` on orin
+- `[2026-07-08]` 360 camera installed on rover
+  - How to wake up camera from sleep mode: `gphoto2 --set-config=d80e=0`
+  - Disable sleep timer: `gphoto2 --set-config=d803=0`
+  - Disable auto power off timer: `gphoto2 --set-config=d81b=0`
+  - Check values: `gphoto2 --get-config=[value]`
+  - Both data and power can flow over the USB cable; infinate battery life
+  - Need to compress images before sending to foxglove
+
 
 ### Evaluation Metrics & Questions
 1. **360 Data Specs:** What is the data size per frame and per second published by the lidar in ROS2?
    - *Result:* `data speeds`
 2. **Publishing Frequencies:**
-   - **Z1 pubishing frequency*
+    - **Z1 pubishing frequency**
+      - `[~19hz]`
+    - check if changing resolution 
      
 3. **ROS2 Interfaces:** List topic names and message types for the IMU, lidar, and ZED 2i outputs.
-  - *Nodes running with theta Active:*
+    - *Nodes running with theta Active:*
+      - `/clicked_point [geometry_msgs/msg/PointStamped]`
+      - `/goal_pose [geometry_msgs/msg/PoseStamped]`
+      - `/image_raw [sensor_msgs/msg/Image]`
+      - `/initialpose [geometry_msgs/msg/PoseWithCovarianceStamped]`
+      - `/move_base_simple/goal [geometry_msgs/msg/PoseStamped]`
+      - `/parameter_events [rcl_interfaces/msg/ParameterEvent]`
+      - `/rosout [rcl_interfaces/msg/Log]`
 
 
 ---
@@ -495,8 +515,26 @@ This document outlines the deployment and development plan for transforming the 
 
 ### Tasks
 - [ ] **Computer Vision Module:** Integrate our YOLOv11 (or latest stable) model for structural crack detection. Utilize the Orin NX GPU for inference.
-
-
+- prerequisites for CV
+  - data size
+  - frequency
+  - depth quality (is it accurate with reality and aligned with rbg)
+  - check which topic is somethign like `depth_aligned_to_color` some unified topic
+- where to download YOLO
+  - Install via pytorch
+  - pytorch version is heavyweight (not good for orin)
+  - convert from pytorch to tensorRT
+  - build TensorRT version on GPU
+- Stage 1 is to run yolo v11 small and nano size
+  - do object detection on depth camera
+  - test throughput; how many FPS can we get throught the CV model
+  - compare small vs nano model
+  - don't use segmentation models; object detection only w/ bounding box
+- https://docs.ultralytics.com/
+YOLO Object Detection & Segmentation | Ultralytics Docs
+Discover Ultralytics YOLO - the latest in real-time object detection and image segmentation. Learn about its features and maximize its potential in your projects.
+- this has guides/tutorials
+- Frank and Gorkem very knowledgable about CV
 
 
 ### Tests & Results

@@ -173,10 +173,10 @@ odom0_config: [false, false, false,
 ---
 ### **ISSUE-013: Robot toses track of where it is when running slam**
 
-* **Status**: `Open`
+* **Status**: `Resolved`
 * **Symptoms:** After launching `zero.launch.py` and `slamtoolbox.launch.py`, the robot loses where it is WRT to the 'map' frame. This causes the map generated to have obstacles in the wrong spots.
-* **Root Cause:** This is caused by inaccurate/dropped transforms between the `map` and `odom` frames. This also has something to do with which velocity/accel each sensor is given priority in the ekf localization node.
-* **Fix / Resolution:** Unknown
+* **Root Cause:** The robot doesn't know how far it's rotated when doing "tank turns" (where it spins in place). This means whenever it turns, it must readjust its position based on known obstacle locations. The SLAM node doesn't keep that many lidar frames stored for this purpose, so if the rotation is so far where there are no identifiable obstacles after the tank turn the robot will fail to relocalize itself. This is because the IMU had the wrong `frame_id` value.
+* **Fix / Resolution:** In `/src/roverrobotics_driver/config/accessories.yaml`, I changed the `frame_id` parameter to be `bno055`, what the TF tree is expecting. In `localization_ekf.yaml`, I changed the IMU `operation_mode` parameter from `OxOC #NDOF` to `0x08 #IMU`. This disables the magnetic sensors, and switches the IMU from absolute orientation to relative orientation. I also removed `yaw_vel` from `odom0` (wheels) and removed `x_accel` and `y_accel` from `imu0`. So the wheels control `x_vel` and `y_vel` and the IMU controls `yaw_vel`. I also changed the `use_control` param to `true`, which enables the EKF to predict where it thinks the robot should be based on inputs. I also changed some of the odom and slam parameters to try to make localization easier (bigger buffers, more area scanned to realign off known obstacles, etc). To see all the changes I made, check the changes for commit `c0d8d19`.
 
 ---
 ### **ISSUE-014: Orin sometimes loses connection with the rover after docking**
@@ -220,3 +220,30 @@ odom0_config: [false, false, false,
       - Plug Rover cable into Orin
       - Try `ls -l /dev/rover-control` again, it should work
    - If this fails idk
+
+---
+### **ISSUE-015: Sensor Inaccuracies when Spinning**
+
+* **Status**: `Resolved`
+* **Symptoms:** After launching `zero.launch.py` and `slamtoolbox.launch.py`, the robot loses where it is WRT to the 'map' frame. This causes the map generated to have obstacles in the wrong spots (This is issue #13). When I conducted manual angular rotation tests to see how far the robot was spinning, I found that the IMU was overshooting how far the robot moved by about `3.3%`.
+* **Root Cause:** Unknown
+* **Fix / Resolution:** In `/src/bno055/bno055/sensor/SensorService.py`, I added a correcting factor to the angular velocity in the z direction, scaling it back by `0.968`. Here is the before and after of the message that gets published to `/imu/raw`
+
+```
+imu_raw_msg.angular_velocity.z = \ 
+self.unpackBytesToFloat(buf[16], buf[17]) / self.param.gyr_factor.value
+```
+```
+imu_raw_msg.angular_velocity.z = \ 
+(self.unpackBytesToFloat(buf[16], buf[17]) / self.param.gyr_factor.value) * 0.968
+```
+Here is the before and after of the message that gets published to `/imu/data`.
+```
+imu_msg.angular_velocity.z = \
+self.unpackBytesToFloat(buf[16], buf[17]) / self.param.gyr_factor.value
+```
+```
+imu_msg.angular_velocity.z = \
+(self.unpackBytesToFloat(buf[16], buf[17]) / self.param.gyr_factor.value) * 0.968
+```
+After implementing these changes, the IMU error was 0.18% for 1 test where the robot was rotated 1800 degrees CCW. This is honestly close enough to be a measurement error without extremely accurate starting and final positions measurements.

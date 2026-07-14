@@ -23,7 +23,6 @@ def generate_launch_description():
     rslidar_share = get_package_share_directory('rslidar_sdk') # Find RoboSense Share
 
     accessories_config_path = Path(driver_share, 'config/accessories.yaml')
-    zed_config_path = Path(zed_share, 'config/zed2i.yaml')
 
      # Read the config file
     with open(accessories_config_path, 'r') as f:
@@ -62,14 +61,13 @@ def generate_launch_description():
             launch_arguments={
                 'camera_model': 'zed2i',
                 'camera_name': 'camera',
-                'config_path': str(zed_config_path),
-                'base_frame': 'base_footprint', 
-                'publish_tf': 'false',        # <-- ADD THIS LINE: Stops ZED from fighting wheel encoders over Odom
-                'publish_map_tf': 'false'  # <-- ADD THIS LINE
-                # 'cam_pos_z': '0.3'                 # <-- ADD THIS LINE (Adjust 0.3 to your actual camera mount height in meters if needed)
+                # camera_name:=camera makes the wrapper's own static TF tree root at
+                # "camera_camera_link", which the URDF (rover.urdf.xacro) anchors to base_link.
+                'publish_tf': 'false',      # don't publish odom -> camera_camera_link: would fight the EKF over odom
+                'publish_map_tf': 'false',  # ignored once publish_tf is false, but kept explicit
             }.items()
         )
-        # ld.add_action(zed_launch)
+        ld.add_action(zed_launch)
 
     return ld
 
