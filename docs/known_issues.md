@@ -247,3 +247,11 @@ imu_msg.angular_velocity.z = \
 (self.unpackBytesToFloat(buf[16], buf[17]) / self.param.gyr_factor.value) * 0.968
 ```
 After implementing these changes, the IMU error was 0.18% for 1 test where the robot was rotated 1800 degrees CCW. This is honestly close enough to be a measurement error without extremely accurate starting and final positions measurements.
+
+---
+### **ISSUE-016: YOLO FPS drops when using the Foxglove Bridge**
+
+* **Status**: `resolved`
+* **Symptoms:** FPS drops from `~11` to `~6` when launching the foxglove bridge.
+* **Root Cause:** Unknown
+* **Fix / Resolution:** This issue was fixed by changing the camera resolution 

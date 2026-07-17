@@ -19,10 +19,15 @@ def generate_launch_description():
 
     # Locate package directories
     driver_share = get_package_share_directory('roverrobotics_driver')
-    zed_share = get_package_share_directory('zed_wrapper')
+    zed_wrapper_share = get_package_share_directory('zed_wrapper')
     rslidar_share = get_package_share_directory('rslidar_sdk') # Find RoboSense Share
 
+    zed_config_common = os.path.join(zed_wrapper_share, 'config', 'common_stereo.yaml')
+    zed_config_camera = os.path.join(zed_wrapper_share, 'config', 'zed2i.yaml')
+
+
     accessories_config_path = Path(driver_share, 'config/accessories.yaml')
+
 
      # Read the config file
     with open(accessories_config_path, 'r') as f:
@@ -56,7 +61,7 @@ def generate_launch_description():
     if accessories_config.get('zed2i', {}).get('ros__parameters', {}).get('active', False):
         zed_launch = IncludeLaunchDescription(
             PythonLaunchDescriptionSource(
-                os.path.join(zed_share, 'launch', 'zed_camera.launch.py')
+                os.path.join(zed_wrapper_share, 'launch', 'zed_camera.launch.py')
             ),
             launch_arguments={
                 'camera_model': 'zed2i',
@@ -65,6 +70,7 @@ def generate_launch_description():
                 # "camera_camera_link", which the URDF (rover.urdf.xacro) anchors to base_link.
                 'publish_tf': 'false',      # don't publish odom -> camera_camera_link: would fight the EKF over odom
                 'publish_map_tf': 'false',  # ignored once publish_tf is false, but kept explicit
+                'config_path': os.path.join(zed_wrapper_share, 'config'),
             }.items()
         )
         ld.add_action(zed_launch)

@@ -81,6 +81,10 @@ class YoloDepthNode(Node):
             )
         )
         self.last_seen = {}
+        
+        # --- FPS PROFILING ---
+        self.frame_count = 0
+        self.start_time = None
 
         # --- ROS Setup ---
         self.bridge = CvBridge()
@@ -153,7 +157,8 @@ class YoloDepthNode(Node):
             self.cx = msg.k[2]
             self.cy = msg.k[5]
             self.intrinsics_matrix = True
-            self.get_logger().info(f"🎉 SUCCESS: Camera intrinsics cached! fx: {self.fx}, fy: {self.fy}")
+            # for debugging 
+            # self.get_logger().info(f"🎉 SUCCESS: Camera intrinsics cached! fx: {self.fx}, fy: {self.fy}")
 
     def get_improved_depth(
         self,
@@ -236,11 +241,25 @@ class YoloDepthNode(Node):
     def image_cb(self, rgb_msg: CompressedImage, depth_msg: Image) -> None:
         """Run YOLO inference and publish 3D detections with optional Foxglove annotations."""
 
+        # --- CALCULATE REAL-WORLD THROUGHPUT ---
+        if self.start_time is None:
+            self.start_time = self.get_clock().now()
+        
+        self.frame_count += 1
+        elapsed_time = (self.get_clock().now() - self.start_time).nanoseconds / 1e9
+        
+        if elapsed_time >= 5.0:
+            fps = self.frame_count / elapsed_time
+            self.get_logger().info(f"📊 PERFORMANCE PROFILER: Processing at {fps:.2f} FPS over the last {elapsed_time:.1f}s")
+            self.frame_count = 0
+            self.start_time = self.get_clock().now()
+
         # LOG MARKER 1: The callback triggered! (Both messages arrived and matched timestamps)
-        self.get_logger().info("🎯 CALLBACK TRIGGERED: Received synchronized RGB and Depth frames!", throttle_duration_sec=2.0)
+        # self.get_logger().info("🎯 CALLBACK TRIGGERED: Received synchronized RGB and Depth frames!", throttle_duration_sec=2.0)
 
         if not self.intrinsics_matrix:
-            self.get_logger().warn("⚠️ DROPPING FRAME: Waiting for CameraInfo /intrinsics...", throttle_duration_sec=2.0)
+            # for debugging
+            # self.get_logger().warn("⚠️ DROPPING FRAME: Waiting for CameraInfo /intrinsics...", throttle_duration_sec=2.0)
             return
 
         # if (
@@ -257,14 +276,14 @@ class YoloDepthNode(Node):
             rgb_arr = self.bridge.compressed_imgmsg_to_cv2(rgb_msg, "bgr8")
             depth_arr_mm = self.bridge.imgmsg_to_cv2(depth_msg, "passthrough")
             # LOG MARKER 2: ROS to OpenCV conversion was successful
-            self.get_logger().info(f"📸 Images decoded successfully. RGB Shape: {rgb_arr.shape}, Depth Dtype: {depth_arr_mm.dtype}", throttle_duration_sec=5.0)
+            # self.get_logger().info(f"📸 Images decoded successfully. RGB Shape: {rgb_arr.shape}, Depth Dtype: {depth_arr_mm.dtype}", throttle_duration_sec=5.0)
         except Exception as e:
-            self.get_logger().error(f"❌ Image conversion failed: {e}", throttle_duration_sec=5.0)
-            self.get_logger().warn(f"Image conversion failed: {e}", throttle_duration_sec=5.0)
+            # self.get_logger().error(f"❌ Image conversion failed: {e}", throttle_duration_sec=5.0)
+            # self.get_logger().warn(f"Image conversion failed: {e}", throttle_duration_sec=5.0)
             return
 
         # LOG MARKER 3: Sending to GPU for TensorRT inference
-        self.get_logger().info("🧠 Running YOLO TensorRT inference...", throttle_duration_sec=5.0)
+        # self.get_logger().info("🧠 Running YOLO TensorRT inference...", throttle_duration_sec=5.0)
         results = self.model(
             rgb_arr, verbose=False, device=self.device, conf=self.confidence_threshold
         )[0]
@@ -272,6 +291,7 @@ class YoloDepthNode(Node):
         # --- SSH DEBUG PRINT ---
         if len(results.boxes) > 0:
             self.get_logger().info(f"YOLO detected {len(results.boxes)} objects! Class IDs: {[int(b.cls[0]) for b in results.boxes]}")
+            pass
         else:
             self.get_logger().info("YOLO running but found 0 objects in this frame.", throttle_duration_sec=2.0)
 

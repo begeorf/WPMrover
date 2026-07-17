@@ -13,7 +13,7 @@ def generate_launch_description():
 
     classes_arg = DeclareLaunchArgument(
         'classes',
-        default_value='[0]',  # Keeps potted plant as the default if you omit the flag
+        default_value='[0, 56, 57]',  # Detect persons, chairs, sofas
         description='List of COCO class IDs to filter'
     )
 

@@ -441,6 +441,10 @@ This document outlines the deployment and development plan for transforming the 
 - [ ] **Driver** Install the theta driver here: https://github.com/stella-cv/theta_driver?tab=readme-ov-file
 - [ ] **URDF/TF** Update the URDF File for the exact position of the Z1 is available and publish transforms from base link to it
 
+- add depth and cv to 360 camera
+  - need calibration between lidar and camera
+  - first try manual splicing between lidar and 360 camera
+
 
 
 
@@ -535,34 +539,33 @@ YOLO Object Detection & Segmentation | Ultralytics Docs
 Discover Ultralytics YOLO - the latest in real-time object detection and image segmentation. Learn about its features and maximize its potential in your projects.
 - this has guides/tutorials
 - Frank and Gorkem very knowledgable about CV
-
-
+- Next tasks: use pixels close to the center of the bounding box, take the median depth and use that to find the depth
 ### Tests & Results
 **Date Completed:** `[YYYY-MM-DD]`
-
-
 **Notes/Issues:**
-
-
-
-
-
-
 ### Evaluation Metrics & Questions
 1. **Computer Vision Performance:** What is the average inference FPS for the YOLO crack detection model running on the Orin NX?
    - *Result:* `[Enter FPS]`
 
-
 ---
 
-
 ## Milestones 8: User Interface
-
-
 ### Tasks
-
-
 - [ ] **User Interface:** Set up Foxglove Studio dashboards for real-time visualization of the robot's state, maps, and camera feeds.
+- UI panels; 
+  - camera images with bounding box
+  - costmap from above
+  - 3d model of robot for better visual appearance
+    - Make it dynamic for something visually cool
+  - 3d view with lidar points (again compress/throttle/downfilter)
+    - create a new topic for 2fps
+    - use throttle library
+      - hossein unsure if it voxelizes
+  - Need to test foxglove on ipad
+  - Leave this for now:
+    - Final task: automate everything
+      - start button: launches all launch files
+      - stop button: ^C everything
 
 
 ### Tests & Results
