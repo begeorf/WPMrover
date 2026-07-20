@@ -25,6 +25,8 @@ setup(
     entry_points={
         'console_scripts': [
             'yolo_depth_node = perception.yolo_depth_node:main',
+            'depth_annotator_node = perception.depth_annotator_node:main',
+            'yolo_pointcloud_node = perception.yolo_pointcloud_node:main', # <-- Add this line
         ],
     },
 )
