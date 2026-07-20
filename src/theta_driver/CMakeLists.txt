@@ -21,6 +21,7 @@ find_package(rclcpp REQUIRED)
 find_package(std_srvs REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
+find_package(image_transport REQUIRED)
 find_package(rclcpp_components REQUIRED)
 find_package(OpenCV REQUIRED)
 find_package(Boost 1.53 REQUIRED system thread timer)
@@ -53,6 +54,7 @@ add_library(theta_driver_lib SHARED
 rclcpp_components_register_node(theta_driver_lib PLUGIN "theta_driver::ThetaDriver" EXECUTABLE theta_driver_node)
 ament_target_dependencies(theta_driver_lib
   ${dependencies}
+  image_transport
   OpenCV
   Boost
 )
@@ -83,6 +85,11 @@ install(TARGETS
 
 install(DIRECTORY include/ 
   DESTINATION include/
+)
+
+# Install launch and config assets into the share directory
+install(DIRECTORY launch config
+  DESTINATION share/${PROJECT_NAME}
 )
 
 ament_export_include_directories(

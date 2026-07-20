@@ -1,4 +1,5 @@
 #include "theta_driver/theta_driver_lib.hpp"
+#include <opencv2/imgproc.hpp>
 
 namespace {
 theta_driver::gst_src gsrc;
@@ -50,55 +51,72 @@ void uvc_streaming_callback(uvc_frame_t* frame, void* ptr) {
 }
 
 GstFlowReturn new_sample_callback(GstAppSink* sink, gpointer data) {
+    ThetaDriver* driver = static_cast<ThetaDriver*>(data);
+    
+    // Throttle frame grab at the source before copying deep buffers
+    if (driver->target_framerate_ < 30.0) {
+        rclcpp::Time now = driver->get_clock()->now();
+        double elapsed = (now - driver->last_publish_time_).seconds();
+        if (elapsed < (1.0 / driver->target_framerate_)) {
+            GstSample* drop_sample = gst_app_sink_pull_sample(sink);
+            if (drop_sample) gst_sample_unref(drop_sample);
+            return GST_FLOW_OK;
+        }
+    }
+
     GstSample* sample = gst_app_sink_pull_sample(sink);
+    if (sample == NULL) {
+        return GST_FLOW_EOS;
+    }
+
     GstBuffer* buffer = gst_sample_get_buffer(sample);
     GstBuffer* app_buffer = gst_buffer_copy_deep(buffer);
     GstMapInfo map;
     gst_buffer_map(app_buffer, &map, GST_MAP_WRITE);
 
-    ThetaDriver* driver = static_cast<ThetaDriver*>(data);
     driver->publishImage(map);
 
     gst_sample_unref(sample);
     gst_buffer_unmap(app_buffer, &map);
     gst_buffer_unref(app_buffer);
-    if (sample == NULL) {
-        return GST_FLOW_EOS;
-    }
-    else {
-        return GST_FLOW_OK;
-    }
+    return GST_FLOW_OK;
 }
 
 void ThetaDriver::publishImage(GstMapInfo map) {
-    int dataLength;
-    guint8* rdata;
+    int full_width = use4k_ ? 3840 : 1920;
+    int full_height = use4k_ ? 1920 : 960;
 
-    dataLength = map.size;
-    rdata = map.data;
+    // Wrap GStreamer pointer directly into OpenCV matrix wrapper (Zero Copy)
+    cv::Mat full_frame(full_height, full_width, CV_8UC3, map.data);
+    cv::Mat final_frame;
+
+    if (downscale_factor_ > 1) {
+        int new_width = full_width / downscale_factor_;
+        int new_height = full_height / downscale_factor_;
+        cv::resize(full_frame, final_frame, cv::Size(new_width, new_height), 0, 0, cv::INTER_NEAREST);
+    } else {
+        final_frame = full_frame;
+    }
 
     auto image = std::make_unique<sensor_msgs::msg::Image>();
     image->header.stamp = this->get_clock()->now();
     image->header.frame_id = camera_frame_;
-    if (use4k_) {
-        image->width = 3840;
-        image->height = 1920;
-    }
-    else {
-        image->width = 1920;
-        image->height = 960;
-    }
+    image->width = final_frame.cols;
+    image->height = final_frame.rows;
     image->encoding = "rgb8";
     image->is_bigendian = false;
-    image->step = image->width * 3;
+    image->step = final_frame.cols * 3;
 
-    std::vector<unsigned char> values(rdata, (unsigned char*)rdata + dataLength);
-    image->data = values;
-    image_pub_->publish(std::move(image));
+    size_t size = image->step * image->height;
+    image->data.resize(size);
+    memcpy(image->data.data(), final_frame.data, size);
+    
+    image_pub_.publish(*image);
+    last_publish_time_ = image->header.stamp;
 }
 
 ThetaDriver::ThetaDriver(const rclcpp::NodeOptions& options)
-    : Node("theta_driver", options) {
+    : Node("theta_driver", options), last_publish_time_(0, 0, RCL_ROS_TIME) {
     RCLCPP_INFO(get_logger(), "Initializing");
     onInit();
 }
@@ -114,17 +132,19 @@ ThetaDriver::~ThetaDriver() {
 }
 
 void ThetaDriver::onInit() {
-    image_pub_ = this->create_publisher<sensor_msgs::msg::Image>("image_raw", 1);
+    image_pub_ = image_transport::create_publisher(this, "image_raw", rmw_qos_profile_default);
 
     declare_parameter<bool>("use4k", false);
     get_parameter("use4k", use4k_);
+    declare_parameter<int>("downscale_factor", 1);
+    get_parameter("downscale_factor", downscale_factor_);
+    declare_parameter<double>("target_framerate", 30.0);
+    get_parameter("target_framerate", target_framerate_);
     declare_parameter<std::string>("serial", "");
     get_parameter("serial", serial_);
     declare_parameter<std::string>("camera_frame", camera_frame_);
     get_parameter("camera_frame", camera_frame_);
-    // pipeline_ =
-    //     "appsrc name=ap ! queue ! h264parse ! queue ! "
-    //     "decodebin ! queue ! videoconvert n_threads=8 ! queue ! video/x-raw,format=RGB ! appsink name=appsink emit-signals=true";
+
     pipeline_ =
         "appsrc name=ap ! queue ! h264parse ! "
         "nvv4l2decoder ! video/x-raw(memory:NVMM) ! "
@@ -133,6 +153,20 @@ void ThetaDriver::onInit() {
         "appsink name=appsink emit-signals=true";
     declare_parameter<std::string>("pipeline", pipeline_);
     get_parameter("pipeline", pipeline_);
+
+    // --- ADD CONFIGURATION PRINTS HERE ---
+    RCLCPP_INFO(get_logger(), "============================================");
+    RCLCPP_INFO(get_logger(), "  Theta 360 Camera Driver Configuration ");
+    RCLCPP_INFO(get_logger(), "============================================");
+    RCLCPP_INFO_STREAM(get_logger(), " * Resolution Mode : " << (use4k_ ? "4K (3840x1920)" : "FHD (1920x960)"));
+    RCLCPP_INFO_STREAM(get_logger(), " * Downscale Factor: " << downscale_factor_ 
+                                     << " (Output: " << (use4k_ ? 3840 : 1920) / downscale_factor_ << "x" 
+                                     << (use4k_ ? 1920 : 960) / downscale_factor_ << ")");
+    RCLCPP_INFO_STREAM(get_logger(), " * Target Framerate: " << target_framerate_ << " FPS");
+    RCLCPP_INFO_STREAM(get_logger(), " * Camera Frame ID : " << camera_frame_);
+    RCLCPP_INFO_STREAM(get_logger(), " * Target Serial   : " << (serial_.empty() ? "First available device" : serial_));
+    RCLCPP_INFO(get_logger(), "============================================");
+    // -------------------------------------
 
     rclcpp::Rate rate(1);
     while (rclcpp::ok()) {

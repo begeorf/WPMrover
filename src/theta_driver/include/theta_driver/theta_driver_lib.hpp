@@ -3,6 +3,7 @@
 
 #include <rclcpp/rclcpp.hpp>
 #include <sensor_msgs/msg/image.hpp>
+#include <image_transport/image_transport.hpp>
 #include <gst/gst.h>
 #include <gst/app/gstappsrc.h>
 #include <gst/app/gstappsink.h>
@@ -26,10 +27,16 @@ public:
     uvc_stream_ctrl_t ctrl_;
     uvc_context_t* ctx_;
     bool use4k_ = false;
+    int downscale_factor_ = 1;
+    double target_framerate_ = 30.0;
+    double snapshot_target_framerate_ = 1.0;
+    rclcpp::Time last_publish_time_;
+    rclcpp::Time last_snapshot_time_;
     std::string serial_ = "";
     std::string camera_frame_ = "camera_link";
     std::string pipeline_;
-    rclcpp::Publisher<sensor_msgs::msg::Image>::SharedPtr image_pub_;
+    image_transport::Publisher image_pub_;
+    image_transport::Publisher snapshot_pub_;
 };
 
 struct gst_src {

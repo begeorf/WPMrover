@@ -18,6 +18,7 @@
   <depend>libgstreamer-plugins-base1.0-dev</depend>
   <depend>libuvc-dev</depend>
   <depend>boost</depend>
+  <depend>image_transport</depend>
 
   <exec_depend>ros2launch</exec_depend>
 
