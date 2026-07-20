@@ -540,9 +540,12 @@ Discover Ultralytics YOLO - the latest in real-time object detection and image s
 - this has guides/tutorials
 - Frank and Gorkem very knowledgable about CV
 - Next tasks: use pixels close to the center of the bounding box, take the median depth and use that to find the depth
+- Check with raw data for if the data is correct
 ### Tests & Results
 **Date Completed:** `[YYYY-MM-DD]`
 **Notes/Issues:**
+- Added a version of the yolo algorithm that used the zed published pointcloud2 to calculate distances, this works for all angles but is super laggy and only can produce 5FPS.
+- Downscaled publishing of Zed camera to make YOLO node with depth values run at 15FPS.
 ### Evaluation Metrics & Questions
 1. **Computer Vision Performance:** What is the average inference FPS for the YOLO crack detection model running on the Orin NX?
    - *Result:* `[Enter FPS]`

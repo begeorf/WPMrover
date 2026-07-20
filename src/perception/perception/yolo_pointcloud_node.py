@@ -3,7 +3,7 @@ import ast  # Added to safely parse string representations of lists
 from collections import defaultdict, deque
 from pathlib import Path
 from typing import Optional
-import struct # Added to unpack binary data from PointCloud2
+import struct  # Added to unpack binary data from PointCloud2
 
 import cv2
 import numpy as np
@@ -16,7 +16,7 @@ from foxglove_msgs.msg import Color, ImageAnnotations, Point2, PointsAnnotation,
 from message_filters import ApproximateTimeSynchronizer, Subscriber
 from rclpy.node import Node
 from rclpy.qos import qos_profile_sensor_data
-from sensor_msgs.msg import CameraInfo, Image, CompressedImage, PointCloud2
+from sensor_msgs.msg import CameraInfo, Image, CompressedImage, PointCloud2 # Added PointCloud2
 from ultralytics import YOLO
 from vision_msgs.msg import Detection3D, Detection3DArray, ObjectHypothesisWithPose, ObjectHypothesis
 
@@ -99,7 +99,7 @@ class YoloDepthNode(Node):
 
         # Change these to match your ZED 2i topics:
         self.rgb_sub = Subscriber(self, CompressedImage, "/camera/zed_node/rgb/color/rect/image/compressed", qos_profile=qos_profile_sensor_data)
-        self.depth_sub = Subscriber(self, Image, "/camera/zed_node/depth/depth_registered", qos_profile=qos_profile_sensor_data)
+        self.depth_sub = Subscriber(self, PointCloud2, "/camera/zed_node/point_cloud/cloud_registered", qos_profile=qos_profile_sensor_data)
         
         # FIX: Increased slop from 0.1 to 0.3 to prevent dropping mismatched frames
         self.sync = ApproximateTimeSynchronizer(
@@ -163,7 +163,7 @@ class YoloDepthNode(Node):
 
     def get_improved_depth(
         self,
-        depth_frame_mm: np.ndarray,
+        cloud_msg: PointCloud2,
         cx_pixel: int,
         cy_pixel: int,
         bbox: tuple,
@@ -171,21 +171,36 @@ class YoloDepthNode(Node):
         """Estimate robust object depth using an ROI median with outlier rejection."""
         x1, y1, x2, y2 = bbox
 
-        roi = depth_frame_mm[
-            max(cy_pixel - self.roi_size, 0) : min(
-                cy_pixel + self.roi_size, depth_frame_mm.shape[0]
-            ),
-            max(cx_pixel - self.roi_size, 0) : min(
-                cx_pixel + self.roi_size, depth_frame_mm.shape[1]
-            ),
-        ]
+        y_min = max(cy_pixel - self.roi_size, 0)
+        y_max = min(cy_pixel + self.roi_size, cloud_msg.height)
+        x_min = max(cx_pixel - self.roi_size, 0)
+        x_max = min(cx_pixel + self.roi_size, cloud_msg.width)
 
-        valid_depths_mm = roi[roi > 0]
-        if valid_depths_mm.size < self.min_depth_samples:
+        valid_depths_m = []
+        row_step = cloud_msg.row_step
+        point_step = cloud_msg.point_step
+        data_buffer = cloud_msg.data
+
+        for v in range(y_min, y_max):
+            row_offset = v * row_step
+            for u in range(x_min, x_max):
+                pixel_offset = row_offset + (u * point_step)
+                try:
+                    x, y, z = struct.unpack_from('fff', data_buffer, offset=pixel_offset)
+                except Exception:
+                    continue
+
+                if np.isnan(x) or np.isnan(y) or np.isnan(z):
+                    continue
+
+                radial_dist = float(np.sqrt(x**2 + y**2 + z**2))
+                if radial_dist > 0.1:
+                    valid_depths_m.append(radial_dist)
+
+        if len(valid_depths_m) < self.min_depth_samples:
             return None
 
-        valid_depths_m = valid_depths_mm.astype(np.float32)
-
+        valid_depths_m = np.array(valid_depths_m, dtype=np.float32)
         mean_depth = np.mean(valid_depths_m)
         std_depth = np.std(valid_depths_m)
 
@@ -239,7 +254,7 @@ class YoloDepthNode(Node):
                 del self.position_history[key]
             del self.last_seen[key]
 
-    def image_cb(self, rgb_msg: CompressedImage, depth_msg: Image) -> None:
+    def image_cb(self, rgb_msg: CompressedImage, depth_msg: PointCloud2) -> None:
         """Run YOLO inference and publish 3D detections with optional Foxglove annotations."""
 
         # --- CALCULATE REAL-WORLD THROUGHPUT ---
@@ -275,7 +290,6 @@ class YoloDepthNode(Node):
 
         try:
             rgb_arr = self.bridge.compressed_imgmsg_to_cv2(rgb_msg, "bgr8")
-            depth_arr_mm = self.bridge.imgmsg_to_cv2(depth_msg, "passthrough")
             # LOG MARKER 2: ROS to OpenCV conversion was successful
             # self.get_logger().info(f"📸 Images decoded successfully. RGB Shape: {rgb_arr.shape}, Depth Dtype: {depth_arr_mm.dtype}", throttle_duration_sec=5.0)
         except Exception as e:
@@ -319,7 +333,7 @@ class YoloDepthNode(Node):
             label = self.names[cls_id]
 
             cx, cy = (x1 + x2) // 2, (y1 + y2) // 2
-            raw_depth = self.get_improved_depth(depth_arr_mm, cx, cy, (x1, y1, x2, y2))
+            raw_depth = self.get_improved_depth(depth_msg, cx, cy, (x1, y1, x2, y2))
 
             if raw_depth is None:
                 continue

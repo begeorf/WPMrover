@@ -255,3 +255,18 @@ After implementing these changes, the IMU error was 0.18% for 1 test where the r
 * **Symptoms:** FPS drops from `~11` to `~6` when launching the foxglove bridge.
 * **Root Cause:** Unknown
 * **Fix / Resolution:** This issue was fixed by changing the camera resolution 
+
+---
+### **ISSUE-017: YOLO Distances are inaccurate at edges of Frame**
+* **Status**: `workaround_in_place`
+* **Symptoms:** The distances of detected objects decreases as they move away from the center of the camera frame.
+* **Root Cause:** Distances are calculated based on the orthogonal distance away from the plane of the front of the camera, not the euclidean distance away from the camera center.
+* **Fix / Resolution:** In the final defect detection, we will calculate the angle of an object away from the center of the frame and use trigonometry and the orthogonal distance to find its exact location in 3-space.
+
+---
+### **ISSUE-018: YOLO FPS low**
+* **Status**: `resolved`
+* **Symptoms:** YOLO algorithm unable to keep up with camera FPS.
+* **Root Cause:** Too much data being given to YOLO algorithm.
+* **Fix / Resolution:** Downscaled publishing from zed camera by a factor of 3.
+
