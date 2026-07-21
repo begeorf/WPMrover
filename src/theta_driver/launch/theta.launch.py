@@ -20,4 +20,20 @@ def generate_launch_description():
         parameters=[config_path]
     )
 
-    return LaunchDescription([theta_driver_node])
+    # PointCloud Converter Node
+    equirect_cloud_node = Node(
+        package='theta_driver',
+        executable='equirect_to_cloud_node',
+        name='equirect_to_cloud',
+        output='screen',
+        parameters=[{
+            'radius': 5.0,
+            'downsample_factor': 2
+        }]
+    )
+
+    ld = LaunchDescription()
+    ld.add_action(theta_driver_node)
+    ld.add_action(equirect_cloud_node)
+
+    return ld

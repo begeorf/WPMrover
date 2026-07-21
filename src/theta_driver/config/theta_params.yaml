@@ -1,7 +1,7 @@
 /theta_driver:
   ros__parameters:
-    use4k: false            # Set to true for 3840x1920, false for 1920x960
-    downscale_factor: 2     # Cuts resolution down for the fast stream (e.g., 1920x960 becomes 960x480)
+    use4k: true            # Set to true for 3840x1920, false for 1920x960
+    downscale_factor: 4     # Cuts resolution down for the fast stream (e.g., 1920x960 becomes 960x480)
     target_framerate: 15.0  # Cap active image updates per second on the standard low-res stream
     snapshot_target_framerate: 0.5 # Max rate to allow full-res snapshots (e.g., 0.5 = at most once every 2 seconds)
     camera_frame: "theta_camera_link"

@@ -235,9 +235,9 @@ void ThetaDriver::onInit() {
     get_parameter("pipeline", pipeline_);
 
     // --- CONFIGURATION PRINTS ---
-    RCLCPP_INFO(get_logger(), "============================================");
+    RCLCPP_INFO(get_logger(), "===============================================");
     RCLCPP_INFO(get_logger(), "  Theta 360 Camera Driver Configuration ");
-    RCLCPP_INFO(get_logger(), "============================================");
+    RCLCPP_INFO(get_logger(), "===============================================");
     RCLCPP_INFO_STREAM(get_logger(), " * Resolution Mode    : " << (use4k_ ? "4K (3840x1920)" : "FHD (1920x960)"));
     RCLCPP_INFO_STREAM(get_logger(), " * Downscale Factor   : " << downscale_factor_ 
                                      << " (Output: " << (use4k_ ? 3840 : 1920) / downscale_factor_ << "x" 
@@ -246,7 +246,7 @@ void ThetaDriver::onInit() {
     RCLCPP_INFO_STREAM(get_logger(), " * Snapshot Max Rate  : " << snapshot_target_framerate_ << " FPS (Lazy)");
     RCLCPP_INFO_STREAM(get_logger(), " * Camera Frame ID    : " << camera_frame_);
     RCLCPP_INFO_STREAM(get_logger(), " * Target Serial      : " << (serial_.empty() ? "First available device" : serial_));
-    RCLCPP_INFO(get_logger(), "============================================");
+    RCLCPP_INFO(get_logger(), "===============================================");
 
     rclcpp::Rate rate(1);
     while (rclcpp::ok()) {

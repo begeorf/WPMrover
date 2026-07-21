@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 3.5)
 project(theta_driver)
 
+# Force CMake to search ROS 2 environment paths first for OpenCV
+list(PREPEND CMAKE_PREFIX_PATH "/opt/ros/humble")
+
 # Default to C99
 if(NOT CMAKE_C_STANDARD)
   set(CMAKE_C_STANDARD 99)
@@ -21,6 +24,7 @@ find_package(rclcpp REQUIRED)
 find_package(std_srvs REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
+find_package(cv_bridge REQUIRED)
 find_package(image_transport REQUIRED)
 find_package(rclcpp_components REQUIRED)
 find_package(OpenCV REQUIRED)
@@ -64,6 +68,15 @@ target_link_libraries(theta_driver_lib
   LibUVC::UVCShared
 )
 
+# Add C++ equirectangular to pointcloud node
+add_executable(equirect_to_cloud_node src/equirect_to_cloud_node.cpp)
+ament_target_dependencies(equirect_to_cloud_node
+  rclcpp
+  sensor_msgs
+  cv_bridge
+  OpenCV
+)
+
 if(NOT WIN32)
   ament_environment_hooks(
     "${ament_cmake_package_templates_ENVIRONMENT_HOOK_LIBRARY_PATH}")
@@ -75,12 +88,19 @@ install(TARGETS
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION bin
-  )
+)
   
-# Install exec
+# Install C++ executables
 install(TARGETS
   theta_driver_node
+  equirect_to_cloud_node
   RUNTIME DESTINATION lib/${PROJECT_NAME}
+)
+
+# Install Python executable nodes (kept as backup)
+install(PROGRAMS
+  src/equirect_to_cloud.py
+  DESTINATION lib/${PROJECT_NAME}
 )
 
 install(DIRECTORY include/ 
@@ -96,7 +116,6 @@ ament_export_include_directories(
   include
 )
 
-    
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
   # the following line skips the linter which checks for copyrights
