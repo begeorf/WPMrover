@@ -53,15 +53,30 @@ void uvc_streaming_callback(uvc_frame_t* frame, void* ptr) {
 GstFlowReturn new_sample_callback(GstAppSink* sink, gpointer data) {
     ThetaDriver* driver = static_cast<ThetaDriver*>(data);
     
-    // Throttle frame grab at the source before copying deep buffers
+    // Evaluate downscaled stream timing limits
+    rclcpp::Time now = driver->get_clock()->now();
+    bool needs_lowres = true;
     if (driver->target_framerate_ < 30.0) {
-        rclcpp::Time now = driver->get_clock()->now();
         double elapsed = (now - driver->last_publish_time_).seconds();
         if (elapsed < (1.0 / driver->target_framerate_)) {
-            GstSample* drop_sample = gst_app_sink_pull_sample(sink);
-            if (drop_sample) gst_sample_unref(drop_sample);
-            return GST_FLOW_OK;
+            needs_lowres = false;
         }
+    }
+
+    // Evaluate full-resolution snapshot stream subscription and timing limits
+    bool needs_snapshot = false;
+    if (driver->snapshot_pub_.getNumSubscribers() > 0) {
+        double elapsed_snapshot = (now - driver->last_snapshot_time_).seconds();
+        if (elapsed_snapshot >= (1.0 / driver->snapshot_target_framerate_)) {
+            needs_snapshot = true;
+        }
+    }
+
+    // Drop frame entirely if neither stream demands a processing cycle right now
+    if (!needs_lowres && !needs_snapshot) {
+        GstSample* drop_sample = gst_app_sink_pull_sample(sink);
+        if (drop_sample) gst_sample_unref(drop_sample);
+        return GST_FLOW_OK;
     }
 
     GstSample* sample = gst_app_sink_pull_sample(sink);
@@ -85,38 +100,97 @@ GstFlowReturn new_sample_callback(GstAppSink* sink, gpointer data) {
 void ThetaDriver::publishImage(GstMapInfo map) {
     int full_width = use4k_ ? 3840 : 1920;
     int full_height = use4k_ ? 1920 : 960;
+    rclcpp::Time now = this->get_clock()->now();
 
     // Wrap GStreamer pointer directly into OpenCV matrix wrapper (Zero Copy)
     cv::Mat full_frame(full_height, full_width, CV_8UC3, map.data);
-    cv::Mat final_frame;
 
-    if (downscale_factor_ > 1) {
-        int new_width = full_width / downscale_factor_;
-        int new_height = full_height / downscale_factor_;
-        cv::resize(full_frame, final_frame, cv::Size(new_width, new_height), 0, 0, cv::INTER_NEAREST);
-    } else {
-        final_frame = full_frame;
+    // Replace just the make_camera_info lambda definition with this:
+    auto make_camera_info = [&](int width, int height) {
+        auto info = std::make_unique<sensor_msgs::msg::CameraInfo>();
+        info->header.stamp = now;
+        info->header.frame_id = camera_frame_;
+        info->width = width;
+        info->height = height;
+        info->distortion_model = "plumb_bob"; 
+
+        // Compute valid fallback focal lengths and principal points to appease Foxglove
+        double fx = width / 0.5;
+        double fy = height / 0.5;
+        double cx = width / 2.0;
+        double cy = height / 2.0;
+
+        // Intrinsic Camera Matrix K
+        info->k[0] = fx;  info->k[2] = cx;
+        info->k[4] = fy;  info->k[5] = cy;
+        info->k[8] = 1.0;
+
+        // Projection Matrix P
+        info->p[0] = fx;  info->p[2] = cx;
+        info->p[5] = fy;  info->p[6] = cy;
+        info->p[10] = 1.0;
+
+        return info;
+    };
+
+    // 1. Handle Lazy Snapshot Publishing (Full Resolution Layer)
+    if (snapshot_pub_.getNumSubscribers() > 0 || snapshot_info_pub_->get_subscription_count() > 0) {
+        double elapsed_snapshot = (now - last_snapshot_time_).seconds();
+        if (elapsed_snapshot >= (1.0 / snapshot_target_framerate_)) {
+            auto snapshot_msg = std::make_unique<sensor_msgs::msg::Image>();
+            snapshot_msg->header.stamp = now;
+            snapshot_msg->header.frame_id = camera_frame_;
+            snapshot_msg->width = full_width;
+            snapshot_msg->height = full_height;
+            snapshot_msg->encoding = "rgb8";
+            snapshot_msg->is_bigendian = false;
+            snapshot_msg->step = full_width * 3;
+
+            size_t full_size = snapshot_msg->step * snapshot_msg->height;
+            snapshot_msg->data.resize(full_size);
+            memcpy(snapshot_msg->data.data(), full_frame.data, full_size);
+
+            snapshot_pub_.publish(*snapshot_msg);
+            snapshot_info_pub_->publish(*make_camera_info(full_width, full_height));
+            last_snapshot_time_ = now;
+        }
     }
 
-    auto image = std::make_unique<sensor_msgs::msg::Image>();
-    image->header.stamp = this->get_clock()->now();
-    image->header.frame_id = camera_frame_;
-    image->width = final_frame.cols;
-    image->height = final_frame.rows;
-    image->encoding = "rgb8";
-    image->is_bigendian = false;
-    image->step = final_frame.cols * 3;
+    // 2. Handle Throttled Downscaled Stream Publishing
+    double elapsed_lowres = (now - last_publish_time_).seconds();
+    if (target_framerate_ >= 30.0 || elapsed_lowres >= (1.0 / target_framerate_)) {
+        cv::Mat final_frame;
+        if (downscale_factor_ > 1) {
+            int new_width = full_width / downscale_factor_;
+            int new_height = full_height / downscale_factor_;
+            cv::resize(full_frame, final_frame, cv::Size(new_width, new_height), 0, 0, cv::INTER_NEAREST);
+        } else {
+            final_frame = full_frame;
+        }
 
-    size_t size = image->step * image->height;
-    image->data.resize(size);
-    memcpy(image->data.data(), final_frame.data, size);
-    
-    image_pub_.publish(*image);
-    last_publish_time_ = image->header.stamp;
+        auto image = std::make_unique<sensor_msgs::msg::Image>();
+        image->header.stamp = now;
+        image->header.frame_id = camera_frame_;
+        image->width = final_frame.cols;
+        image->height = final_frame.rows;
+        image->encoding = "rgb8";
+        image->is_bigendian = false;
+        image->step = final_frame.cols * 3;
+
+        size_t size = image->step * image->height;
+        image->data.resize(size);
+        memcpy(image->data.data(), final_frame.data, size);
+        
+        image_pub_.publish(*image);
+        info_pub_->publish(*make_camera_info(final_frame.cols, final_frame.rows));
+        last_publish_time_ = now;
+    }
 }
 
 ThetaDriver::ThetaDriver(const rclcpp::NodeOptions& options)
-    : Node("theta_driver", options), last_publish_time_(0, 0, RCL_ROS_TIME) {
+    : Node("theta_driver", options), 
+      last_publish_time_(0, 0, RCL_ROS_TIME),
+      last_snapshot_time_(0, 0, RCL_ROS_TIME) {
     RCLCPP_INFO(get_logger(), "Initializing");
     onInit();
 }
@@ -133,6 +207,10 @@ ThetaDriver::~ThetaDriver() {
 
 void ThetaDriver::onInit() {
     image_pub_ = image_transport::create_publisher(this, "image_raw", rmw_qos_profile_default);
+    snapshot_pub_ = image_transport::create_publisher(this, "image_snapshot", rmw_qos_profile_default);
+
+    info_pub_ = this->create_publisher<sensor_msgs::msg::CameraInfo>("camera_info", 10);
+    snapshot_info_pub_ = this->create_publisher<sensor_msgs::msg::CameraInfo>("snapshot_info", 10);
 
     declare_parameter<bool>("use4k", false);
     get_parameter("use4k", use4k_);
@@ -140,6 +218,8 @@ void ThetaDriver::onInit() {
     get_parameter("downscale_factor", downscale_factor_);
     declare_parameter<double>("target_framerate", 30.0);
     get_parameter("target_framerate", target_framerate_);
+    declare_parameter<double>("snapshot_target_framerate", 1.0);
+    get_parameter("snapshot_target_framerate", snapshot_target_framerate_);
     declare_parameter<std::string>("serial", "");
     get_parameter("serial", serial_);
     declare_parameter<std::string>("camera_frame", camera_frame_);
@@ -154,19 +234,19 @@ void ThetaDriver::onInit() {
     declare_parameter<std::string>("pipeline", pipeline_);
     get_parameter("pipeline", pipeline_);
 
-    // --- ADD CONFIGURATION PRINTS HERE ---
+    // --- CONFIGURATION PRINTS ---
     RCLCPP_INFO(get_logger(), "============================================");
     RCLCPP_INFO(get_logger(), "  Theta 360 Camera Driver Configuration ");
     RCLCPP_INFO(get_logger(), "============================================");
-    RCLCPP_INFO_STREAM(get_logger(), " * Resolution Mode : " << (use4k_ ? "4K (3840x1920)" : "FHD (1920x960)"));
-    RCLCPP_INFO_STREAM(get_logger(), " * Downscale Factor: " << downscale_factor_ 
+    RCLCPP_INFO_STREAM(get_logger(), " * Resolution Mode    : " << (use4k_ ? "4K (3840x1920)" : "FHD (1920x960)"));
+    RCLCPP_INFO_STREAM(get_logger(), " * Downscale Factor   : " << downscale_factor_ 
                                      << " (Output: " << (use4k_ ? 3840 : 1920) / downscale_factor_ << "x" 
                                      << (use4k_ ? 1920 : 960) / downscale_factor_ << ")");
-    RCLCPP_INFO_STREAM(get_logger(), " * Target Framerate: " << target_framerate_ << " FPS");
-    RCLCPP_INFO_STREAM(get_logger(), " * Camera Frame ID : " << camera_frame_);
-    RCLCPP_INFO_STREAM(get_logger(), " * Target Serial   : " << (serial_.empty() ? "First available device" : serial_));
+    RCLCPP_INFO_STREAM(get_logger(), " * Target Framerate   : " << target_framerate_ << " FPS");
+    RCLCPP_INFO_STREAM(get_logger(), " * Snapshot Max Rate  : " << snapshot_target_framerate_ << " FPS (Lazy)");
+    RCLCPP_INFO_STREAM(get_logger(), " * Camera Frame ID    : " << camera_frame_);
+    RCLCPP_INFO_STREAM(get_logger(), " * Target Serial      : " << (serial_.empty() ? "First available device" : serial_));
     RCLCPP_INFO(get_logger(), "============================================");
-    // -------------------------------------
 
     rclcpp::Rate rate(1);
     while (rclcpp::ok()) {

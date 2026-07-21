@@ -37,6 +37,8 @@ public:
     std::string pipeline_;
     image_transport::Publisher image_pub_;
     image_transport::Publisher snapshot_pub_;
+    rclcpp::Publisher<sensor_msgs::msg::CameraInfo>::SharedPtr info_pub_;
+    rclcpp::Publisher<sensor_msgs::msg::CameraInfo>::SharedPtr snapshot_info_pub_;
 };
 
 struct gst_src {
