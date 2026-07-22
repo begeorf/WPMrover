@@ -34,6 +34,6 @@ def generate_launch_description():
 
     ld = LaunchDescription()
     ld.add_action(theta_driver_node)
-    ld.add_action(equirect_cloud_node)
+    # ld.add_action(equirect_cloud_node)
 
     return ld

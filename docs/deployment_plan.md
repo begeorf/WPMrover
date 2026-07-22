@@ -541,6 +541,13 @@ Discover Ultralytics YOLO - the latest in real-time object detection and image s
 - Frank and Gorkem very knowledgable about CV
 - Next tasks: use pixels close to the center of the bounding box, take the median depth and use that to find the depth
 - Check with raw data for if the data is correct
+
+- Find the focal lenght of the zed and create static updater for correcting the depth at edges of Zed FOV
+- minimum requirement for 360 camera: take high resolution image every 1 or 2 seconds (automatically)
+  - maybe don't take images when the rover is moving, maybe not every second
+  - embedded with location
+  - need to be able to see where they were taken in the UI
+  - add button to manually take picture
 ### Tests & Results
 **Date Completed:** `[YYYY-MM-DD]`
 **Notes/Issues:**

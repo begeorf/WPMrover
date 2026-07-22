@@ -210,7 +210,7 @@ void ThetaDriver::onInit() {
     snapshot_pub_ = image_transport::create_publisher(this, "image_snapshot", rmw_qos_profile_default);
 
     info_pub_ = this->create_publisher<sensor_msgs::msg::CameraInfo>("camera_info", 10);
-    snapshot_info_pub_ = this->create_publisher<sensor_msgs::msg::CameraInfo>("snapshot_info", 10);
+    snapshot_info_pub_ = this->create_publisher<sensor_msgs::msg::CameraInfo>("image_snapshot/camera_info", 10);
 
     declare_parameter<bool>("use4k", false);
     get_parameter("use4k", use4k_);

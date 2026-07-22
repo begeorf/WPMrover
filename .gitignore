@@ -29,3 +29,6 @@ index.html
 *.pt
 *.onnx
 *.engine
+*.png
+original_snapshot.png
+cubemap_output.png
