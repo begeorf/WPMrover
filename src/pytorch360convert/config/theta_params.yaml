@@ -1,0 +1,12 @@
+/**:
+  ros__parameters:
+    # Camera Exposure Settings
+    # exposure_program: 1 = Manual, 2 = Auto, 3 = Aperture Priority (Av), 4 = Shutter Priority (Tv)
+    exposure_program: 4
+    shutter_speed: "0.004"      # 1/250s (Fast shutter to prevent motion blur)
+    white_balance: "Daylight"   # Daylight / Outdoor WB
+    iso: "0"                   # 0 = Auto ISO
+
+    # Node Options
+    save_to_ssd: true          # Set to false if you want 0 SSD writes
+    save_path: "~/rover_workspace/original_snapshot.png"

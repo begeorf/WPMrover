@@ -12,7 +12,6 @@ setup(
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
-        # --- ADD THIS LINE ---
         (os.path.join('share', package_name, 'launch'), glob('launch/*.launch.py')),
     ],
     install_requires=['setuptools'],
@@ -24,7 +23,11 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
+            'ps4_trigger_node = pytorch360convert.ps4_trigger_node:main',
+            'theta_driver_node = pytorch360convert.theta_driver_node:main',
             'cubemap_converter_node = pytorch360convert.cubemap_converter_node:main',
+            # Legacy node retained for compatibility if needed
+            'theta_still_node = pytorch360convert.theta_still_node:main',
         ],
     },
 )
