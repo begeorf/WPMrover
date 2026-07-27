@@ -105,7 +105,7 @@
     <child link="bno055"/>
     <!-- This configuration is based on my estimate for where the center of the chip is
     the IMU is mounted in a right-handed X forward Y left configuration. -->
-    <origin rpy="0 0 0" xyz="0.092487 -0.036660 0.143350"/>
+    <origin rpy="0 0 1.5707963" xyz="0.10286227 0.48285 0.141350"/>
   </joint>
   <link name="rslidar">
     <visual>
@@ -120,7 +120,7 @@
     <child link="rslidar"/>
     <!-- <origin xyz="0.0 0.043684 .19576183" rpy="0 ${-22 * pi / 180} 0"/> -->
     <!-- <origin xyz="0.0 0.043684 .19576183" rpy="${pi} 0 0"/> -->
-    <origin rpy="0 0.3839724354387525 0" xyz="0.077296 0.0355 .203479"/>
+    <origin rpy="0 0.3839724354387525 0" xyz="0.158968 0.0 .170481"/>
   </joint>
   <!-- Unified camera frame for ZED 2i (and Theta 360 when integrated).
        The zed-ros2-wrapper (launched with camera_name:=camera) roots its TF tree at camera_camera_link,
