@@ -28,6 +28,7 @@ setup(
             'cubemap_converter_node = pytorch360convert.cubemap_converter_node:main',
             # Legacy node retained for compatibility if needed
             'theta_still_node = pytorch360convert.theta_still_node:main',
+            'orin_theta_fast_capture = pytorch360convert.orin_theta_fast_capture:main',
         ],
     },
 )

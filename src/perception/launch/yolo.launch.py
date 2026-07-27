@@ -19,7 +19,7 @@ def generate_launch_description():
 
     yolo_node = Node(
         package='perception',
-        executable='yolo_pointcloud_node',
+        executable='yolo_depth_node',
         name='yolo_depth_node',
         output='screen',
         emulate_tty=True,
@@ -27,7 +27,7 @@ def generate_launch_description():
             'engine_path': LaunchConfiguration('engine_path'),
             'classes': LaunchConfiguration('classes'),
             'debug_view': False,
-            'confidence_threshold': 0.35,
+            'confidence_threshold': 0.5,
         }]
     )
 

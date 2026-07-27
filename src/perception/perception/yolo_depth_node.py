@@ -329,6 +329,12 @@ class YoloDepthNode(Node):
             )
             smoothed_depth = self.smooth_depth_temporal(object_key, raw_depth, current_time)
 
+            # --- Focal-Length / Off-Axis Radial Distance Correction ---
+            radial_multiplier = np.sqrt(
+                1.0 + ((cx - self.cx) / self.fx) ** 2 + ((cy - self.cy) / self.fy) ** 2
+            )
+            true_distance = smoothed_depth * radial_multiplier
+
             x_cam = (cx - self.cx) * smoothed_depth / self.fx
             y_cam = (cy - self.cy) * smoothed_depth / self.fy
             raw_pos = np.array([x_cam, y_cam, smoothed_depth])
@@ -375,7 +381,7 @@ class YoloDepthNode(Node):
                 txt = TextAnnotation()
                 txt.timestamp = rgb_msg.header.stamp
                 txt.position = Point2(x=float(x1), y=float(y1) - 10)
-                txt.text = f"{label} ({smoothed_depth:.1f} m)"
+                txt.text = f"{label} ({true_distance:.1f} m)"
                 txt.font_size = 18.0
                 txt.text_color = white_color
                 txt.background_color = red_bg
@@ -383,7 +389,7 @@ class YoloDepthNode(Node):
 
             if self.debug_view:
                 cv2.rectangle(rgb_arr, (x1, y1), (x2, y2), (0, 255, 0), 2)
-                text = f"{label} raw:{raw_depth:.2f}m | smooth:{smoothed_depth:.2f}m"
+                text = f"{label} raw:{raw_depth:.2f}m | dist:{true_distance:.2f}m"
                 cv2.putText(
                     rgb_arr, text, (x1, y1 - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 255, 0), 1
                 )
