@@ -22,7 +22,7 @@ from vision_msgs.msg import Detection3D, Detection3DArray, ObjectHypothesisWithP
 
 
 class YoloDepthNode(Node):
-    """ROS2 node that fuses RealSense RGB and depth images to produce 3D object detections.
+    """ROS2 node that fuses RealSense/ZED RGB and depth images to produce 3D object detections.
 
     Runs YOLOv8 TensorRT inference on the colour stream, estimates per-detection depth
     using a robust ROI-median strategy, back-projects detections into 3D camera space,
@@ -48,7 +48,7 @@ class YoloDepthNode(Node):
         self.declare_parameter("min_depth_samples", 5)
         self.declare_parameter("depth_percentile", 25)
         self.declare_parameter("object_key_grid_size", 50)
-        self.declare_parameter("classes", "[0]") # Default to person
+        self.declare_parameter("classes", "[1]") # Default to cracking
 
         self.debug_view = self.get_parameter("debug_view").get_parameter_value().bool_value
         self.device = self.get_parameter("device").get_parameter_value().string_value
@@ -97,11 +97,10 @@ class YoloDepthNode(Node):
             CameraInfo, "/camera/zed_node/rgb/color/rect/image/camera_info", self.info_callback, qos_profile_sensor_data
         )
 
-        # Change these to match your ZED 2i topics:
+        # ZED 2i Topics:
         self.rgb_sub = Subscriber(self, CompressedImage, "/camera/zed_node/rgb/color/rect/image/compressed", qos_profile=qos_profile_sensor_data)
         self.depth_sub = Subscriber(self, Image, "/camera/zed_node/depth/depth_registered", qos_profile=qos_profile_sensor_data)
         
-        # FIX: Increased slop from 0.1 to 0.3 to prevent dropping mismatched frames
         self.sync = ApproximateTimeSynchronizer(
             [self.rgb_sub, self.depth_sub], queue_size=10, slop=0.3
         )
@@ -109,9 +108,6 @@ class YoloDepthNode(Node):
 
         # Internal State (For Object Mapper)
         self.det_pub = self.create_publisher(Detection3DArray, "/yolo/internal_state", 10)
-        
-        # FIX: Changed path to match ZED's namespace environment structure
-        # self.annot_pub = self.create_publisher(ImageAnnotations, "/camera/zed_node/rgb/color/rect/image/annotations", 10)
         self.annot_pub = self.create_publisher(ImageAnnotations, "/yolo/image_annotations", 10)
 
         # --- YOLO Setup ---
@@ -158,8 +154,7 @@ class YoloDepthNode(Node):
             self.cx = msg.k[2]
             self.cy = msg.k[5]
             self.intrinsics_matrix = True
-            # for debugging 
-            # self.get_logger().info(f"🎉 SUCCESS: Camera intrinsics cached! fx: {self.fx}, fy: {self.fy}")
+            self.get_logger().info(f"🎉 SUCCESS: Camera intrinsics cached! fx: {self.fx:.2f}, fy: {self.fy:.2f}")
 
     def get_improved_depth(
         self,
@@ -167,24 +162,39 @@ class YoloDepthNode(Node):
         cx_pixel: int,
         cy_pixel: int,
         bbox: tuple,
+        binary_mask: Optional[np.ndarray] = None,
     ) -> Optional[float]:
         """Estimate robust object depth using an ROI median with outlier rejection."""
         x1, y1, x2, y2 = bbox
 
-        roi = depth_frame_mm[
-            max(cy_pixel - self.roi_size, 0) : min(
-                cy_pixel + self.roi_size, depth_frame_mm.shape[0]
-            ),
-            max(cx_pixel - self.roi_size, 0) : min(
-                cx_pixel + self.roi_size, depth_frame_mm.shape[1]
-            ),
-        ]
+        if binary_mask is not None and np.any(binary_mask):
+            valid_mask = (binary_mask > 0) & np.isfinite(depth_frame_mm) & (depth_frame_mm > 0)
+            valid_depths_mm = depth_frame_mm[valid_mask]
+        else:
+            roi = depth_frame_mm[
+                max(cy_pixel - self.roi_size, 0) : min(
+                    cy_pixel + self.roi_size, depth_frame_mm.shape[0]
+                ),
+                max(cx_pixel - self.roi_size, 0) : min(
+                    cx_pixel + self.roi_size, depth_frame_mm.shape[1]
+                ),
+            ]
+            valid_depths_mm = roi[np.isfinite(roi) & (roi > 0)]
 
-        valid_depths_mm = roi[roi > 0]
+        # Ensure we filter out NaNs and zeros/invalid values
         if valid_depths_mm.size < self.min_depth_samples:
+            self.get_logger().warn(
+                f"⚠️ Depth failed: Insufficient valid pixels in ROI ({valid_depths_mm.size}/{self.min_depth_samples})",
+                throttle_duration_sec=2.0
+            )
             return None
 
-        valid_depths_m = valid_depths_mm.astype(np.float32)
+        # Convert to meters if depth image format is millimeters (or raw floats)
+        # Standard OpenCV depth is often float32 (in meters) or uint16 (in mm).
+        if depth_frame_mm.dtype == np.uint16:
+            valid_depths_m = valid_depths_mm.astype(np.float32) / 1000.0
+        else:
+            valid_depths_m = valid_depths_mm.astype(np.float32)
 
         mean_depth = np.mean(valid_depths_m)
         std_depth = np.std(valid_depths_m)
@@ -255,73 +265,93 @@ class YoloDepthNode(Node):
             self.frame_count = 0
             self.start_time = self.get_clock().now()
 
-        # LOG MARKER 1: The callback triggered! (Both messages arrived and matched timestamps)
-        # self.get_logger().info("🎯 CALLBACK TRIGGERED: Received synchronized RGB and Depth frames!", throttle_duration_sec=2.0)
+        # LOG MARKER 1: Callback triggered
+        self.get_logger().info("🎯 CALLBACK TRIGGERED: Received synced RGB and Depth frames!", throttle_duration_sec=3.0)
 
         if not self.intrinsics_matrix:
-            # for debugging
-            # self.get_logger().warn("⚠️ DROPPING FRAME: Waiting for CameraInfo /intrinsics...", throttle_duration_sec=2.0)
+            self.get_logger().warn("⚠️ DROPPING FRAME: Waiting for CameraInfo /intrinsics...", throttle_duration_sec=2.0)
             return
-
-        # if (
-        #     not self.debug_view
-        #     and self.det_pub.get_subscription_count() == 0
-        #     and self.annot_pub.get_subscription_count() == 0
-        # ):
-        #     self.get_logger().warn("No publishers or subscribers, Returning...", throttle_duration_sec=5.0)
-        #     return
 
         current_time = rgb_msg.header.stamp.sec + rgb_msg.header.stamp.nanosec * 1e-9
 
         try:
             rgb_arr = self.bridge.compressed_imgmsg_to_cv2(rgb_msg, "bgr8")
             depth_arr_mm = self.bridge.imgmsg_to_cv2(depth_msg, "passthrough")
-            # LOG MARKER 2: ROS to OpenCV conversion was successful
-            # self.get_logger().info(f"📸 Images decoded successfully. RGB Shape: {rgb_arr.shape}, Depth Dtype: {depth_arr_mm.dtype}", throttle_duration_sec=5.0)
+            # LOG MARKER 2: Successful OpenCV decoding
+            self.get_logger().info(
+                f"📸 Decoded Images. RGB: {rgb_arr.shape}, Depth: {depth_arr_mm.shape} (dtype: {depth_arr_mm.dtype})",
+                throttle_duration_sec=5.0
+            )
         except Exception as e:
-            # self.get_logger().error(f"❌ Image conversion failed: {e}", throttle_duration_sec=5.0)
-            # self.get_logger().warn(f"Image conversion failed: {e}", throttle_duration_sec=5.0)
+            self.get_logger().error(f"❌ Image conversion failed: {e}", throttle_duration_sec=3.0)
             return
 
-        # LOG MARKER 3: Sending to GPU for TensorRT inference
-        # self.get_logger().info("🧠 Running YOLO TensorRT inference...", throttle_duration_sec=5.0)
-        results = self.model(
-            rgb_arr, verbose=False, device=self.device, conf=self.confidence_threshold
+        # AFTER:
+        results = self.model.predict(
+            source=rgb_arr, 
+            verbose=False, 
+            device=self.device, 
+            conf=self.confidence_threshold,
+            task="segment" # Force the segmentation task reader even if using only BBoxes
         )[0]
 
-        # # --- SSH DEBUG PRINT ---
-        # if len(results.boxes) > 0:
-        #     self.get_logger().info(f"YOLO detected {len(results.boxes)} objects! Class IDs: {[int(b.cls[0]) for b in results.boxes]}")
-        #     pass
-        # else:
-        #     self.get_logger().info("YOLO running but found 0 objects in this frame.", throttle_duration_sec=2.0)
+        # LOG MARKER 3: YOLO Raw outputs
+        num_raw_boxes = len(results.boxes)
+        if num_raw_boxes > 0:
+            self.get_logger().info(
+                f"🧠 YOLO Output: {num_raw_boxes} raw detections! Classes: {[int(b.cls[0]) for b in results.boxes]} | Confs: {[round(float(b.conf[0]), 2) for b in results.boxes]}",
+                throttle_duration_sec=1.0
+            )
+        else:
+            self.get_logger().info("🔍 YOLO active: 0 detections above confidence threshold.", throttle_duration_sec=2.0)
 
         det_msg = Detection3DArray()
         det_msg.header = rgb_msg.header
 
-        should_publish_foxglove = (not self.debug_view) and (
-            self.annot_pub.get_subscription_count() > 0
-        )
+        should_publish_foxglove = True  # Always construct annotations for publishing
         annot_msg = ImageAnnotations() if should_publish_foxglove else None
 
         red_color = Color(r=1.0, g=0.0, b=0.0, a=1.0)
         white_color = Color(r=1.0, g=1.0, b=1.0, a=1.0)
         red_bg = Color(r=1.0, g=0.0, b=0.0, a=0.5)
 
-        for box in results.boxes:
+        published_count = 0
+
+        has_masks = results.masks is not None
+        masks_data = results.masks.data.cpu().numpy() if has_masks else None
+
+        for idx, box in enumerate(results.boxes):
             cls_id = int(box.cls[0])
 
             if cls_id not in self.target_classes:
+                self.get_logger().info(
+                    f"⏭️ Skipping class ID {cls_id} (Not in target classes {self.target_classes})",
+                    throttle_duration_sec=2.0
+                )
                 continue
 
-            conf = float(box.conf)
-            x1, y1, x2, y2 = map(int, box.xyxy[0])
-            label = self.names[cls_id]
+            conf = float(box.conf[0])
+            x1, y1, x2, y2 = map(int, box.xyxy[0].tolist())
 
+            label = self.names[cls_id]
             cx, cy = (x1 + x2) // 2, (y1 + y2) // 2
-            raw_depth = self.get_improved_depth(depth_arr_mm, cx, cy, (x1, y1, x2, y2))
+
+            binary_mask = None
+            if has_masks and masks_data is not None:
+                raw_mask = masks_data[idx]
+                binary_mask = cv2.resize(
+                    raw_mask,
+                    (depth_arr_mm.shape[1], depth_arr_mm.shape[0]),
+                    interpolation=cv2.INTER_NEAREST,
+                )
+
+            raw_depth = self.get_improved_depth(depth_arr_mm, cx, cy, (x1, y1, x2, y2), binary_mask)
 
             if raw_depth is None:
+                self.get_logger().warn(
+                    f"⚠️ Object '{label}' dropped: Depth ROI calculation failed.",
+                    throttle_duration_sec=1.0
+                )
                 continue
 
             object_key = (
@@ -329,7 +359,7 @@ class YoloDepthNode(Node):
             )
             smoothed_depth = self.smooth_depth_temporal(object_key, raw_depth, current_time)
 
-            # --- Focal-Length / Off-Axis Radial Distance Correction ---
+            # Focal-Length / Off-Axis Radial Distance Correction
             radial_multiplier = np.sqrt(
                 1.0 + ((cx - self.cx) / self.fx) ** 2 + ((cy - self.cy) / self.fy) ** 2
             )
@@ -348,8 +378,6 @@ class YoloDepthNode(Node):
 
             det = Detection3D()
             det.header = rgb_msg.header
-            # old ros2 jazzy version det.results.append(ObjectHypothesisWithPose(id=label, score=conf))
-            # updated humble version of hypothesis making 
             hyp_pose = ObjectHypothesisWithPose()
             hyp_pose.hypothesis.class_id = str(label)
             hyp_pose.hypothesis.score = float(conf)
@@ -387,12 +415,20 @@ class YoloDepthNode(Node):
                 txt.background_color = red_bg
                 annot_msg.texts.append(txt)
 
+            published_count += 1
+
             if self.debug_view:
                 cv2.rectangle(rgb_arr, (x1, y1), (x2, y2), (0, 255, 0), 2)
                 text = f"{label} raw:{raw_depth:.2f}m | dist:{true_distance:.2f}m"
                 cv2.putText(
                     rgb_arr, text, (x1, y1 - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 255, 0), 1
                 )
+
+        if published_count > 0:
+            self.get_logger().info(
+                f"✅ SUCCESS: Published {published_count} valid 3D detections!",
+                throttle_duration_sec=1.0
+            )
 
         self.det_pub.publish(det_msg)
 

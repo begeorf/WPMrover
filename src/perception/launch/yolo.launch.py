@@ -7,13 +7,14 @@ from launch_ros.actions import Node
 def generate_launch_description():
     engine_path_arg = DeclareLaunchArgument(
         'engine_path',
-        default_value='/home/rover/rover_workspace/src/perception/models/yolo11n.engine',
+        default_value='/home/rover/rover_workspace/src/perception/models/nano/ConcreteModel1_YOLO_nano.engine',
+        # default_value='/home/rover/rover_workspace/src/perception/models/nano/ConcreteModel1_YOLO_small.engine',
         description='Absolute path to the compiled YOLO TensorRT .engine file'
     )
 
     classes_arg = DeclareLaunchArgument(
         'classes',
-        default_value='"[0, 56, 57]"',  # Detect persons, chairs, sofas
+        default_value="'[1]'",  # Detect Cracking
         description='List of COCO class IDs to filter'
     )
 
@@ -27,7 +28,7 @@ def generate_launch_description():
             'engine_path': LaunchConfiguration('engine_path'),
             'classes': LaunchConfiguration('classes'),
             'debug_view': False,
-            'confidence_threshold': 0.5,
+            'confidence_threshold': 0.35,
         }]
     )
 
