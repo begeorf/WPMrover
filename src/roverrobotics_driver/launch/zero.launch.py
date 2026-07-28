@@ -5,6 +5,7 @@ from ament_index_python.packages import get_package_share_path
 from launch import LaunchDescription
 from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
+from launch_xml.launch_description_sources import XMLLaunchDescriptionSource
 from launch_ros.actions import Node
 
 
@@ -20,10 +21,29 @@ def generate_launch_description():
     with open(default_model_path, 'r') as infp:
         robot_desc = infp.read()
 
-    # PS4 controller launch
+    # PS4 controller launch (Commented out to avoid conflict on /joy with Ally X)
     controller_launch_path = os.path.join(driver_share, 'launch', 'ps4_controller.launch.py')
     ps4_controller_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(controller_launch_path))
+
+    # Ally X Joystick Node
+    ally_joy_node = Node(
+        package='roverrobotics_input_manager',
+        executable='ally_joy_node.py',
+        name='ally_joy_node',
+        output='screen'
+    )
+
+    # Foxglove Bridge Launcher
+    foxglove_bridge_path = os.path.join(
+        get_package_share_directory('foxglove_bridge'),
+        'launch',
+        'foxglove_bridge_launch.xml'
+    )
+    foxglove_bridge_launch = IncludeLaunchDescription(
+        XMLLaunchDescriptionSource(foxglove_bridge_path),
+        launch_arguments={'port': '8765'}.items()
+    )
 
     # EKF (robot_localization) — sole publisher of odom -> base_footprint
     ekf_launch_path = os.path.join(driver_share, 'launch', 'robot_localizer.launch.py')
@@ -64,6 +84,8 @@ def generate_launch_description():
     ld.add_action(joint_state_publisher_node)
     ld.add_action(robot_state_publisher_node)
     ld.add_action(robot_localizer_launch)
-    ld.add_action(ps4_controller_launch)
+    ld.add_action(ally_joy_node)
+    ld.add_action(foxglove_bridge_launch)
+    # ld.add_action(ps4_controller_launch)
 
     return ld

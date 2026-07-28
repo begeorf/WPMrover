@@ -10,6 +10,7 @@ install(DIRECTORY
 
 install(PROGRAMS
   scripts/joys_manager.py
+  scripts/ally_joy_node.py
   DESTINATION lib/${PROJECT_NAME})
 
 
