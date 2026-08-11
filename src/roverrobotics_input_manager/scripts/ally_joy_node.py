@@ -134,12 +134,12 @@ class AllyJoyNode(Node):
 
         self.pub_cmd_vel.publish(twist)
 
-    def watchdog_callback(self) -> None:
-        """Bring robot to an immediate halt if Foxglove drops connection or stops publishing."""
-        time_since_last_msg = (self.get_clock().now() - self.last_joy_time).nanoseconds / 1e9
-        if time_since_last_msg > self.timeout_sec:
-            stop_cmd = Twist()
-            self.cmd_pub.publish(stop_cmd)
+    # def watchdog_callback(self) -> None:
+    #     """Bring robot to an immediate halt if Foxglove drops connection or stops publishing."""
+    #     time_since_last_msg = (self.get_clock().now() - self.last_joy_time).nanoseconds / 1e9
+    #     if time_since_last_msg > self.timeout_sec:
+    #         stop_cmd = Twist()
+    #         self.cmd_pub.publish(stop_cmd)
 
     def stop_robot(self) -> None:
         """Publish zero velocity to halt the robot."""
