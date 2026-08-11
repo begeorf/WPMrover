@@ -12,6 +12,9 @@ slam_test_run_1/
 slam_test_run_2/
 slam_test_run_2/rosbag*/
 spin_test_results.csv
+snapshots/
+zzzsnapshots/
+*.JPG
 
 # Ignore python compilation files
 __pycache__/
@@ -32,3 +35,8 @@ index.html
 *.png
 original_snapshot.png
 cubemap_output.png
+theta_captures_*/
+.cache/
+.vscode/
+semantic_map.json
+ZED_Diagnostic_Results.json
