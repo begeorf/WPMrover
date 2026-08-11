@@ -27,6 +27,7 @@ setup(
             'yolo_depth_node = perception.yolo_depth_node:main',
             'depth_annotator_node = perception.depth_annotator_node:main',
             'yolo_pointcloud_node = perception.yolo_pointcloud_node:main', # <-- Add this line
+            'object_mapper_node = perception.object_mapper_node:main'
         ],
     },
 )

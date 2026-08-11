@@ -13,12 +13,13 @@ from cv_bridge import CvBridge
 
 # Foxglove Imports
 from foxglove_msgs.msg import Color, ImageAnnotations, Point2, PointsAnnotation, TextAnnotation
-from message_filters import ApproximateTimeSynchronizer, Subscriber
+from message_filters import ApproximateTimeSynchronizer, TimeSynchronizer, Subscriber
 from rclpy.node import Node
 from rclpy.qos import qos_profile_sensor_data
 from sensor_msgs.msg import CameraInfo, Image, CompressedImage, PointCloud2
 from ultralytics import YOLO
 from vision_msgs.msg import Detection3D, Detection3DArray, ObjectHypothesisWithPose, ObjectHypothesis
+from rclpy.executors import MultiThreadedExecutor
 
 
 class YoloDepthNode(Node):
@@ -101,8 +102,8 @@ class YoloDepthNode(Node):
         self.rgb_sub = Subscriber(self, CompressedImage, "/camera/zed_node/rgb/color/rect/image/compressed", qos_profile=qos_profile_sensor_data)
         self.depth_sub = Subscriber(self, Image, "/camera/zed_node/depth/depth_registered", qos_profile=qos_profile_sensor_data)
         
-        self.sync = ApproximateTimeSynchronizer(
-            [self.rgb_sub, self.depth_sub], queue_size=10, slop=0.3
+        self.sync = TimeSynchronizer(
+            [self.rgb_sub, self.depth_sub], queue_size=10
         )
         self.sync.registerCallback(self.image_cb)
 
@@ -168,8 +169,14 @@ class YoloDepthNode(Node):
         x1, y1, x2, y2 = bbox
 
         if binary_mask is not None and np.any(binary_mask):
-            valid_mask = (binary_mask > 0) & np.isfinite(depth_frame_mm) & (depth_frame_mm > 0)
-            valid_depths_mm = depth_frame_mm[valid_mask]
+            # FIX 1: Crop depth and mask to bounding box FIRST to save CPU cycles
+            # We use max(0, val) to ensure we don't slice with negative indices if the box touches edges
+            depth_roi = depth_frame_mm[max(0, y1):y2, max(0, x1):x2]
+            mask_roi = binary_mask[max(0, y1):y2, max(0, x1):x2]
+
+            
+            valid_mask = (mask_roi > 0) & np.isfinite(depth_roi) & (depth_roi > 0)
+            valid_depths_mm = depth_roi[valid_mask]
         else:
             roi = depth_frame_mm[
                 max(cy_pixel - self.roi_size, 0) : min(
@@ -445,8 +452,12 @@ class YoloDepthNode(Node):
 def main(args: Optional[list] = None) -> None:
     rclpy.init(args=args)
     node = YoloDepthNode()
+    
+    # Use multi-threaded executor to prevent single-core Python blocking
+    executor = MultiThreadedExecutor()
+    executor.add_node(node)
     try:
-        rclpy.spin(node)
+        executor.spin()
     except KeyboardInterrupt:
         pass
     finally:

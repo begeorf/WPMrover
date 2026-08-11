@@ -2,7 +2,11 @@
 import json
 import math
 import os
+import sys
 from typing import Optional
+
+# Pre-flight debug print (triggers upon script load/import)
+print("[DEBUG OBJECT_MAPPER] Script file loaded successfully!", file=sys.stderr)
 
 import rclpy
 import tf2_geometry_msgs
@@ -24,6 +28,10 @@ class ObjectMapper(Node):
     def __init__(self) -> None:
         super().__init__("object_mapper")
 
+        self.get_logger().info("==========================================")
+        self.get_logger().info("Initializing ObjectMapper Node...")
+        self.get_logger().info("==========================================")
+
         # --- PARAMETERS ---
         self.declare_parameter("debug_view", False)
         self.declare_parameter("map_save_path", "semantic_map.json")
@@ -41,6 +49,10 @@ class ObjectMapper(Node):
             self.get_parameter("position_alpha").get_parameter_value().double_value
         )
 
+        self.get_logger().info(f"Loaded Param - debug_view: {self.debug_view}")
+        self.get_logger().info(f"Loaded Param - map_save_path: {self.map_file}")
+        self.get_logger().info(f"Loaded Param - match_dist_thresh: {self.match_dist_thresh}")
+
         # --- STATE ---
         self.objects = []
         self.next_obj_id = 0
@@ -57,6 +69,7 @@ class ObjectMapper(Node):
         self.sub = self.create_subscription(
             Detection3DArray, "/yolo/internal_state", self.fast_callback, 10
         )
+        self.get_logger().info("Subscribed to: /yolo/internal_state")
 
         # --- PUBLISHERS ---
         self.scene_pub = self.create_publisher(SceneUpdate, "/visual_scene", 10)
@@ -76,6 +89,8 @@ class ObjectMapper(Node):
 
         # 3. Processing Timer (The new 1Hz Logic Loop)
         self.create_timer(1.0, self.slow_processing_loop)
+
+        self.get_logger().info("ObjectMapper Node initialized and timers running.")
 
     def load_map(self) -> None:
         """Load previously saved objects from the JSON map file if it exists."""
@@ -132,7 +147,11 @@ class ObjectMapper(Node):
             return
 
         for det in msg.detections:
-            label = det.results[0].id
+            # Extract label accounting for ROS 2 Humble vision_msgs changes
+            if hasattr(det.results[0], "hypothesis"):
+                label = det.results[0].hypothesis.class_id
+            else:
+                label = str(det.results[0].id)
 
             # 1. Transform Point to Map Frame
             point_camera = PointStamped()
@@ -291,6 +310,7 @@ class ObjectMapper(Node):
 
 
 def main(args: Optional[list] = None) -> None:
+    print("[DEBUG MAIN] main() entrypoint reached!", file=sys.stderr)
     rclpy.init(args=args)
     node = ObjectMapper()
     try:
@@ -305,4 +325,3 @@ def main(args: Optional[list] = None) -> None:
 
 if __name__ == "__main__":
     main()
-
