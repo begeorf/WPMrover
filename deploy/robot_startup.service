@@ -1,0 +1,27 @@
+[Unit]
+Description=Rover Robotics System Main Application
+# Wait until network interface is active
+After=network-online.target
+Wants=network-online.target
+
+StartLimitIntervalSec=60
+StartLimitBurst=5
+
+[Service]
+Type=simple
+# Run as 'rover' user so ROS files and serial ports have correct permissions
+User=rover
+WorkingDirectory=/home/rover/rover_workspace
+
+# Execution script
+ExecStart=/usr/local/bin/start_robot_system.sh
+
+# Restart logic: If it crashes, wait 10s and restart
+Restart=on-failure
+RestartSec=10
+
+# Base environment
+Environment="HOME=/home/rover/rover_workspace"
+
+[Install]
+WantedBy=multi-user.target
