@@ -20,7 +20,10 @@ public:
     void onInit();
     bool init();
     bool open();
-    void publishImage(GstMapInfo map);
+    // Change declaration from:
+    // void publishImage(GstMapInfo map);
+    // To:
+    void publishImage(GstMapInfo map, uint64_t capture_time_ns);
 
     bool streaming_ = false;
     uvc_device_handle_t* devh_;
@@ -39,6 +42,9 @@ public:
     image_transport::Publisher snapshot_pub_;
     rclcpp::Publisher<sensor_msgs::msg::CameraInfo>::SharedPtr info_pub_;
     rclcpp::Publisher<sensor_msgs::msg::CameraInfo>::SharedPtr snapshot_info_pub_;
+    std::string snapshot_save_dir_;
+    uint64_t snapshot_count_{0};
+    bool enable_snapshots_{true};
 };
 
 struct gst_src {

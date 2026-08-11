@@ -4,6 +4,10 @@
     downscale_factor: 4     # Cuts resolution down for the fast stream (e.g., 1920x960 becomes 960x480)
     target_framerate: 15.0  # Cap active image updates per second on the standard low-res stream
     snapshot_target_framerate: 0.5 # Max rate to allow full-res snapshots (e.g., 0.5 = at most once every 2 seconds)
+    snapshot_save_dir: "/home/rover/rover_workspace/zzzsnapshots"
+    snapshot_target_framerate: 0.5
+    enable_snapshots: false
+
     camera_frame: "theta_camera_link"
     serial: ""              # Leave blank to grab the first connected Theta
     # Jetson Hardware Accelerated Unwrapping/Decoding GStreamer Pipeline
