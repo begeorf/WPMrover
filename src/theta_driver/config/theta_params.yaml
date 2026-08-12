@@ -2,11 +2,13 @@
   ros__parameters:
     use4k: true            # Set to true for 3840x1920, false for 1920x960
     downscale_factor: 4     # Cuts resolution down for the fast stream (e.g., 1920x960 becomes 960x480)
-    target_framerate: 15.0  # Cap active image updates per second on the standard low-res stream
+    target_framerate: 2.0  # Cap active image updates per second on the standard low-res stream
     snapshot_target_framerate: 0.5 # Max rate to allow full-res snapshots (e.g., 0.5 = at most once every 2 seconds)
     snapshot_save_dir: "/home/rover/rover_workspace/zzzsnapshots"
-    snapshot_target_framerate: 0.5
-    enable_snapshots: false
+    enable_snapshots: true
+    use_automatic_snapshots: false   # Time-gated capture at snapshot_target_framerate (current/MVP behavior)
+    use_distance_snapshots: true   # Allow the trigger_snapshot service (called by snapshot_manager) to force a capture
+    snapshot_density_distance: 1.0
 
     camera_frame: "theta_camera_link"
     serial: ""              # Leave blank to grab the first connected Theta

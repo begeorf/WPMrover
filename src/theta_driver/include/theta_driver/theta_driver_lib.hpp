@@ -4,12 +4,14 @@
 #include <rclcpp/rclcpp.hpp>
 #include <sensor_msgs/msg/image.hpp>
 #include <image_transport/image_transport.hpp>
+#include <std_srvs/srv/trigger.hpp>
 #include <gst/gst.h>
 #include <gst/app/gstappsrc.h>
 #include <gst/app/gstappsink.h>
 #include <libuvc/libuvc.h>
 #include <opencv2/core.hpp>
 #include "thetauvc.h"
+#include <atomic>
 
 namespace theta_driver {
 
@@ -45,6 +47,14 @@ public:
     std::string snapshot_save_dir_;
     uint64_t snapshot_count_{0};
     bool enable_snapshots_{true};
+    bool use_automatic_snapshots_{true};
+    bool use_distance_snapshots_{false};
+    std::atomic<bool> force_snapshot_{false};
+    rclcpp::Service<std_srvs::srv::Trigger>::SharedPtr trigger_snapshot_srv_;
+
+    void handleTriggerSnapshot(
+        const std::shared_ptr<std_srvs::srv::Trigger::Request> request,
+        std::shared_ptr<std_srvs::srv::Trigger::Response> response);
 };
 
 struct gst_src {

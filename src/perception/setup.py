@@ -14,6 +14,7 @@ setup(
         ('share/' + package_name, ['package.xml']),
         # FIX: Clean up this line so it only grabs actual launch files
         (os.path.join('share', package_name, 'launch'), glob(os.path.join('launch', '*.py'))),
+        (os.path.join('share', package_name, 'config'), glob(os.path.join('config', '*.yaml'))),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
@@ -27,7 +28,8 @@ setup(
             'yolo_depth_node = perception.yolo_depth_node:main',
             'depth_annotator_node = perception.depth_annotator_node:main',
             'yolo_pointcloud_node = perception.yolo_pointcloud_node:main', # <-- Add this line
-            'object_mapper_node = perception.object_mapper_node:main'
+            'object_mapper_node = perception.object_mapper_node:main',
+            'snapshot_manager_node = perception.snapshot_manager_node:main'
         ],
     },
 )

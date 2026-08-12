@@ -1,10 +1,17 @@
 import os
+from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 
 def generate_launch_description():
+    snapshot_manager_config_path = os.path.join(
+        get_package_share_directory('perception'),
+        'config',
+        'snapshot_manager_params.yaml'
+    )
+
     engine_path_arg = DeclareLaunchArgument(
         'engine_path',
         # default_value='/home/rover/rover_workspace/src/perception/models/nano/ConcreteModel1_YOLO_nano.engine',
@@ -37,6 +44,13 @@ def generate_launch_description():
         description='Interval in seconds between atomic map JSON disk writes'
     )
 
+    # --- Snapshot Manager Node Arguments ---
+    snapshot_density_distance_arg = DeclareLaunchArgument(
+        'snapshot_density_distance',
+        default_value='1.0',
+        description='Minimum distance in meters to the nearest existing snapshot before a new one is triggered'
+    )
+
     yolo_node = Node(
         package='perception',
         executable='yolo_depth_node',
@@ -66,7 +80,17 @@ def generate_launch_description():
         }]
     )
 
-    
+    snapshot_manager_node = Node(
+        package='perception',
+        executable='snapshot_manager_node',
+        name='snapshot_manager',
+        output='screen',
+        emulate_tty=True,
+        parameters=[
+            snapshot_manager_config_path,
+            {'snapshot_density_distance': LaunchConfiguration('snapshot_density_distance')},
+        ]
+    )
 
     return LaunchDescription([
         engine_path_arg,
@@ -74,6 +98,8 @@ def generate_launch_description():
         map_save_path_arg,
         match_dist_thresh_arg,
         save_interval_arg,
+        snapshot_density_distance_arg,
         yolo_node,
         object_mapper_node,
+        snapshot_manager_node,
     ])

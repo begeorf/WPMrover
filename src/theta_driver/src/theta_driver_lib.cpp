@@ -75,8 +75,13 @@ GstFlowReturn new_sample_callback(GstAppSink* sink, gpointer data) {
 
     bool needs_snapshot = false;
     if (driver->enable_snapshots_ && (driver->snapshot_pub_.getNumSubscribers() > 0 || !driver->snapshot_save_dir_.empty())) {
-        double elapsed_snapshot = (now - driver->last_snapshot_time_).seconds();
-        if (elapsed_snapshot >= (1.0 / driver->snapshot_target_framerate_)) {
+        if (driver->use_automatic_snapshots_) {
+            double elapsed_snapshot = (now - driver->last_snapshot_time_).seconds();
+            if (elapsed_snapshot >= (1.0 / driver->snapshot_target_framerate_)) {
+                needs_snapshot = true;
+            }
+        }
+        if (driver->force_snapshot_) {
             needs_snapshot = true;
         }
     }
@@ -152,8 +157,9 @@ void ThetaDriver::publishImage(GstMapInfo map, uint64_t capture_time_ns) {
     // 1. Handle Lazy Snapshot Publishing (Full Resolution Layer)
     if (enable_snapshots_ && (snapshot_pub_.getNumSubscribers() > 0 || snapshot_info_pub_->get_subscription_count() > 0 || !snapshot_save_dir_.empty())) {
         double elapsed_snapshot = (capture_stamp - last_snapshot_time_).seconds();
-        if (elapsed_snapshot >= (1.0 / snapshot_target_framerate_)) {
-            
+        bool forced = force_snapshot_.exchange(false);
+        if (forced || (use_automatic_snapshots_ && elapsed_snapshot >= (1.0 / snapshot_target_framerate_))) {
+
             snapshot_count_++;
             double pipeline_delay_ms = (system_now.seconds() - capture_stamp.seconds()) * 1000.0;
             
@@ -260,6 +266,10 @@ void ThetaDriver::onInit() {
 
     declare_parameter<bool>("enable_snapshots", false);
     get_parameter("enable_snapshots", enable_snapshots_);
+    declare_parameter<bool>("use_automatic_snapshots", true);
+    get_parameter("use_automatic_snapshots", use_automatic_snapshots_);
+    declare_parameter<bool>("use_distance_snapshots", false);
+    get_parameter("use_distance_snapshots", use_distance_snapshots_);
     declare_parameter<bool>("use4k", false);
     get_parameter("use4k", use4k_);
     declare_parameter<int>("downscale_factor", 1);
@@ -277,7 +287,7 @@ void ThetaDriver::onInit() {
 
     // Pipeline tuned to force max-buffers=1 and drop leaky frames (Eliminates camera lag)
     pipeline_ =
-        "appsrc name=ap max-bytes=0 max-buffers=1 leaky=2 ! "
+        "appsrc name=ap max-buffers=2 leaky=2 ! "
         "h264parse ! "
         "nvv4l2decoder ! video/x-raw(memory:NVMM) ! "
         "nvvidconv ! video/x-raw,format=BGRx ! "
@@ -286,11 +296,17 @@ void ThetaDriver::onInit() {
     declare_parameter<std::string>("pipeline", pipeline_);
     get_parameter("pipeline", pipeline_);
 
+    trigger_snapshot_srv_ = create_service<std_srvs::srv::Trigger>(
+        "trigger_snapshot",
+        std::bind(&ThetaDriver::handleTriggerSnapshot, this, std::placeholders::_1, std::placeholders::_2));
+
     // --- CONFIGURATION PRINTS ---
     RCLCPP_INFO(get_logger(), "===============================================");
     RCLCPP_INFO(get_logger(), "  Theta 360 Camera Driver Configuration ");
     RCLCPP_INFO(get_logger(), "===============================================");
     RCLCPP_INFO_STREAM(get_logger(), " * Enable Snapshots   : " << (enable_snapshots_ ? "True" : "False"));
+    RCLCPP_INFO_STREAM(get_logger(), " * Automatic Snapshots: " << (use_automatic_snapshots_ ? "True" : "False"));
+    RCLCPP_INFO_STREAM(get_logger(), " * Distance Snapshots : " << (use_distance_snapshots_ ? "True" : "False"));
     RCLCPP_INFO_STREAM(get_logger(), " * Resolution Mode    : " << (use4k_ ? "4K (3840x1920)" : "FHD (1920x960)"));
     RCLCPP_INFO_STREAM(get_logger(), " * Downscale Factor   : " << downscale_factor_ 
                                      << " (Output: " << (use4k_ ? 3840 : 1920) / downscale_factor_ << "x" 
@@ -314,6 +330,22 @@ void ThetaDriver::onInit() {
         rate.sleep();
         RCLCPP_WARN(get_logger(), "retry");
     }
+}
+
+void ThetaDriver::handleTriggerSnapshot(
+    const std::shared_ptr<std_srvs::srv::Trigger::Request> /*request*/,
+    std::shared_ptr<std_srvs::srv::Trigger::Response> response) {
+    if (!enable_snapshots_ || !use_distance_snapshots_) {
+        response->success = false;
+        response->message = "Distance-based snapshots are disabled (enable_snapshots/use_distance_snapshots)";
+        return;
+    }
+
+    // Capture happens asynchronously on the next GStreamer sample; this only confirms the
+    // request was accepted, not that the frame has been written to disk yet.
+    force_snapshot_ = true;
+    response->success = true;
+    response->message = "Snapshot request accepted";
 }
 
 bool ThetaDriver::open() {

@@ -1,0 +1,8 @@
+/snapshot_manager:
+  ros__parameters:
+    snapshot_density_distance: 1.0   # Trigger a new snapshot once this far (m) from the nearest existing one
+    pose_check_frequency: 5.0        # Hz to poll the map->base_frame TF lookup
+    map_frame: "map"
+    base_frame: "base_link"
+    publish_markers: true
+    trigger_service_name: "/trigger_snapshot"
