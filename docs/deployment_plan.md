@@ -445,12 +445,6 @@ This document outlines the deployment and development plan for transforming the 
   - need calibration between lidar and camera
   - first try manual splicing between lidar and 360 camera
 
-- MVP: take snapshots in 4k from live mode
-- 2.1- From development perspective, you need to have a bring-up launch file that brings all of your specific launch files, nodes, or etc together and test everything at the same time. For this task, please evaluate and double check these stuff: A- What FPS you get with your CV node when everything is up (nav, slam, ...) B-Any delay or lag in your Foxglove panels, they should all work real-time.
- 
-- 2.2-From UI perspective, you want an interactive visualization for every function you developed. here is some of them: A- Users should be able to see the detected defect in 2d/3d map from environment (object_mapper node) B-Users should be able to see where was the location of every image for 360 camera, so we need robot trajectory and a numbered label in your 2d view panel. C-We need some buttons (as service call) in your foxglove to connect to your bring-up launch file so users can start and stop the whole process from Foxglove. 
- 
-- 2.3- We need an automation process on robot. You need some "service" files along with .sh files to after every boot and powering on, connect the robot to your network (router), bring-up foxglove bridge, and your "service" file, then users can push "start" button to work with robot. 
 
 
 

@@ -40,16 +40,9 @@ def generate_launch_description():
         'launch',
         'foxglove_bridge_launch.xml'
     )
-    foxglove_bridge_node = Node(
-        package="foxglove_bridge",
-        executable="foxglove_bridge",  # Note: executable is 'foxglove_bridge', not 'foxglove_bridge_node'
-        name="foxglove_bridge",
-        parameters=[{
-            "port": 8765,
-            "address": "0.0.0.0",
-            "send_buffer_limit": 10000000,
-            "use_sim_time": False,
-        }]
+    foxglove_bridge_launch = IncludeLaunchDescription(
+        XMLLaunchDescriptionSource(foxglove_bridge_path),
+        launch_arguments={'port': '8765'}.items()
     )
 
     # EKF (robot_localization) — sole publisher of odom -> base_footprint
@@ -92,7 +85,7 @@ def generate_launch_description():
     ld.add_action(robot_state_publisher_node)
     ld.add_action(robot_localizer_launch)
     ld.add_action(ally_joy_node)
-    ld.add_action(foxglove_bridge_node)
+    ld.add_action(foxglove_bridge_launch)
     # ld.add_action(ps4_controller_launch)
 
     return ld
