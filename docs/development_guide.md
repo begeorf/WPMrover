@@ -1,19 +1,18 @@
-# [rover_name] Robot Deployment: Automation Documentation
+# [rover_name] Robot Deployment: Development Documentation
 
 ## 1. System Overview
-This system provides a fully automated startup sequence for the Roverrobotics Rover Zero robot. It handles:
+This system provides automated remote access for developers. It runs on top of the automation system, see `automation_guide.md`. It requires:
 
-- **Smart Networking:** Automatically connects to any known WiFi (Home, Office, Hotspot). 
+- **Connection:** Rover and Asus Device must be connected to the same network, and the network must have internet. 
 <!-- If all fail, it creates its own fallback Hotspot (**MAX-Hotspot**) so you are never locked out. -->
-- **Field Management:** Includes a command-line tool (`add-wifi`) to safely add new networks on-site without losing connection.
-- **Robust Application Launch:** Starts the entire ROS 2 stack (SLAM, Navigation, AI, Camera) automatically.
-- **Crash Recovery:** Automatic service restarts on failure via systemd `Restart=on-failure`.
+- **Robot in IDLE mode:** The robot will launch into IDLE mode. A user will press a button in foxglove to put the robot in dev mode
+- **Charging:** Rover must be placed on the charger while in developer mode to prevent it from running out of battery and dying.
 
 ---
 
 ## 2. File Architecture
 
-These are the 6 critical files that orchestrate the system.
+These are the`[TODO: number of files]` critical files that orchestrate the system.
 
 | File Path | Role | Description |
 |----------|------|-------------|
@@ -23,97 +22,43 @@ These are the 6 critical files that orchestrate the system.
 | `/usr/local/bin/start_robot_system.sh` | Orchestrator | The main script. Loads env, starts the Foxglove Bridge, and triggers the ROS launch. |
 | `/etc/systemd/system/robot-app.service` | Service Def | Controls the orchestrator. Runs on boot and automatically restarts the application if it crashes. |
 | `/home/unitree/MAX-Brain-v1.0/src/bringup/max_bringup/launch/max_bringup.launch.py` | ROS Launch | The "Brain." Launches Nav2, SLAM, camera, and AI in a timed sequence. |
-`/etc/systemd/system/robot_dev_mode_start.service` | Service Def | Executes the .sh file that puts the rover in dev mode. |
+`/etc/systemd/system/robot_dev_mode_start.service` | Service Def | Executes the `dev_mode_start.sh`  as root. |
 `/usr/local/bin/dev_mode_start.sh` | Developer mode manager | Puts Tailscale up, allowing a devleoper to remotely SSH into the rover. |
 ---
 
 ## 3. The Startup Sequence
 
-### Power On
-Linux Kernel loads.
+### T+0s IDLE Mode
+Rover must be in IDLE mode with a foxglove connection to begin the processes.
 
-### T+45s (Network)
-`wifi-fallback.service` runs.
+### T+`[time]`s (User Input)
+User presses the `[TODO: button name]` button
+- Service callback: `[TOOD: callback name]` runs in the background
 
-- **Check:** Is any known WiFi reachable?
-- **Priority:** Connects to the network with the highest `autoconnect-priority`.
-- **Failure:** If no connection after 45s, create Hotspot:
-  - SSID: `MAX-Hotspot`
-  - Password: `MAX-Hotspot`
+### T+`[time]`s (Dev mode Service file)
+`rover_dev_mode_start.service` runs.
+- Runs `dev_mode_start.sh` as `root`.
 
-### T+60s (Application)
-`robot-app.service` starts.
-
-- Loads environment variables (`robot_env_loader.sh`)
-- Starts Foxglove Bridge (Docker)
-- Executes ROS 2 Launch
-
-### T+70s (ROS Nodes)
-- **0s:** Nav2 & SLAM
-- **+5s:** RealSense Camera
-- **+20s:** YOLO Depth Node
-- **+30s:** Object Mapper
-- **+40s:** Voxel Filter (LiDAR downsampler for visualization)
+### T+70s (DEV mode )
+- Robot becomes Accessable with its Tailscale IP address
 
 ---
 
 ## 4. Operator's Guide (Cheat Sheet)
 
-### A. Managing WiFi in the Field
+### A. Foxglove automated developer mode
 
-When you arrive at a new location:
+- Follow the steps in `automation_guide.md` to put the robot into IDLE mode.
+- Press the button in foxglove to put the robot in developer mode.
 
-1. Connect your laptop to:
-   - SSID: `MAX-Hotspot`
-2. SSH into the robot:
-   ```bash
-   ssh unitree@192.168.123.161
-   ```
-
-   or
-
-   ```bash
-   ssh unitree@ubuntu.local
-   ```
-
-3. Run the tool:
-   ```bash
-   sudo add-wifi
-   ```
-
-4. Follow prompts (Scan → Enter Password → Reboot)
 
 ---
 
-### B. Start / Stop Services
-
-Stop the Robot App:
+### B. Developer mode from terminal commands
+- Access the rover terminal either via SSH or with keyboard and mouse
+- Put the robot in developer mode:
 ```bash
-sudo systemctl stop robot-app.service
-```
-
-Start the Robot App:
-```bash
-sudo systemctl start robot-app.service
-```
-
-Restart the Robot App:
-```bash
-sudo systemctl restart robot-app.service
-```
-
----
-
-### C. Debugging Logs
-
-Main Application Log (ROS/Python Errors):
-```bash
-tail -f /tmp/robot_startup.log
-```
-
-Network Manager Log (WiFi/Hotspot Switching):
-```bash
-sudo journalctl -u wifi-fallback.service -f
+sudo systemctl start robot_dev_mode_start.service
 ```
 
 ---

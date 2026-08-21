@@ -1,0 +1,20 @@
+# Copy to deploy/robot.conf and fill in values. Never commit robot.conf.
+#
+# These 3 variables are the only robot-specific settings required by install.sh.
+# Everything else is derived from WORKSPACE or is fixed per-robot (e.g. unitree user).
+
+# Ethernet interface connected to the robot internal network (192.168.123.99/24).
+# Find it with: ip link show
+# Common values: eth0, ens3, enp2s0, enp3s0
+ETH_INTERFACE="eth0"
+
+# Absolute path to the workspace root (this repo).
+WORKSPACE="/home/unitree/MAX-Brain-v1.0"
+
+# Absolute path to the compiled YOLO TensorRT engine file.
+# Generate with: yolo export model=yolov8n.pt format=engine device=0
+# The engine must be compiled on the target Jetson — it is not portable across architectures.
+YOLO_ENGINE="/home/unitree/yolov8n.engine"
+
+
+

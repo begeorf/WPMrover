@@ -80,6 +80,7 @@ class RobotManagerNode(Node):
         self.create_service(Trigger, "/robot_manager/start_navigation", self._start_navigation_cb)
         self.create_service(Trigger, "/robot_manager/start_mapping", self._start_mapping_cb)
         self.create_service(Trigger, "/robot_manager/stop_pipeline", self._stop_pipeline_cb)
+        self.create_service(Trigger, "/robot_manager/enable_dev", self._start_development_cb)
 
         # Timers
         health_hz: float = self.get_parameter("health_check_hz").value
@@ -102,6 +103,43 @@ class RobotManagerNode(Node):
                     self._driver_diagnostics[status.name] = status.message
 
     # --- Service callbacks ---
+    def _start_development_cb(
+        self, _req: Trigger.Request, res: Trigger.Response
+        ) -> Trigger.Response:
+        """Trigger developer support mode systemd service."""
+        self.get_logger().info("[DEBUG] /robot_manager/enable_dev service called.")
+
+        try:
+            # -S tells sudo to read the password from standard input (stdin)
+            cmd = ["sudo", "-S", "/usr/local/bin/dev_mode_start.sh"]
+            
+            result = subprocess.run(
+                cmd,
+                input=f"rover\n",  # Append newline to simulate pressing Enter
+                capture_output=True,
+                text=True,
+                timeout=10.0,
+            )
+
+            if result.returncode == 0:
+                res.success = True
+                res.message = "Developer support mode successfully triggered."
+                self.get_logger().info(res.message)
+            else:
+                res.success = False
+                res.message = f"Failed to start dev mode service (code {result.returncode}): {result.stderr.strip()}"
+                self.get_logger().error(res.message)
+
+        except subprocess.TimeoutExpired:
+            res.success = False
+            res.message = "Timed out waiting for developer mode service to start."
+            self.get_logger().error(res.message)
+        except Exception as exc:
+            res.success = False
+            res.message = f"Exception while triggering dev mode: {exc}"
+            self.get_logger().error(res.message)
+
+        return res
 
     def _start_navigation_cb(
         self, _req: Trigger.Request, res: Trigger.Response
@@ -129,7 +167,7 @@ class RobotManagerNode(Node):
                 self.get_logger().info(f"[DEBUG] _start_navigation_cb: Rejecting call — {res.message}")
                 return res
 
-            log_path = "/tmp/max_bringup.log"
+            log_path = "/tmp/max_bringup.log" #TODO: change to correct file path
             self.get_logger().info(f"[DEBUG] _start_navigation_cb: Attempting to spawn process, logging to {log_path}")
 
             try:
@@ -187,6 +225,7 @@ class RobotManagerNode(Node):
                 self._pipeline_log = open(log_path, "w")  # noqa: WPS515
                 self._pipeline_proc = subprocess.Popen(
                     [
+                        # TODO: change this once pointlio is implemented
                         "ros2",
                         "launch",
                         "pointlio",
@@ -340,7 +379,7 @@ class RobotManagerNode(Node):
         return (
             self.count_publishers("/lidar_points") > 0
             and self.count_publishers("/imu/filtered") > 0
-            and self.count_publishers("/registered_scan") > 0
+            # and self.count_publishers("/registered_scan") > 0
         )
 
     def _topic_publisher_snapshot(self) -> Dict[str, bool]:
@@ -350,13 +389,13 @@ class RobotManagerNode(Node):
         no message deserialization, no DDS traffic.
         """
         topics = (
-            "/lidar_points",
-            "/imu/filtered",
+            "/lidar_points", # TODO: change topic name to match rs airy lidar
+            "/imu/filtered", # TODO: change topic name to match rs ekf node
             "/odom",
             "/map",
             "/camera/color/image_raw",
             "/yolo/internal_state",
-            "/registered_scan",
+            # "/registered_scan",
         )
         return {t: self.count_publishers(t) > 0 for t in topics}
 
